@@ -10,6 +10,8 @@ class Settings(BaseSettings):
     RESET_PASSWORD_ALGORITHM: str = "HS256"
     RESET_PASSWORD_EXPIRE_MINUTES: int = 30
 
+    DB_DATABASE: str = "test.db"
+
     EMAIL_USERNAME: str
     EMAIL_PASSWORD: str
     EMAIL_FROM: str

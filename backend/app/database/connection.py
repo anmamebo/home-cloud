@@ -1,10 +1,11 @@
 from typing import Annotated
 
+from app.config import settings
 from fastapi import Depends
 from sqlmodel import Session, SQLModel, create_engine
 
 # URL de conexión a la base de datos (SQLite en este caso)
-SQLITE_DATABASE_URL = "sqlite:///./files.db"
+SQLITE_DATABASE_URL = f"sqlite:///./{settings.DB_DATABASE}"
 
 # Crear el motor de la base de datos
 connect_args = {"check_same_thread": False}
