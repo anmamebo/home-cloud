@@ -10,3 +10,6 @@ venv/
 
 # Database
 *.db
+
+# Storage
+storage/
