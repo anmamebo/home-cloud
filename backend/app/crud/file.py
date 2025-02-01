@@ -29,7 +29,10 @@ def delete_file(db: Session, file: File):
     db.commit()
 
 
-def check_same_name(db: Session, folder_id: int, name: str):
-    return db.exec(
-        select(File).where(File.filename == name, File.folder_id == folder_id)
-    ).first()
+def check_same_name(db: Session, folder_id: int, name: str) -> bool:
+    return (
+        db.exec(
+            select(File).where(File.filename == name, File.folder_id == folder_id)
+        ).first()
+        is not None
+    )
