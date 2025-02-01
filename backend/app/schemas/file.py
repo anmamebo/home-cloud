@@ -5,6 +5,10 @@ class FileBase(BaseModel):
     filename: str
 
 
+class FileIn(FileBase):
+    pass
+
+
 class FileOut(FileBase):
     id: int
     storage_path: str

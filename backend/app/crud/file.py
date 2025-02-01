@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from app.models.file import File
+from app.schemas.file import FileIn
 from sqlmodel import Session, select
 
 
@@ -15,12 +16,14 @@ def get_file_by_id(db: Session, file_id: int):
     return db.get(File, file_id)
 
 
-def update_file(db: Session, file: File, update_data: dict):
-    for key, value in update_data.items():
-        setattr(file, key, value)
+def update_file(db: Session, file: File, update_data: FileIn):
+    file_data = update_data.model_dump(exclude_unset=True)
+    file.sqlmodel_update(file_data)
     file.updated_at = datetime.now()
+    db.add(file)
     db.commit()
     db.refresh(file)
+
     return file
 
 

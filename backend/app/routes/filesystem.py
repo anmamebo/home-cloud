@@ -15,7 +15,7 @@ from app.crud.folder import create_folder, get_folder_by_id, get_root_folder
 from app.database.connection import SessionDep
 from app.models.file import File
 from app.models.folder import Folder
-from app.schemas.file import FileOut
+from app.schemas.file import FileIn, FileOut
 from app.schemas.folder import FolderContent, FolderIn, FolderOut
 from app.schemas.user import UserOut
 from app.utils.security import decode_access_token
@@ -190,27 +190,26 @@ def update_file_route(
     db: SessionDep,
     current_user: Annotated[UserOut, Depends(get_current_user)],
     file_id: int,
-    update_data: dict,
+    file: FileIn,
 ):
     # Obtener el archivo de la base de datos
-    file = get_file_by_id(db, file_id)
-    if not file:
+    file_db = get_file_by_id(db, file_id)
+    if not file_db:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Archivo no encontrado.",
         )
 
     # Verificar si el nombre del archivo ha cambiado
-    if "filename" in update_data:
-        new_filename = update_data["filename"]
+    if "filename" in file:
+        new_filename = file["filename"]
 
         # Comprobar si ya existe un archivo con el mismo nombre
-        if check_same_name(db, file.folder_id, new_filename):
+        if check_same_name(db, file_db.folder_id, new_filename):
             raise HTTPException(
                 status_code=status.HTTP_409_CONFLICT,
                 detail="Ya existe un archivo con el mismo nombre en esta carpeta.",
             )
 
     # Actualizar los campos del archivo
-    updated_file = update_file(db, file, update_data)
-    return updated_file
+    return update_file(db, file_db, file)
