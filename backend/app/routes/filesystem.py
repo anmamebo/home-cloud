@@ -121,7 +121,7 @@ def update_folder_route(
     return update_folder(db, folder_db, folder)
 
 
-@router.post("/files/upload", response_model=FileOut)
+@router.post("/files", response_model=FileOut)
 def upload_file(
     db: SessionDep,
     current_user: Annotated[UserOut, Depends(get_current_user)],
@@ -163,7 +163,7 @@ def upload_file(
     return create_file(db, db_file)
 
 
-@router.get("/files/download/{file_id}")
+@router.get("/files/{file_id}/download")
 def download_file(
     db: SessionDep,
     current_user: Annotated[UserOut, Depends(get_current_user)],
