@@ -12,6 +12,8 @@ class Settings(BaseSettings):
 
     DB_DATABASE: str = "test.db"
 
+    STORAGE_PATH: str = "storage"
+
     EMAIL_USERNAME: str
     EMAIL_PASSWORD: str
     EMAIL_FROM: str
