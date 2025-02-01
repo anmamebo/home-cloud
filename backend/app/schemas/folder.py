@@ -13,7 +13,9 @@ class FolderIn(FolderBase):
 
 class FolderOut(FolderBase):
     id: int
-    path: str
+
+    class Config:
+        from_attributes = True
 
 
 class FolderContent(FolderOut):

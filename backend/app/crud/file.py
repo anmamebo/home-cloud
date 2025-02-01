@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from app.models.file import File
-from sqlmodel import Session
+from sqlmodel import Session, select
 
 
 def create_file(db: Session, file: File):
@@ -27,3 +27,9 @@ def update_file(db: Session, file: File, update_data: dict):
 def delete_file(db: Session, file: File):
     db.delete(file)
     db.commit()
+
+
+def check_same_name(db: Session, folder_id: int, name: str):
+    return db.exec(
+        select(File).where(File.filename == name, File.folder_id == folder_id)
+    ).first()

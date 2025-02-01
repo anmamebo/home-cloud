@@ -11,9 +11,8 @@ if TYPE_CHECKING:
 class Folder(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
     name: str = Field(index=True)
-    path: str = Field(unique=True, index=True)
 
-    parent_id: int | None = Field(default=None, foreign_key="folder.id")
+    parent_id: int = Field(default=0, foreign_key="folder.id")
     user_id: int = Field(foreign_key="user.id")
 
     created_at: datetime = Field(default_factory=datetime.now)

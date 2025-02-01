@@ -1,10 +1,17 @@
 import os
+import uuid
 from datetime import datetime
 from typing import Annotated
 
 from app.config import settings
-from app.crud.file import create_file, delete_file, get_file_by_id, update_file
-from app.crud.folder import create_folder, get_folder_by_id
+from app.crud.file import (
+    check_same_name,
+    create_file,
+    delete_file,
+    get_file_by_id,
+    update_file,
+)
+from app.crud.folder import create_folder, get_folder_by_id, get_root_folder
 from app.database.connection import SessionDep
 from app.models.file import File
 from app.models.folder import Folder
@@ -55,7 +62,8 @@ def create_folder_route(
     folder: FolderIn,
     parent_id: int | None = None,
 ):
-    # Crear la ruta de la carpeta
+    # Validar carpeta padre
+    parent_folder = None
     if parent_id:
         parent_folder = get_folder_by_id(db, parent_id)
         if not parent_folder:
@@ -63,27 +71,14 @@ def create_folder_route(
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail="Carpeta padre no encontrada.",
             )
-        folder_path = os.path.join(parent_folder.path, folder.name)
-    else:
-        folder_path = os.path.join(settings.STORAGE_PATH, folder.name)
-
-    # Crear la carpeta en el sistema de archivos
-    if not os.path.exists(folder_path):
-        os.makedirs(folder_path)
-    else:
-        raise HTTPException(
-            status_code=status.HTTP_409_CONFLICT,
-            detail="La carpeta ya existe.",
-        )
 
     # Crear la carpeta en la base de datos
-    folder = Folder(
+    new_folder = Folder(
         name=folder.name,
-        path=folder_path,
         parent_id=parent_id,
         user_id=current_user.id,
     )
-    return create_folder(db, folder)
+    return create_folder(db, new_folder)
 
 
 @router.get("/folders/{folder_id}", response_model=FolderContent)
@@ -92,8 +87,10 @@ def get_folder_contents_route(
     current_user: Annotated[UserOut, Depends(get_current_user)],
     folder_id: int,
 ):
-    folder = get_folder_by_id(db, folder_id)
+    if folder_id == 0:
+        return get_root_folder(db)
 
+    folder = get_folder_by_id(db, folder_id)
     if not folder:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -106,31 +103,38 @@ def get_folder_contents_route(
 def upload_file(
     db: SessionDep,
     current_user: Annotated[UserOut, Depends(get_current_user)],
-    folder_id: int | None = None,
+    folder_id: int = 0,
     file: UploadFile = FastAPIFile(...),
 ):
-    # Determinar la carpeta de destino
-    if folder_id:
-        folder = get_folder_by_id(db, folder_id)
-        if not folder:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="Carpeta no encontrada.",
-            )
-        filepath = os.path.join(folder.path, file.filename)
-    else:
-        filepath = os.path.join(settings.STORAGE_PATH, file.filename)
+    # Comprobar si la carpeta existe
+    folder = get_folder_by_id(db, folder_id)
+    if not folder:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Carpeta no encontrada.",
+        )
 
-    # Guardar el archivo en el sistema de archivos
-    with open(filepath, "wb") as buffer:
+    # Comprobar si ya existe un archivo con el mismo nombre
+    if check_same_name(db, folder_id, file.filename):
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="Ya existe un archivo con el mismo nombre en esta carpeta.",
+        )
+
+    # Generar un nombre único para el almacenamiento
+    unique_filename = f"{uuid.uuid4().hex}{os.path.splitext(file.filename)[-1]}"
+    storage_path = os.path.join(settings.STORAGE_PATH, unique_filename)
+
+    # Guardar el archivo físicamente
+    with open(storage_path, "wb") as buffer:
         buffer.write(file.file.read())
 
     # Crear el registro del archivo en la base de datos
     db_file = File(
         filename=file.filename,
-        filepath=filepath,
+        storage_path=storage_path,
         filetype=file.content_type,
-        filesize=os.path.getsize(filepath),
+        filesize=os.path.getsize(storage_path),
         folder_id=folder_id,
         user_id=current_user.id,
     )
@@ -150,13 +154,13 @@ def download_file(
             detail="Archivo no encontrado.",
         )
 
-    # Actualizar campos de acceso
+    # Actualizar acceso
     file.last_accessed_at = datetime.now()
     file.last_accessed_by = current_user.id
     file.download_count += 1
     db.commit()
 
-    return FileResponse(file.filepath, filename=file.filename)
+    return FileResponse(file.storage_path, filename=file.filename)
 
 
 @router.delete("/files/{file_id}")
@@ -176,7 +180,7 @@ def delete_file_route(
     delete_file(db, file)
 
     # Eliminar archivo del sistema de archivos
-    os.remove(file.filepath)
+    os.remove(file.storage_path)
 
     return {"message": "Archivo eliminado correctamente."}
 
@@ -196,33 +200,16 @@ def update_file_route(
             detail="Archivo no encontrado.",
         )
 
-    # Comprobar si el nombre del archivo ha cambiado
+    # Verificar si el nombre del archivo ha cambiado
     if "filename" in update_data:
         new_filename = update_data["filename"]
 
-        # Construir la nueva ruta del archivo
-        if file.folder_id:
-            folder = get_folder_by_id(db, file.folder_id)
-            if not folder:
-                raise HTTPException(
-                    status_code=status.HTTP_404_NOT_FOUND,
-                    detail="Carpeta no encontrada.",
-                )
-            new_filepath = os.path.join(folder.path, new_filename)
-        else:
-            new_filepath = os.path.join(settings.STORAGE_PATH, new_filename)
-
-        # Renombrar el archivo en el sistema de archivos
-        try:
-            os.rename(file.filepath, new_filepath)
-        except OSError as e:
+        # Comprobar si ya existe un archivo con el mismo nombre
+        if check_same_name(db, file.folder_id, new_filename):
             raise HTTPException(
-                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                detail=f"No se puedo renombrar el archivo: {e}",
+                status_code=status.HTTP_409_CONFLICT,
+                detail="Ya existe un archivo con el mismo nombre en esta carpeta.",
             )
-
-        # Actualizar el metadata del archivo en la base de datos
-        update_data["filepath"] = new_filepath
 
     # Actualizar los campos del archivo
     updated_file = update_file(db, file, update_data)

@@ -1,5 +1,8 @@
+from app.models.file import File
 from app.models.folder import Folder
-from sqlmodel import Session
+from app.schemas.file import FileOut
+from app.schemas.folder import FolderContent, FolderOut
+from sqlmodel import Session, select
 
 
 def create_folder(db: Session, folder: Folder):
@@ -7,6 +10,16 @@ def create_folder(db: Session, folder: Folder):
     db.commit()
     db.refresh(folder)
     return folder
+
+
+def get_root_folder(db: Session):
+    folders = db.exec(select(Folder).where(Folder.parent_id == 0)).all()
+    files = db.exec(select(File).where(File.folder_id == 0)).all()
+
+    files_out = [FileOut.model_validate(file) for file in files]
+    folders_out = [FolderOut.model_validate(folder) for folder in folders]
+
+    return FolderContent(id=0, name="root", subfolders=folders_out, files=files_out)
 
 
 def get_folder_by_id(db: Session, folder_id: int):
