@@ -3,7 +3,7 @@ from contextlib import asynccontextmanager
 
 from app.config import settings
 from app.database.connection import create_db_and_tables
-from app.routes import auth
+from app.routes import auth, filesystem
 from fastapi import FastAPI
 
 
@@ -20,7 +20,9 @@ app = FastAPI(lifespan=lifespan)
 if not os.path.exists(settings.STORAGE_PATH):
     os.makedirs(settings.STORAGE_PATH)
 
+# Rutas
 app.include_router(auth.router)
+app.include_router(filesystem.router)
 
 
 @app.get("/")
