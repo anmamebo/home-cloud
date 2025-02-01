@@ -1,6 +1,9 @@
 from typing import Annotated
 
 from app.config import settings
+from app.models.file import File
+from app.models.folder import Folder
+from app.models.user import User
 from fastapi import Depends
 from sqlmodel import Session, SQLModel, create_engine
 
