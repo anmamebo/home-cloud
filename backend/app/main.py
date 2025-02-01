@@ -14,7 +14,16 @@ async def lifespan(app: FastAPI):
     yield  # Aquí FastAPI ejecuta la aplicación normalmente
 
 
-app = FastAPI(lifespan=lifespan)
+app = FastAPI(
+    title="HomeCloud API",
+    version="0.1",
+    contact={
+        "name": "Antonio Manuel",
+        "url": "https://github.com/anmamebo",
+        "email": "anmamebo2001@gmail.com",
+    },
+    lifespan=lifespan,
+)
 
 # Se crea el directorio de almacenamiento si no existe
 if not os.path.exists(settings.STORAGE_PATH):
