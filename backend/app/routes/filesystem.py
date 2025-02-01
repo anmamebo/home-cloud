@@ -11,7 +11,12 @@ from app.crud.file import (
     get_file_by_id,
     update_file,
 )
-from app.crud.folder import create_folder, get_folder_by_id, get_root_folder
+from app.crud.folder import (
+    create_folder,
+    get_folder_by_id,
+    get_root_folder,
+    update_folder,
+)
 from app.database.connection import SessionDep
 from app.models.file import File
 from app.models.folder import Folder
@@ -97,6 +102,23 @@ def get_folder_contents_route(
             detail="Carpeta no encontrada.",
         )
     return folder
+
+
+@router.patch("/folders/{folder_id}", response_model=FolderOut)
+def update_folder_route(
+    db: SessionDep,
+    current_user: Annotated[UserOut, Depends(get_current_user)],
+    folder_id: int,
+    folder: FolderIn,
+):
+    folder_db = get_folder_by_id(db, folder_id)
+    if not folder_db:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Carpeta no encontrada.",
+        )
+
+    return update_folder(db, folder_db, folder)
 
 
 @router.post("/files/upload", response_model=FileOut)
