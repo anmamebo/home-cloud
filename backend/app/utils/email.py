@@ -8,8 +8,8 @@ conf = ConnectionConfig(
     MAIL_FROM=settings.EMAIL_FROM,
     MAIL_PORT=settings.EMAIL_PORT,
     MAIL_SERVER=settings.EMAIL_SERVER,
-    MAIL_STARTTLS=True,  # Usar STARTTLS
-    MAIL_SSL_TLS=False,  # No usar SSL/TLS
+    MAIL_STARTTLS=True,  # Use STARTTLS
+    MAIL_SSL_TLS=False,  # Not use SSL/TLS
     USE_CREDENTIALS=True,
     VALIDATE_CERTS=True,
 )
@@ -22,7 +22,7 @@ async def send_reset_password_email(email: str, reset_token: str):
         subject="Restablecer contraseña",
         recipients=[email],
         body=f"Haz clic en el siguiente enlace para restablecer tu contraseña: {reset_url}",
-        subtype="html",  # Opcional: para enviar el correo en formato HTML
+        subtype="html",  # Optional: to send the email in HTML format
     )
     fm = FastMail(conf)
     try:

@@ -63,6 +63,6 @@ def decode_password_reset_token(token: str):
             settings.RESET_PASSWORD_SECRET_KEY,
             algorithms=[settings.RESET_PASSWORD_ALGORITHM],
         )
-        return payload.get("sub")  # Devuelve el email
+        return payload.get("sub")  # returns the email
     except jwt.ExpiredSignatureError:
         return None

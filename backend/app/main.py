@@ -10,8 +10,8 @@ from fastapi import FastAPI
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Inicialization of the database and tables."""
-    create_db_and_tables()  # Ejecuta antes de que la app arranque
-    yield  # Aquí FastAPI ejecuta la aplicación normalmente
+    create_db_and_tables()  # Run before the app starts
+    yield  # Here FastAPI runs the application normally
 
 
 app = FastAPI(
@@ -25,11 +25,11 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-# Se crea el directorio de almacenamiento si no existe
+# The storage directory is created if it does not exist
 if not os.path.exists(settings.STORAGE_PATH):
     os.makedirs(settings.STORAGE_PATH)
 
-# Rutas
+# Routes
 app.include_router(auth.router)
 app.include_router(folder.router)
 app.include_router(file.router)

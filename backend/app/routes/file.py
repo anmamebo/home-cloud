@@ -33,7 +33,7 @@ def upload_file(
     folder_id: int = 0,
     file: UploadFile = FastAPIFile(...),
 ):
-    # Comprobar si la carpeta existe
+    # Check if the folder exists
     folder = get_folder_by_id(db, folder_id)
     if folder_id != 0 and not folder:
         raise HTTPException(
@@ -41,22 +41,22 @@ def upload_file(
             detail="Carpeta no encontrada.",
         )
 
-    # Comprobar si ya existe un archivo con el mismo nombre
+    # Check if a file with the same name already exists
     if check_same_name(db, folder_id, file.filename):
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
             detail="Ya existe un archivo con el mismo nombre en esta carpeta.",
         )
 
-    # Generar un nombre único para el almacenamiento
+    # Generate a unique name for storage
     unique_filename = f"{uuid.uuid4().hex}{os.path.splitext(file.filename)[-1]}"
     storage_path = os.path.join(settings.STORAGE_PATH, unique_filename)
 
-    # Guardar el archivo físicamente
+    # Saving the file physically
     with open(storage_path, "wb") as buffer:
         buffer.write(file.file.read())
 
-    # Crear el registro del archivo en la base de datos
+    # Create the file record in the database
     db_file = File(
         filename=file.filename,
         storage_path=storage_path,
@@ -81,7 +81,7 @@ def download_file(
             detail="Archivo no encontrado.",
         )
 
-    # Actualizar acceso
+    # Update access
     file.last_accessed_at = datetime.now()
     file.last_accessed_by = current_user.id
     file.download_count += 1
@@ -103,10 +103,10 @@ def delete_file_route(
             detail="Archivo no encontrado.",
         )
 
-    # Eliminar registro de la base de datos
+    # Delete record from database
     delete_file(db, file)
 
-    # Eliminar archivo del sistema de archivos
+    # Delete file from file system
     os.remove(file.storage_path)
 
     return {"message": "Archivo eliminado correctamente."}
@@ -119,7 +119,7 @@ def update_file_route(
     file_id: int,
     file: FileIn,
 ):
-    # Obtener el archivo de la base de datos
+    # Get database file
     file_db = get_file_by_id(db, file_id)
     if not file_db:
         raise HTTPException(
@@ -127,16 +127,16 @@ def update_file_route(
             detail="Archivo no encontrado.",
         )
 
-    # Verificar si el nombre del archivo ha cambiado
+    # Check if the file name has changed
     if "filename" in file:
         new_filename = file["filename"]
 
-        # Comprobar si ya existe un archivo con el mismo nombre
+        # Check if a file with the same name already exists
         if check_same_name(db, file_db.folder_id, new_filename):
             raise HTTPException(
                 status_code=status.HTTP_409_CONFLICT,
                 detail="Ya existe un archivo con el mismo nombre en esta carpeta.",
             )
 
-    # Actualizar los campos del archivo
+    # Update file fields
     return update_file(db, file_db, file)

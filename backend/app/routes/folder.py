@@ -30,7 +30,7 @@ def create_folder_route(
     folder: FolderIn,
     parent_id: int = 0,
 ):
-    # Validar carpeta padre
+    # Validate parent folder
     parent_folder = get_folder_by_id(db, parent_id)
     if parent_id != 0 and not parent_folder:
         raise HTTPException(
@@ -38,14 +38,14 @@ def create_folder_route(
             detail="Carpeta padre no encontrada.",
         )
 
-    # Comprobar si ya existe una carpeta con el mismo nombre
+    # Check if a folder with the same name already exists
     if check_same_name(db, parent_id, folder.name):
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
             detail="Ya existe una carpeta con el mismo nombre.",
         )
 
-    # Crear la carpeta en la base de datos
+    # Create the folder in the database
     new_folder = Folder(
         name=folder.name,
         parent_id=parent_id,
@@ -113,22 +113,22 @@ def download_folder_route(
         root_folders = folder.subfolders
         root_files = folder.files
 
-    # Crear un buffer en memoria para el ZIP
+    # Create an in-memory buffer for the ZIP
     zip_buffer = io.BytesIO()
 
     with zipfile.ZipFile(zip_buffer, "w", zipfile.ZIP_DEFLATED) as zip_file:
-        # Agregar archivos de la carpeta raíz
+        # Add files from the root folder
         for file in root_files:
             file_data = get_file_content(file)
             zip_file.writestr(f"{base_path}{file.filename}", file_data)
 
-        # Agregar subcarpetas y su contenido recursivamente
+        # Adding subfolders and their contents recursively
         add_folder_to_zip(db, zip_file, root_folders, base_path)
 
-    # Ajustar la posición del buffer al inicio
+    # Adjust the buffer position at startup
     zip_buffer.seek(0)
 
-    # Nombre del archivo ZIP
+    # ZIP file name
     timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
     folder_name = folder_name.strip().replace(" ", "_")
     zip_filename = f"{folder_name}_{timestamp}.zip"
@@ -148,21 +148,21 @@ def add_folder_to_zip(db, zip_file, folders, parent_path):
     for folder in folders:
         folder_path = f"{parent_path}{folder.name}/"
 
-        # Agregar la carpeta al ZIP (aunque esté vacía)
+        # Add folder to ZIP (even if it is empty)
         zip_file.writestr(folder_path, "")
 
-        # Obtener archivos de esta carpeta
+        # Get files from this folder
         files = folder.files
         for file in files:
             file_data = get_file_content(file)
             zip_file.writestr(f"{folder_path}{file.filename}", file_data)
 
-        # Obtener subcarpetas y procesarlas recursivamente
+        # Get subfolders and process them recursively
         subfolders = folder.subfolders
         add_folder_to_zip(db, zip_file, subfolders, folder_path)
 
 
 def get_file_content(file: File) -> bytes:
-    """Obtener el contenido de un archivo desde el sistema de almacenamiento."""
+    """Get the contents of a file from the storage system."""
     with open(file.storage_path, "rb") as f:
         return f.read()

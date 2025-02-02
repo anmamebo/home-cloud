@@ -14,9 +14,7 @@ class UserOut(UserBase):
     id: int
 
     class Config:
-        from_attributes = (
-            True  # Permite la conversión de objetos ORM a modelos Pydantic
-        )
+        from_attributes = True  # Allows conversion of ORM objects to Pydantic models
 
 
 class UserInDB(UserBase):

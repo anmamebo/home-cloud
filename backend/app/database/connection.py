@@ -7,24 +7,24 @@ from app.models.user import User
 from fastapi import Depends
 from sqlmodel import Session, SQLModel, create_engine
 
-# URL de conexión a la base de datos (SQLite en este caso)
+# Database connection URL (SQLite in this case)
 SQLITE_DATABASE_URL = f"sqlite:///./{settings.DB_DATABASE}"
 
-# Crear el motor de la base de datos
+# Create the database engine
 connect_args = {"check_same_thread": False}
 engine = create_engine(SQLITE_DATABASE_URL, connect_args=connect_args)
 
 
-# Crear la base de datos y las tablas
+# Create the database and tables
 def create_db_and_tables():
     SQLModel.metadata.create_all(engine)
 
 
-# Obtener una sesión de la base de datos
+# Get a database session
 def get_session():
     with Session(engine) as session:
         yield session
 
 
-# Dependencia para obtener una sesión de la base de datos
+# Dependency to get a session from the database
 SessionDep = Annotated[Session, Depends(get_session)]
