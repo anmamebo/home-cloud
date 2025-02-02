@@ -11,17 +11,11 @@ from app.crud.file import (
     get_file_by_id,
     update_file,
 )
-from app.crud.folder import (
-    create_folder,
-    get_folder_by_id,
-    get_root_folder,
-    update_folder,
-)
+from app.crud.folder import get_folder_by_id
+from app.crud.user import get_user_by_username
 from app.database.connection import SessionDep
 from app.models.file import File
-from app.models.folder import Folder
 from app.schemas.file import FileIn, FileOut
-from app.schemas.folder import FolderContent, FolderIn, FolderOut
 from app.schemas.user import UserOut
 from app.utils.security import decode_access_token
 from fastapi import APIRouter, Depends
@@ -31,10 +25,9 @@ from fastapi.responses import FileResponse
 from fastapi.security import OAuth2PasswordBearer
 
 router = APIRouter(
-    prefix="/filesystem",
+    prefix="/filesystem/files",
     tags=["filesystem"],
 )
-from app.crud.user import get_user_by_username
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/login")
 
@@ -60,68 +53,7 @@ def get_current_user(token: Annotated[str, Depends(oauth2_scheme)], db: SessionD
     return user
 
 
-@router.post("/folders", response_model=FolderOut)
-def create_folder_route(
-    db: SessionDep,
-    current_user: Annotated[UserOut, Depends(get_current_user)],
-    folder: FolderIn,
-    parent_id: int | None = None,
-):
-    # Validar carpeta padre
-    parent_folder = None
-    if parent_id:
-        parent_folder = get_folder_by_id(db, parent_id)
-        if not parent_folder:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="Carpeta padre no encontrada.",
-            )
-
-    # Crear la carpeta en la base de datos
-    new_folder = Folder(
-        name=folder.name,
-        parent_id=parent_id,
-        user_id=current_user.id,
-    )
-    return create_folder(db, new_folder)
-
-
-@router.get("/folders/{folder_id}", response_model=FolderContent)
-def get_folder_contents_route(
-    db: SessionDep,
-    current_user: Annotated[UserOut, Depends(get_current_user)],
-    folder_id: int,
-):
-    if folder_id == 0:
-        return get_root_folder(db)
-
-    folder = get_folder_by_id(db, folder_id)
-    if not folder:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Carpeta no encontrada.",
-        )
-    return folder
-
-
-@router.patch("/folders/{folder_id}", response_model=FolderOut)
-def update_folder_route(
-    db: SessionDep,
-    current_user: Annotated[UserOut, Depends(get_current_user)],
-    folder_id: int,
-    folder: FolderIn,
-):
-    folder_db = get_folder_by_id(db, folder_id)
-    if not folder_db:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Carpeta no encontrada.",
-        )
-
-    return update_folder(db, folder_db, folder)
-
-
-@router.post("/files", response_model=FileOut)
+@router.post("/", response_model=FileOut)
 def upload_file(
     db: SessionDep,
     current_user: Annotated[UserOut, Depends(get_current_user)],
@@ -163,7 +95,7 @@ def upload_file(
     return create_file(db, db_file)
 
 
-@router.get("/files/{file_id}/download")
+@router.get("/{file_id}/download")
 def download_file(
     db: SessionDep,
     current_user: Annotated[UserOut, Depends(get_current_user)],
@@ -185,7 +117,7 @@ def download_file(
     return FileResponse(file.storage_path, filename=file.filename)
 
 
-@router.delete("/files/{file_id}")
+@router.delete("/{file_id}")
 def delete_file_route(
     db: SessionDep,
     current_user: Annotated[UserOut, Depends(get_current_user)],
@@ -207,7 +139,7 @@ def delete_file_route(
     return {"message": "Archivo eliminado correctamente."}
 
 
-@router.patch("/files/{file_id}", response_model=FileOut)
+@router.patch("/{file_id}", response_model=FileOut)
 def update_file_route(
     db: SessionDep,
     current_user: Annotated[UserOut, Depends(get_current_user)],
