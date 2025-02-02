@@ -1,3 +1,6 @@
+import io
+import zipfile
+from datetime import datetime
 from typing import Annotated
 
 from app.crud.folder import (
@@ -9,11 +12,13 @@ from app.crud.folder import (
 )
 from app.crud.user import get_user_by_username
 from app.database.connection import SessionDep
+from app.models.file import File
 from app.models.folder import Folder
 from app.schemas.folder import FolderContent, FolderIn, FolderOut
 from app.schemas.user import UserOut
 from app.utils.security import decode_access_token
 from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi.responses import StreamingResponse
 from fastapi.security import OAuth2PasswordBearer
 
 router = APIRouter(
@@ -109,3 +114,83 @@ def update_folder_route(
         )
 
     return update_folder(db, folder_db, folder)
+
+
+@router.get("/{folder_id}/download")
+def download_folder_route(
+    db: SessionDep,
+    current_user: Annotated[UserOut, Depends(get_current_user)],
+    folder_id: int,
+):
+    if folder_id == 0:
+        folder_name = "root"
+        base_path = ""
+        root_folder = get_root_folder(db)
+        root_folders = root_folder.subfolders
+        root_files = root_folder.files
+    else:
+        folder = get_folder_by_id(db, folder_id)
+        if not folder:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Carpeta no encontrada.",
+            )
+        folder_name = folder.name
+        base_path = folder.name + "/"
+        root_folders = folder.subfolders
+        root_files = folder.files
+
+    # Crear un buffer en memoria para el ZIP
+    zip_buffer = io.BytesIO()
+
+    with zipfile.ZipFile(zip_buffer, "w", zipfile.ZIP_DEFLATED) as zip_file:
+        # Agregar archivos de la carpeta raíz
+        for file in root_files:
+            file_data = get_file_content(file)
+            zip_file.writestr(f"{base_path}{file.filename}", file_data)
+
+        # Agregar subcarpetas y su contenido recursivamente
+        add_folder_to_zip(db, zip_file, root_folders, base_path)
+
+    # Ajustar la posición del buffer al inicio
+    zip_buffer.seek(0)
+
+    # Nombre del archivo ZIP
+    timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
+    folder_name = folder_name.strip().replace(" ", "_")
+    zip_filename = f"{folder_name}_{timestamp}.zip"
+    print(zip_filename)
+
+    return StreamingResponse(
+        content=zip_buffer,
+        media_type="application/zip",
+        headers={
+            "Content-Disposition": f"attachment; filename={zip_filename}",
+            "Content-Type": "application/zip",
+        },
+    )
+
+
+def add_folder_to_zip(db, zip_file, folders, parent_path):
+    """Add a folder and its contents to a ZIP file recursively."""
+    for folder in folders:
+        folder_path = f"{parent_path}{folder.name}/"
+
+        # Agregar la carpeta al ZIP (aunque esté vacía)
+        zip_file.writestr(folder_path, "")
+
+        # Obtener archivos de esta carpeta
+        files = folder.files
+        for file in files:
+            file_data = get_file_content(file)
+            zip_file.writestr(f"{folder_path}{file.filename}", file_data)
+
+        # Obtener subcarpetas y procesarlas recursivamente
+        subfolders = folder.subfolders
+        add_folder_to_zip(db, zip_file, subfolders, folder_path)
+
+
+def get_file_content(file: File) -> bytes:
+    """Obtener el contenido de un archivo desde el sistema de almacenamiento."""
+    with open(file.storage_path, "rb") as f:
+        return f.read()
