@@ -62,7 +62,7 @@ def upload_file(
 ):
     # Comprobar si la carpeta existe
     folder = get_folder_by_id(db, folder_id)
-    if not folder:
+    if folder_id != 0 and not folder:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Carpeta no encontrada.",
