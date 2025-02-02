@@ -1,7 +1,6 @@
 import io
 import zipfile
 from datetime import datetime
-from typing import Annotated
 
 from app.crud.folder import (
     check_same_name,
@@ -10,50 +9,24 @@ from app.crud.folder import (
     get_root_folder,
     update_folder,
 )
-from app.crud.user import get_user_by_username
 from app.database.connection import SessionDep
 from app.models.file import File
 from app.models.folder import Folder
 from app.schemas.folder import FolderContent, FolderIn, FolderOut
-from app.schemas.user import UserOut
-from app.utils.security import decode_access_token
-from fastapi import APIRouter, Depends, HTTPException, status
+from app.utils.auth import CurrentUserDep
+from fastapi import APIRouter, HTTPException, status
 from fastapi.responses import StreamingResponse
-from fastapi.security import OAuth2PasswordBearer
 
 router = APIRouter(
     prefix="/filesystem/folders",
     tags=["filesystem"],
 )
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/login")
-
-
-def get_current_user(token: Annotated[str, Depends(oauth2_scheme)], db: SessionDep):
-    """Get the current user from the access token."""
-    payload = decode_access_token(token)
-    if not payload:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Token inválido o expirado.",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
-
-    username = payload.get("sub")
-    user = get_user_by_username(db, username)
-    if not user:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Usuario no encontrado.",
-        )
-
-    return user
-
 
 @router.post("/", response_model=FolderOut)
 def create_folder_route(
     db: SessionDep,
-    current_user: Annotated[UserOut, Depends(get_current_user)],
+    current_user: CurrentUserDep,
     folder: FolderIn,
     parent_id: int = 0,
 ):
@@ -84,7 +57,7 @@ def create_folder_route(
 @router.get("/{folder_id}", response_model=FolderContent)
 def get_folder_contents_route(
     db: SessionDep,
-    current_user: Annotated[UserOut, Depends(get_current_user)],
+    current_user: CurrentUserDep,
     folder_id: int,
 ):
     if folder_id == 0:
@@ -102,7 +75,7 @@ def get_folder_contents_route(
 @router.patch("/{folder_id}", response_model=FolderOut)
 def update_folder_route(
     db: SessionDep,
-    current_user: Annotated[UserOut, Depends(get_current_user)],
+    current_user: CurrentUserDep,
     folder_id: int,
     folder: FolderIn,
 ):
@@ -119,7 +92,7 @@ def update_folder_route(
 @router.get("/{folder_id}/download")
 def download_folder_route(
     db: SessionDep,
-    current_user: Annotated[UserOut, Depends(get_current_user)],
+    current_user: CurrentUserDep,
     folder_id: int,
 ):
     if folder_id == 0:
