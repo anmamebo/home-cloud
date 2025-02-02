@@ -33,6 +33,7 @@ def delete_file(db: Session, file: File):
 
 
 def check_same_name(db: Session, folder_id: int, name: str) -> bool:
+    """Check if a file with the same name exists in the folder."""
     return (
         db.exec(
             select(File).where(File.filename == name, File.folder_id == folder_id)

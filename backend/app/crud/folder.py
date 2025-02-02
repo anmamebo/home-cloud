@@ -37,6 +37,7 @@ def get_folder_by_id(db: Session, folder_id: int):
 
 
 def check_same_name(db: Session, parent_id: int, name: str) -> bool:
+    """Check if a folder with the same name exists in the parent folder."""
     return (
         db.exec(
             select(Folder).where(Folder.name == name, Folder.parent_id == parent_id)
