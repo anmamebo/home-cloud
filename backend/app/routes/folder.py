@@ -132,7 +132,6 @@ def download_folder_route(
     timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
     folder_name = folder_name.strip().replace(" ", "_")
     zip_filename = f"{folder_name}_{timestamp}.zip"
-    print(zip_filename)
 
     return StreamingResponse(
         content=zip_buffer,
