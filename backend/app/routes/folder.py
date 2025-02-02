@@ -1,6 +1,7 @@
 from typing import Annotated
 
 from app.crud.folder import (
+    check_same_name,
     create_folder,
     get_folder_by_id,
     get_root_folder,
@@ -49,17 +50,22 @@ def create_folder_route(
     db: SessionDep,
     current_user: Annotated[UserOut, Depends(get_current_user)],
     folder: FolderIn,
-    parent_id: int | None = None,
+    parent_id: int = 0,
 ):
     # Validar carpeta padre
-    parent_folder = None
-    if parent_id:
-        parent_folder = get_folder_by_id(db, parent_id)
-        if not parent_folder:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="Carpeta padre no encontrada.",
-            )
+    parent_folder = get_folder_by_id(db, parent_id)
+    if parent_id != 0 and not parent_folder:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Carpeta padre no encontrada.",
+        )
+
+    # Comprobar si ya existe una carpeta con el mismo nombre
+    if check_same_name(db, parent_id, folder.name):
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="Ya existe una carpeta con el mismo nombre.",
+        )
 
     # Crear la carpeta en la base de datos
     new_folder = Folder(

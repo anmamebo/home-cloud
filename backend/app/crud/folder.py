@@ -37,3 +37,12 @@ def get_root_folder(db: Session):
 
 def get_folder_by_id(db: Session, folder_id: int):
     return db.get(Folder, folder_id)
+
+
+def check_same_name(db: Session, parent_id: int, name: str) -> bool:
+    return (
+        db.exec(
+            select(Folder).where(Folder.name == name, Folder.parent_id == parent_id)
+        ).first()
+        is not None
+    )
