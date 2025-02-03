@@ -140,3 +140,43 @@ def update_file_route(
 
     # Update file fields
     return update_file(db, file_db, file)
+
+
+@router.put(
+    "/{file_id}/move/{new_folder_id}",
+    response_model=FileOut,
+    status_code=status.HTTP_200_OK,
+)
+def move_file_route(
+    db: SessionDep,
+    current_user: CurrentUserDep,
+    file_id: int,
+    new_folder_id: int,
+):
+    file_db = get_file_by_id(db, file_id)
+    if not file_db:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Archivo no encontrado.",
+        )
+
+    if new_folder_id != 0:
+        folder = get_folder_by_id(db, new_folder_id)
+        if not folder:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Carpeta destino no encontrada.",
+            )
+
+    # Check if a file with the same name already exists
+    if check_same_name(db, new_folder_id, file_db.filename):
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="Ya existe un archivo con el mismo nombre en esta carpeta.",
+        )
+
+    file_db.folder_id = new_folder_id
+    db.commit()
+    db.refresh(file_db)
+
+    return file_db
