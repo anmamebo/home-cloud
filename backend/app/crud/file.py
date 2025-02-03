@@ -16,6 +16,12 @@ def get_file_by_id(db: Session, file_id: int):
     return db.get(File, file_id)
 
 
+def get_file_in_folder_by_name(db: Session, folder_id: int, name: str):
+    return db.exec(
+        select(File).where(File.folder_id == folder_id, File.filename == name)
+    ).first()
+
+
 def update_file(db: Session, file: File, update_data: FileIn):
     file_data = update_data.model_dump(exclude_unset=True)
     file.sqlmodel_update(file_data)

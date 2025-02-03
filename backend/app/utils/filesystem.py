@@ -1,6 +1,6 @@
 import os
 
-from app.crud.file import delete_file
+from app.crud.file import delete_file, get_file_in_folder_by_name
 from app.crud.folder import delete_folder
 from app.models.file import File
 from app.models.folder import Folder
@@ -60,3 +60,17 @@ def is_subfolder(folder: Folder, possible_parent: Folder) -> bool:
             return True
         possible_parent = possible_parent.parent
     return False
+
+
+def generate_copy_filename(db: Session, folder_id: int, filename: str) -> str:
+    """Generate a unique filename for a copied file."""
+    copy_number = 1
+    base, ext = os.path.splitext(filename)
+    new_filename = f"Copia de {base}{ext}"
+
+    # Check if the filename already exists
+    while get_file_in_folder_by_name(db, folder_id, new_filename):
+        new_filename = f"Copia de {base} ({copy_number}){ext}"
+        copy_number += 1
+
+    return new_filename

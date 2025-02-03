@@ -1,4 +1,5 @@
 import os
+import shutil
 import uuid
 from datetime import datetime
 
@@ -15,6 +16,7 @@ from app.database.connection import SessionDep
 from app.models.file import File
 from app.schemas.file import FileIn, FileOut
 from app.utils.auth import CurrentUserDep
+from app.utils.filesystem import generate_copy_filename
 from fastapi import APIRouter
 from fastapi import File as FastAPIFile
 from fastapi import HTTPException, UploadFile, status
@@ -180,3 +182,37 @@ def move_file_route(
     db.refresh(file_db)
 
     return file_db
+
+
+@router.post("/{file_id}/copy", response_model=FileOut)
+def make_file_copy_route(
+    db: SessionDep,
+    current_user: CurrentUserDep,
+    file_id: int,
+):
+    file_db = get_file_by_id(db, file_id)
+    if not file_db:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Archivo no encontrado.",
+        )
+
+    new_filename = generate_copy_filename(db, file_db.folder_id, file_db.filename)
+
+    # Generate a unique name for storage
+    unique_filename = f"{uuid.uuid4().hex}{os.path.splitext(new_filename)[-1]}"
+    storage_path = os.path.join(settings.STORAGE_PATH, unique_filename)
+
+    shutil.copy(file_db.storage_path, storage_path)
+
+    # Create a new file record
+    new_file = File(
+        filename=new_filename,
+        folder_id=file_db.folder_id,
+        user_id=current_user.id,
+        storage_path=storage_path,
+        filesize=file_db.filesize,
+        filetype=file_db.filetype,
+    )
+
+    return create_file(db, new_file)
