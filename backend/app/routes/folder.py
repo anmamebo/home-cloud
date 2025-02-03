@@ -10,11 +10,14 @@ from app.crud.folder import (
     update_folder,
 )
 from app.database.connection import SessionDep
-from app.models.file import File
 from app.models.folder import Folder
 from app.schemas.folder import FolderContent, FolderIn, FolderOut
 from app.utils.auth import CurrentUserDep
-from app.utils.filesystem import add_folder_to_zip, get_file_content
+from app.utils.filesystem import (
+    add_folder_to_zip,
+    delete_folder_recursive,
+    get_file_content,
+)
 from fastapi import APIRouter, HTTPException, status
 from fastapi.responses import StreamingResponse
 
@@ -142,3 +145,17 @@ def download_folder_route(
             "Content-Type": "application/zip",
         },
     )
+
+
+@router.delete("/{folder_id}")
+def delete_folder_route(db: SessionDep, current_user: CurrentUserDep, folder_id: int):
+    folder = get_folder_by_id(db, folder_id)
+    if not folder:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Carpeta no encontrada.",
+        )
+
+    delete_folder_recursive(db, folder)
+
+    return {"message": "Archivo eliminado correctamente."}

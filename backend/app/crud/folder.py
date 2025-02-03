@@ -36,6 +36,11 @@ def get_folder_by_id(db: Session, folder_id: int):
     return db.get(Folder, folder_id)
 
 
+def delete_folder(db: Session, folder: Folder):
+    db.delete(folder)
+    db.commit()
+
+
 def check_same_name(db: Session, parent_id: int, name: str) -> bool:
     """Check if a folder with the same name exists in the parent folder."""
     return (
