@@ -196,12 +196,12 @@ def move_folder_route(
                 detail="No se puede mover una carpeta dentro de sí misma o de una subcarpeta.",
             )
 
-        # Check if a folder with the same name already exists
-        if check_same_name(db, new_parent_id, folder.name):
-            raise HTTPException(
-                status_code=status.HTTP_409_CONFLICT,
-                detail="Ya existe una carpeta con el mismo nombre.",
-            )
+    # Check if a folder with the same name already exists
+    if check_same_name(db, new_parent_id, folder.name):
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="Ya existe una carpeta con el mismo nombre.",
+        )
 
     # Update at the database
     folder.parent_id = new_parent_id
