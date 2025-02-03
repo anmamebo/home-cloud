@@ -17,6 +17,7 @@ from app.utils.filesystem import (
     add_folder_to_zip,
     delete_folder_recursive,
     get_file_content,
+    is_subfolder,
 )
 from fastapi import APIRouter, HTTPException, status
 from fastapi.responses import StreamingResponse
@@ -159,3 +160,52 @@ def delete_folder_route(db: SessionDep, current_user: CurrentUserDep, folder_id:
     delete_folder_recursive(db, folder)
 
     return {"message": "Archivo eliminado correctamente."}
+
+
+@router.put(
+    "/{folder_id}/move/{new_parent_id}",
+    response_model=FolderOut,
+    status_code=status.HTTP_200_OK,
+)
+def move_folder_route(
+    db: SessionDep,
+    current_user: CurrentUserDep,
+    folder_id: int,
+    new_parent_id: int,
+):
+    folder = get_folder_by_id(db, folder_id)
+    if not folder:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Carpeta no encontrada.",
+        )
+
+    # Verify that the new parent folder exists (except for the root folder)
+    if new_parent_id != 0:
+        new_parent = get_folder_by_id(db, new_parent_id)
+        if not new_parent:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Carpeta destino no encontrada.",
+            )
+
+        # Do not allow moving a folder to itself
+        if is_subfolder(folder, new_parent):
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="No se puede mover una carpeta dentro de sí misma o de una subcarpeta.",
+            )
+
+        # Check if a folder with the same name already exists
+        if check_same_name(db, new_parent_id, folder.name):
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail="Ya existe una carpeta con el mismo nombre.",
+            )
+
+    # Update at the database
+    folder.parent_id = new_parent_id
+    db.commit()
+    db.refresh(folder)
+
+    return folder

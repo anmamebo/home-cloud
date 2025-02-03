@@ -51,3 +51,12 @@ def delete_file_from_disk(file_path: str):
     """Delete a file from the storage system."""
     if os.path.exists(file_path):
         os.remove(file_path)
+
+
+def is_subfolder(folder: Folder, possible_parent: Folder) -> bool:
+    """Check if 'possible_parent' is a subfolder of 'folder'."""
+    while possible_parent:
+        if possible_parent.id == folder.id:
+            return True
+        possible_parent = possible_parent.parent
+    return False
