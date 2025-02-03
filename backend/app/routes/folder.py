@@ -24,11 +24,18 @@ from fastapi.responses import StreamingResponse
 
 router = APIRouter(
     prefix="/filesystem/folders",
-    tags=["filesystem"],
+    tags=["folders"],
+    responses={404: {"description": "Not found"}},
 )
 
 
-@router.post("/", response_model=FolderOut)
+@router.post(
+    "/",
+    response_model=FolderOut,
+    status_code=status.HTTP_201_CREATED,
+    summary="Create a new folder",
+    description="Create a new folder in the filesystem.",
+)
 def create_folder_route(
     db: SessionDep,
     current_user: CurrentUserDep,
@@ -59,7 +66,13 @@ def create_folder_route(
     return create_folder(db, new_folder)
 
 
-@router.get("/{folder_id}", response_model=FolderContent)
+@router.get(
+    "/{folder_id}",
+    response_model=FolderContent,
+    status_code=status.HTTP_200_OK,
+    summary="Get folder contents",
+    description="Get the contents of a folder.",
+)
 def get_folder_contents_route(
     db: SessionDep,
     current_user: CurrentUserDep,
@@ -77,7 +90,13 @@ def get_folder_contents_route(
     return folder
 
 
-@router.patch("/{folder_id}", response_model=FolderOut)
+@router.patch(
+    "/{folder_id}",
+    response_model=FolderOut,
+    status_code=status.HTTP_200_OK,
+    summary="Update folder",
+    description="Update the folder name.",
+)
 def update_folder_route(
     db: SessionDep,
     current_user: CurrentUserDep,
@@ -94,7 +113,12 @@ def update_folder_route(
     return update_folder(db, folder_db, folder)
 
 
-@router.get("/{folder_id}/download")
+@router.get(
+    "/{folder_id}/download",
+    status_code=status.HTTP_200_OK,
+    summary="Download folder as ZIP",
+    description="Download the contents of a folder as a ZIP file.",
+)
 def download_folder_route(
     db: SessionDep,
     current_user: CurrentUserDep,
@@ -148,7 +172,12 @@ def download_folder_route(
     )
 
 
-@router.delete("/{folder_id}")
+@router.delete(
+    "/{folder_id}",
+    status_code=status.HTTP_204_NO_CONTENT,
+    summary="Delete folder",
+    description="Delete a folder.",
+)
 def delete_folder_route(db: SessionDep, current_user: CurrentUserDep, folder_id: int):
     folder = get_folder_by_id(db, folder_id)
     if not folder:
@@ -159,13 +188,15 @@ def delete_folder_route(db: SessionDep, current_user: CurrentUserDep, folder_id:
 
     delete_folder_recursive(db, folder)
 
-    return {"message": "Archivo eliminado correctamente."}
+    return None
 
 
 @router.put(
     "/{folder_id}/move/{new_parent_id}",
     response_model=FolderOut,
     status_code=status.HTTP_200_OK,
+    summary="Move folder",
+    description="Move a folder to a new parent folder.",
 )
 def move_folder_route(
     db: SessionDep,

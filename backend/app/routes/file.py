@@ -24,11 +24,18 @@ from fastapi.responses import FileResponse
 
 router = APIRouter(
     prefix="/filesystem/files",
-    tags=["filesystem"],
+    tags=["files"],
+    responses={404: {"description": "Not found"}},
 )
 
 
-@router.post("/", response_model=FileOut)
+@router.post(
+    "/",
+    response_model=FileOut,
+    status_code=status.HTTP_201_CREATED,
+    summary="Upload a new file",
+    description="Upload a new file to the filesystem.",
+)
 def upload_file(
     db: SessionDep,
     current_user: CurrentUserDep,
@@ -70,7 +77,13 @@ def upload_file(
     return create_file(db, db_file)
 
 
-@router.get("/{file_id}/download")
+@router.get(
+    "/{file_id}/download",
+    response_class=FileResponse,
+    status_code=status.HTTP_200_OK,
+    summary="Download a file",
+    description="Download a file from the filesystem.",
+)
 def download_file(
     db: SessionDep,
     current_user: CurrentUserDep,
@@ -92,7 +105,12 @@ def download_file(
     return FileResponse(file.storage_path, filename=file.filename)
 
 
-@router.delete("/{file_id}")
+@router.delete(
+    "/{file_id}",
+    status_code=status.HTTP_204_NO_CONTENT,
+    summary="Delete file",
+    description="Delete a file from the filesystem.",
+)
 def delete_file_route(
     db: SessionDep,
     current_user: CurrentUserDep,
@@ -111,10 +129,16 @@ def delete_file_route(
     # Delete file from file system
     os.remove(file.storage_path)
 
-    return {"message": "Archivo eliminado correctamente."}
+    return None
 
 
-@router.patch("/{file_id}", response_model=FileOut)
+@router.patch(
+    "/{file_id}",
+    response_model=FileOut,
+    status_code=status.HTTP_200_OK,
+    summary="Update file",
+    description="Update the file metadata.",
+)
 def update_file_route(
     db: SessionDep,
     current_user: CurrentUserDep,
@@ -148,6 +172,8 @@ def update_file_route(
     "/{file_id}/move/{new_folder_id}",
     response_model=FileOut,
     status_code=status.HTTP_200_OK,
+    summary="Move file",
+    description="Move a file to a different folder.",
 )
 def move_file_route(
     db: SessionDep,
@@ -184,7 +210,13 @@ def move_file_route(
     return file_db
 
 
-@router.post("/{file_id}/copy", response_model=FileOut)
+@router.post(
+    "/{file_id}/copy",
+    response_model=FileOut,
+    status_code=status.HTTP_201_CREATED,
+    summary="Copy file",
+    description="Copy a file to the same folder.",
+)
 def make_file_copy_route(
     db: SessionDep,
     current_user: CurrentUserDep,

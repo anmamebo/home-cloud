@@ -28,12 +28,24 @@ router = APIRouter(
 )
 
 
-@router.get("/me", response_model=UserOut)
+@router.get(
+    "/me",
+    response_model=UserOut,
+    status_code=status.HTTP_200_OK,
+    summary="Get the current user",
+    description="Get the current user information.",
+)
 def read_users_me(current_user: CurrentUserDep):
     return current_user
 
 
-@router.post("/register", response_model=UserOut)
+@router.post(
+    "/register",
+    response_model=UserOut,
+    status_code=status.HTTP_201_CREATED,
+    summary="Register a new user",
+    description="Register a new user with the provided username, email, and password.",
+)
 def register(user: UserIn, db: SessionDep):
     db_user = get_user_by_username(db, user.username)
     if db_user:
@@ -44,7 +56,13 @@ def register(user: UserIn, db: SessionDep):
     return create_user(db, user)
 
 
-@router.post("/login", response_model=Token)
+@router.post(
+    "/login",
+    response_model=Token,
+    status_code=status.HTTP_200_OK,
+    summary="Login",
+    description="Login with the provided username and password.",
+)
 def login(db: SessionDep, form_data: OAuth2PasswordRequestForm = Depends()) -> Token:
     user = get_user_by_username(db, form_data.username)
     if not user or not verify_password(form_data.password, user.hashed_password):
@@ -63,7 +81,12 @@ def login(db: SessionDep, form_data: OAuth2PasswordRequestForm = Depends()) -> T
     return Token(access_token=access_token, token_type="bearer")
 
 
-@router.post("/change-password")
+@router.post(
+    "/change-password",
+    status_code=status.HTTP_204_NO_CONTENT,
+    summary="Change password",
+    description="Change the current user's password.",
+)
 def change_password(
     db: SessionDep,
     current_user: CurrentUserInDBDep,
@@ -78,10 +101,15 @@ def change_password(
     current_user.hashed_password = get_password_hash(password_data.new_password)
     db.commit()
     db.refresh(current_user)
-    return {"message": "Contraseña actualizada correctamente."}
+    return None
 
 
-@router.post("/forgot-password", status_code=status.HTTP_202_ACCEPTED)
+@router.post(
+    "/forgot-password",
+    status_code=status.HTTP_204_NO_CONTENT,
+    summary="Forgot password",
+    description="Send an email with a password reset link.",
+)
 def forgot_password(
     email_data: ForgotPasswordRequest, db: SessionDep, background_tasks: BackgroundTasks
 ):
@@ -89,12 +117,15 @@ def forgot_password(
     if user:
         reset_token = generate_password_reset_token(user.email)
         background_tasks.add_task(send_reset_password_email, user.email, reset_token)
-    return {
-        "message": "Si el usuario existe, se enviará un correo con las instrucciones para restablecer la contraseña."
-    }
+    return None
 
 
-@router.post("/reset-password", status_code=status.HTTP_200_OK)
+@router.post(
+    "/reset-password",
+    status_code=status.HTTP_204_NO_CONTENT,
+    summary="Reset password",
+    description="Reset the user's password.",
+)
 def reset_password(password_data: ResetPasswordRequest, db: SessionDep):
     email = decode_password_reset_token(password_data.token)
     if not email:
@@ -113,4 +144,4 @@ def reset_password(password_data: ResetPasswordRequest, db: SessionDep):
     user.hashed_password = get_password_hash(password_data.new_password)
     db.commit()
     db.refresh(user)
-    return {"message": "Contraseña restablecida correctamente."}
+    return None
