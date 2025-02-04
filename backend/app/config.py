@@ -20,7 +20,12 @@ class Settings(BaseSettings):
     EMAIL_PORT: int
     EMAIL_SERVER: str
 
-    FRONTEND_URL: str = "http://localhost:3000"
+    FRONTEND_URL: str = "http://localhost:5173"
+
+    ORIGINS: list[str] = [
+        "http://localhost",
+        "http://localhost:5173",
+    ]
 
     class Config:
         env_file = ".env"

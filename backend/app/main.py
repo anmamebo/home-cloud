@@ -5,6 +5,7 @@ from app.config import settings
 from app.database.connection import create_db_and_tables
 from app.routes import auth, file, folder
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 
 @asynccontextmanager
@@ -28,6 +29,15 @@ app = FastAPI(
 # The storage directory is created if it does not exist
 if not os.path.exists(settings.STORAGE_PATH):
     os.makedirs(settings.STORAGE_PATH)
+
+# Middleware to allow CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=settings.ORIGINS,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Routes
 app.include_router(auth.router)
