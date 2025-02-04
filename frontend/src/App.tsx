@@ -1,4 +1,4 @@
-import { MainLayout } from "@/components/layout/main-layout";
+import { MainLayout } from "@/components/layout/MainLayot";
 import { ThemeProvider } from "@/components/theme";
 import { Button } from "@/components/ui/button";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";

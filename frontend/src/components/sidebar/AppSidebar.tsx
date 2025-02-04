@@ -4,7 +4,7 @@ import {
   SidebarFooter,
   SidebarHeader,
 } from "@/components/ui/sidebar";
-import { NavUser } from "./nav-user";
+import { NavUser } from "./NavUser";
 
 export const AppSidebar = ({
   ...props
