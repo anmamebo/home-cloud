@@ -1,8 +1,8 @@
 import { MainLayout } from "@/components/layout/MainLayot";
-import { AuthProvider } from "@/components/providers/AuthProvider";
+import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { Button } from "@/components/ui/button";
+import { AuthProvider } from "@/providers/AuthProvider";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { ProtectedRoute } from "./components/ProtectedRoute";
 
 export const Router = () => {
   return (
