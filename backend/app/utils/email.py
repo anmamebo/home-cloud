@@ -17,7 +17,9 @@ conf = ConnectionConfig(
 
 async def send_reset_password_email(email: str, reset_token: str):
     """Send a password reset email."""
-    reset_url = f"{settings.FRONTEND_URL}/reset-password?token={reset_token}"
+    reset_url = (
+        f"{settings.FRONTEND_URL}{settings.RESET_PASSWORD_URL}?token={reset_token}"
+    )
     message = MessageSchema(
         subject="Restablecer contraseña",
         recipients=[email],

@@ -21,6 +21,7 @@ class Settings(BaseSettings):
     EMAIL_SERVER: str
 
     FRONTEND_URL: str = "http://localhost:5173"
+    RESET_PASSWORD_URL: str = "/restablecer-contrasena"
 
     ORIGINS: list[str] = [
         "http://localhost",
