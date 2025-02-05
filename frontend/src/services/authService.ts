@@ -57,6 +57,15 @@ const handleAxiosError = (error: AxiosError): never => {
   }
 };
 
+export const fetchAuthenticatedUser = async () => {
+  try {
+    const response = await axiosInstance.get("/auth/me");
+    return response.data;
+  } catch (error) {
+    handleAxiosError(error as AxiosError);
+  }
+};
+
 export const registerUser = async (data: RegisterData) => {
   try {
     const response = await axiosInstance.post("/auth/register", data);
