@@ -166,8 +166,8 @@ export const LoginForm = () => {
       {/* Terms of service */}
       <div className="text-balance text-center text-xs text-muted-foreground [&_a]:underline [&_a]:underline-offset-4 hover:[&_a]:text-primary  ">
         Al hacer clic en continuar, aceptas nuestros{" "}
-        <a href="#">Términos de servicio</a> y nuestra{" "}
-        <a href="#">Política de privacidad</a>.
+        <Link to="/terminos">Términos de servicio</Link> y nuestra{" "}
+        <Link to="/privacidad">Política de privacidad</Link>.
       </div>
     </div>
   );
