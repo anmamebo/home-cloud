@@ -20,6 +20,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
+import { useAuth } from "@/hooks/useAuth";
 import {
   BadgeCheck,
   Bell,
@@ -35,7 +36,10 @@ export const NavUser = ({
 }: {
   user: { name: string; email: string; avatar: string };
 }) => {
+  const { logout } = useAuth();
+
   const { isMobile } = useSidebar();
+
   const { theme, setTheme } = useTheme();
   const [selectedTheme, setSelectedTheme] = useState<
     "light" | "dark" | "system"
@@ -48,6 +52,10 @@ export const NavUser = ({
   const handleThemeChange = (newTheme: "light" | "dark" | "system") => {
     setTheme(newTheme);
     setSelectedTheme(newTheme);
+  };
+
+  const handleLogOut = () => {
+    logout();
   };
 
   return (
@@ -146,7 +154,7 @@ export const NavUser = ({
             <DropdownMenuSeparator />
 
             {/* Log out */}
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={handleLogOut}>
               <LogOut />
               Cerrar sesión
             </DropdownMenuItem>
