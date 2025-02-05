@@ -1,4 +1,4 @@
-import { MainLayout } from "@/components/layout/MainLayot";
+import { MainLayout } from "@/components/layout/MainLayout";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { PublicRoute } from "@/components/PublicRoute";
 import { Button } from "@/components/ui/button";
