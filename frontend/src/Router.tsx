@@ -1,3 +1,4 @@
+import { AuthLayout } from "@/components/layout/AuthLayout";
 import { MainLayout } from "@/components/layout/MainLayout";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { PublicRoute } from "@/components/PublicRoute";
@@ -8,7 +9,7 @@ import { PrivacyPolicy } from "@/pages/Privacy";
 import { RegisterPage } from "@/pages/RegisterPage";
 import { TermsOfService } from "@/pages/Terms";
 import { AuthProvider } from "@/providers/AuthProvider";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
 import { ResetPasswordPage } from "./pages/ResetPasswordPage";
 
 export const Router = () => {
@@ -16,18 +17,31 @@ export const Router = () => {
     <AuthProvider>
       <BrowserRouter>
         <Routes>
+          {/* Static pages */}
           <Route path="/terminos" element={<TermsOfService />} />
           <Route path="/privacidad" element={<PrivacyPolicy />} />
 
           {/* Public routes */}
           <Route element={<PublicRoute />}>
-            <Route path="/iniciar-sesion" element={<LoginPage />} />
-            <Route path="/registro" element={<RegisterPage />} />
-            <Route path="/olvide-contrasena" element={<ForgotPasswordPage />} />
+            {/* Auth routes */}
             <Route
-              path="/restablecer-contrasena"
-              element={<ResetPasswordPage />}
-            />
+              element={
+                <AuthLayout>
+                  <Outlet />
+                </AuthLayout>
+              }
+            >
+              <Route path="/iniciar-sesion" element={<LoginPage />} />
+              <Route path="/registro" element={<RegisterPage />} />
+              <Route
+                path="/olvide-contrasena"
+                element={<ForgotPasswordPage />}
+              />
+              <Route
+                path="/restablecer-contrasena"
+                element={<ResetPasswordPage />}
+              />
+            </Route>
           </Route>
 
           {/* Private routes */}
