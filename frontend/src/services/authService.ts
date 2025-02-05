@@ -85,3 +85,64 @@ export const loginUser = async (data: LoginData) => {
     }
   }
 };
+
+export const forgotPassword = async (data: { email: string }) => {
+  try {
+    const response = await axiosInstance.post("/auth/forgot-password", data);
+
+    if (response.status === 204) {
+      return "Se ha enviado un correo electrónico con instrucciones para restablecer tu contraseña.";
+    }
+
+    return response.data;
+  } catch (error) {
+    const errorResponse = error as AxiosError;
+
+    if (errorResponse.response) {
+      // Server responded with a status code different from 2xx
+      throw new Error(
+        `Ocurrió un error al enviar la solicitud. Por favor, inténtalo más tarde.`
+      );
+    } else if (errorResponse.request) {
+      // Request was made but no response was received
+      throw new Error(
+        "No se recibió respuesta del servidor. Verifica tu conexión a Internet."
+      );
+    } else {
+      // Something happened in setting up the request that triggered an error
+      throw new Error(
+        "Ocurrió un error al enviar la solicitud. Por favor, inténtalo más tarde."
+      );
+    }
+  }
+};
+
+export const resetPassword = async (data: {
+  token: string;
+  new_password: string;
+}) => {
+  try {
+    const response = await axiosInstance.post("/auth/reset-password", data);
+
+    return response.data;
+  } catch (error) {
+    const errorResponse = error as AxiosError;
+
+    if (errorResponse.response) {
+      // Server responded with a status code different from 2xx
+      throw new Error(
+        `Ocurrió un error al enviar la solicitud. Por favor, inténtalo más tarde.`
+      );
+    } else if (errorResponse.request) {
+      // Request was made but no response was received
+      throw new Error(
+        "No se recibió respuesta del servidor. Verifica tu conexión a Internet."
+      );
+    } else {
+      // Something happened in setting up the request that triggered an error
+      throw new Error(
+        "Ocurrió un error al enviar la solicitud. Por favor, inténtalo más tarde."
+      );
+    }
+  }
+};
