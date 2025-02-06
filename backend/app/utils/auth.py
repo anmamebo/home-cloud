@@ -32,7 +32,7 @@ def get_current_user(token: Annotated[str, Depends(oauth2_scheme)], db: SessionD
     if not user:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail="Usuario no encontrado.",
+            detail="No se encontró el usuario autenticado.",
         )
 
     return user

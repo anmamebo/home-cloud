@@ -76,7 +76,7 @@ def login(db: SessionDep, form_data: OAuth2PasswordRequestForm = Depends()) -> T
     if not user or not verify_password(form_data.password, user.hashed_password):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Usuario o contraseña incorrectos.",
+            detail="Credenciales incorrectas. Por favor, inténtalo de nuevo.",
             headers={"WWW-Authenticate": "Bearer"},
         )
 
@@ -125,7 +125,7 @@ def forgot_password(
     if not user:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail="Usuario no encontrado.",
+            detail="El correo electrónico proporcionado no está registrado.",
         )
 
     reset_token = generate_password_reset_token(user.email)
@@ -144,14 +144,14 @@ def reset_password(password_data: ResetPasswordRequest, db: SessionDep):
     if not email:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="El token es inválido o ha expirado.",
+            detail="El token proporcionado es inválido o ha expirado.",
         )
 
     user = get_user_by_email(db, email)
     if not user:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail="Usuario no encontrado.",
+            detail="El token proporcionado es inválido o ha expirado.",
         )
 
     user.hashed_password = get_password_hash(password_data.new_password)
