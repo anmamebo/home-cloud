@@ -21,6 +21,13 @@ def get_current_user(token: Annotated[str, Depends(oauth2_scheme)], db: SessionD
         )
 
     username = payload.get("sub")
+    if not username:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Token inválido.",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
     user = get_user_by_username(db, username)
     if not user:
         raise HTTPException(

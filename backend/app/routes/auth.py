@@ -114,9 +114,14 @@ def forgot_password(
     email_data: ForgotPasswordRequest, db: SessionDep, background_tasks: BackgroundTasks
 ):
     user = get_user_by_email(db, email_data.email)
-    if user:
-        reset_token = generate_password_reset_token(user.email)
-        background_tasks.add_task(send_reset_password_email, user.email, reset_token)
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Usuario no encontrado.",
+        )
+
+    reset_token = generate_password_reset_token(user.email)
+    background_tasks.add_task(send_reset_password_email, user.email, reset_token)
     return None
 
 

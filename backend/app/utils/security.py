@@ -42,6 +42,8 @@ def decode_access_token(token: str):
         return payload
     except jwt.ExpiredSignatureError:
         return None
+    except (jwt.InvalidTokenError, jwt.DecodeError):
+        return None
 
 
 def generate_password_reset_token(email: str):
@@ -65,4 +67,6 @@ def decode_password_reset_token(token: str):
         )
         return payload.get("sub")  # returns the email
     except jwt.ExpiredSignatureError:
+        return None
+    except (jwt.InvalidTokenError, jwt.DecodeError):
         return None
