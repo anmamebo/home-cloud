@@ -10,53 +10,58 @@ import { RegisterPage } from "@/pages/RegisterPage";
 import { TermsOfService } from "@/pages/Terms";
 import { AuthProvider } from "@/providers/AuthProvider";
 import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
+import { AxiosErrorInterceptor } from "./interceptors/AxiosErrorInterceptor";
 import { ResetPasswordPage } from "./pages/ResetPasswordPage";
 
 export const Router = () => {
   return (
     <AuthProvider>
       <BrowserRouter>
-        <Routes>
-          {/* Static pages */}
-          <Route path="/terminos" element={<TermsOfService />} />
-          <Route path="/privacidad" element={<PrivacyPolicy />} />
+        <AxiosErrorInterceptor>
+          <Routes>
+            {/* Static pages */}
+            <Route path="/terminos" element={<TermsOfService />} />
+            <Route path="/privacidad" element={<PrivacyPolicy />} />
 
-          {/* Public routes */}
-          <Route element={<PublicRoute />}>
-            {/* Auth routes */}
-            <Route
-              element={
-                <AuthLayout>
-                  <Outlet />
-                </AuthLayout>
-              }
-            >
-              <Route path="/iniciar-sesion" element={<LoginPage />} />
-              <Route path="/registro" element={<RegisterPage />} />
+            {/* Public routes */}
+            <Route element={<PublicRoute />}>
+              {/* Auth routes */}
               <Route
-                path="/olvide-contrasena"
-                element={<ForgotPasswordPage />}
-              />
+                element={
+                  <AuthLayout>
+                    <Outlet />
+                  </AuthLayout>
+                }
+              >
+                <Route path="/iniciar-sesion" element={<LoginPage />} />
+                <Route path="/registro" element={<RegisterPage />} />
+                <Route
+                  path="/olvide-contrasena"
+                  element={<ForgotPasswordPage />}
+                />
+                <Route
+                  path="/restablecer-contrasena"
+                  element={<ResetPasswordPage />}
+                />
+              </Route>
+            </Route>
+
+            {/* Private routes */}
+            <Route element={<ProtectedRoute />}>
               <Route
-                path="/restablecer-contrasena"
-                element={<ResetPasswordPage />}
+                path="/"
+                element={
+                  <MainLayout>
+                    <h1 className="text-3xl font-bold underline">
+                      Hello world!
+                    </h1>
+                    <Button variant="secondary">Click me</Button>
+                  </MainLayout>
+                }
               />
             </Route>
-          </Route>
-
-          {/* Private routes */}
-          <Route element={<ProtectedRoute />}>
-            <Route
-              path="/"
-              element={
-                <MainLayout>
-                  <h1 className="text-3xl font-bold underline">Hello world!</h1>
-                  <Button variant="secondary">Click me</Button>
-                </MainLayout>
-              }
-            />
-          </Route>
-        </Routes>
+          </Routes>
+        </AxiosErrorInterceptor>
       </BrowserRouter>
     </AuthProvider>
   );
