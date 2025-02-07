@@ -1,5 +1,7 @@
+from datetime import datetime
+
 from app.models.user import User
-from app.schemas.user import UserIn
+from app.schemas.user import UserIn, UserInUpdate
 from app.utils.security import get_password_hash
 from sqlmodel import Session, select
 
@@ -23,3 +25,14 @@ def create_user(db: Session, user: UserIn):
     db.commit()
     db.refresh(db_user)
     return db_user
+
+
+def update_user(db: Session, user: User, update_data: UserInUpdate):
+    user_data = update_data.model_dump(exclude_unset=True)
+    user.sqlmodel_update(user_data)
+    user.updated_at = datetime.now()
+    db.add(user)
+    db.commit()
+    db.refresh(user)
+
+    return user
