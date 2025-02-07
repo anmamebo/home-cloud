@@ -20,8 +20,18 @@ type ResetPasswordData = {
   new_password: string;
 };
 
+type UpdateUserData = {
+  username: string;
+  email: string;
+};
+
 export const fetchAuthenticatedUser = async () => {
   const response = await axiosInstance.get("/auth/me");
+  return response.data;
+};
+
+export const updateAuthenticatedUser = async (data: UpdateUserData) => {
+  const response = await axiosInstance.patch("/auth/me", data);
   return response.data;
 };
 
