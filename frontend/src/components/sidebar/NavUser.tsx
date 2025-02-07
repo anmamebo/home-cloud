@@ -25,7 +25,6 @@ import {
 import { useAuth } from "@/hooks/useAuth";
 import {
   BadgeCheck,
-  Bell,
   ChevronsUpDown,
   KeyRound,
   LogOut,
@@ -132,10 +131,6 @@ export const NavUser = () => {
                 >
                   <KeyRound />
                   Cambiar contraseña
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Bell />
-                  Notificaciones
                 </DropdownMenuItem>
               </DropdownMenuGroup>
 
