@@ -1,3 +1,4 @@
+import { ChangePasswordDialog } from "@/components/profile/ChangePasswordDialog";
 import { ProfileDialog } from "@/components/profile/ProfileDialog";
 import { useTheme } from "@/components/theme";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -26,6 +27,7 @@ import {
   BadgeCheck,
   Bell,
   ChevronsUpDown,
+  KeyRound,
   LogOut,
   Moon,
   Sun,
@@ -43,6 +45,8 @@ export const NavUser = () => {
   >(theme);
 
   const [isProfileDialogOpen, setIsProfileDialogOpen] = useState(false);
+  const [isChangePasswordDialogOpen, setIsChangePasswordDialogOpen] =
+    useState(false);
 
   useEffect(() => {
     setSelectedTheme(theme);
@@ -123,6 +127,12 @@ export const NavUser = () => {
                   <BadgeCheck />
                   Mi cuenta
                 </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => setIsChangePasswordDialogOpen(true)}
+                >
+                  <KeyRound />
+                  Cambiar contraseña
+                </DropdownMenuItem>
                 <DropdownMenuItem>
                   <Bell />
                   Notificaciones
@@ -181,6 +191,12 @@ export const NavUser = () => {
       <ProfileDialog
         open={isProfileDialogOpen}
         onOpenChange={setIsProfileDialogOpen}
+      />
+
+      {/* Change Password Dialog */}
+      <ChangePasswordDialog
+        open={isChangePasswordDialogOpen}
+        onOpenChange={setIsChangePasswordDialogOpen}
       />
     </>
   );

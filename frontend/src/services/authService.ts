@@ -15,6 +15,11 @@ type ForgotPasswordData = {
   email: string;
 };
 
+type ChangePasswordData = {
+  old_password: string;
+  new_password: string;
+};
+
 type ResetPasswordData = {
   token: string;
   new_password: string;
@@ -46,6 +51,16 @@ export const loginUser = async (data: LoginData) => {
   params.append("password", data.password);
 
   const response = await axiosInstance.post("/auth/login", params);
+  return response.data;
+};
+
+export const changePassword = async (data: ChangePasswordData) => {
+  const response = await axiosInstance.post("/auth/change-password", data);
+
+  if (response.status === 204) {
+    return "Contraseña actualizada correctamente.";
+  }
+
   return response.data;
 };
 
