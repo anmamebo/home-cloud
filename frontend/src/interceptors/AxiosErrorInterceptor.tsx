@@ -47,12 +47,14 @@ export const AxiosErrorInterceptor = ({
 
   useEffect(() => {
     const errInterceptor = (error: AxiosError) => {
-      const { config } = error;
+      const { config, status } = error;
 
-      if (config?.url?.includes("/auth/me") && config?.method === "get") {
+      if (config?.url?.includes("/auth/me") && status === 401) {
         logout();
         navigate("/iniciar-sesion");
-        return Promise.reject(error);
+        return Promise.reject(
+          new Error("No autorizado. Por favor, inicia sesión.")
+        );
       }
 
       handleError(error);
