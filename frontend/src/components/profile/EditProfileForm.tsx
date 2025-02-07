@@ -13,6 +13,7 @@ import {
   fetchAuthenticatedUser,
   updateAuthenticatedUser,
 } from "@/services/authService";
+import { notify } from "@/services/notifications";
 import { getErrorMessage } from "@/utils/errorUtils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useCallback, useEffect, useState } from "react";
@@ -39,8 +40,6 @@ export const EditProfileForm = () => {
     },
   });
 
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchUserData = useCallback(async () => {
@@ -52,9 +51,7 @@ export const EditProfileForm = () => {
         email: response.email,
       });
     } catch (error) {
-      setErrorMessage(
-        "Ocurrió un error al cargar la información del usuario." + error
-      );
+      notify.error(getErrorMessage(error));
     } finally {
       setIsLoading(false);
     }
@@ -66,27 +63,16 @@ export const EditProfileForm = () => {
 
   const onSubmit = form.handleSubmit(
     async (values: z.infer<typeof formSchema>) => {
-      setErrorMessage(null);
-      setSuccessMessage(null);
-
       try {
         const response = await updateAuthenticatedUser(values);
         const { access_token } = response;
 
         login(access_token);
 
-        setSuccessMessage("Información actualizada correctamente.");
-
-        setTimeout(() => {
-          setSuccessMessage("");
-        }, 3000);
+        notify.success("Información actualizada correctamente.");
       } catch (error) {
-        setErrorMessage(getErrorMessage(error));
+        notify.error(getErrorMessage(error));
         console.error(error);
-
-        setTimeout(() => {
-          setErrorMessage("");
-        }, 3000);
       }
     }
   );
@@ -147,20 +133,6 @@ export const EditProfileForm = () => {
                 )}
               />
             </div>
-
-            {/* Success message */}
-            {successMessage && (
-              <div className="text-sm font-semibold text-green-700">
-                {successMessage}
-              </div>
-            )}
-
-            {/* Error message */}
-            {errorMessage && (
-              <div className="text-sm font-semibold text-red-500">
-                {errorMessage}
-              </div>
-            )}
 
             <Button type="submit" className="w-full">
               Guardar cambios
