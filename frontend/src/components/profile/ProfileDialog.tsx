@@ -16,15 +16,11 @@ import {
   DrawerTitle,
 } from "@/components/ui/drawer";
 import { useIsMobile } from "@/hooks/useMobile";
+import { DialogProps } from "@/types/DialogPropsTypes";
 import { createPortal } from "react-dom";
 import { EditProfileForm } from "./EditProfileForm";
 
-type ProfileDialogProps = {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-};
-
-export const ProfileDialog = ({ open, onOpenChange }: ProfileDialogProps) => {
+export const ProfileDialog = ({ open, onOpenChange }: DialogProps) => {
   const isMobile = useIsMobile();
 
   if (isMobile) {
