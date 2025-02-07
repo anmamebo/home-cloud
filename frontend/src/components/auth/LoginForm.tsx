@@ -8,6 +8,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { PasswordInput } from "@/components/ui/password-input";
 import { useAuth } from "@/hooks/useAuth";
 import { loginUser } from "@/services/authService";
 import { getErrorMessage } from "@/utils/errorUtils";
@@ -108,11 +109,7 @@ export const LoginForm = () => {
                     <FormItem>
                       <FormLabel>Contraseña</FormLabel>
                       <FormControl>
-                        <Input
-                          type="password"
-                          placeholder="********"
-                          {...field}
-                        />
+                        <PasswordInput placeholder="********" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
