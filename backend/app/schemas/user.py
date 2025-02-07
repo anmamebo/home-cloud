@@ -21,6 +21,15 @@ class UserInDB(UserBase):
     hashed_password: str
 
 
+class UserInUpdate(UserBase):
+    pass
+
+
+class UserOutUpdate(BaseModel):
+    user: UserOut
+    access_token: str
+
+
 class Token(BaseModel):
     access_token: str
     token_type: str
