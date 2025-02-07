@@ -1,6 +1,11 @@
 from datetime import datetime
 
-from app.crud.user import create_user, get_user_by_email, get_user_by_username
+from app.crud.user import (
+    create_user,
+    get_user_by_email,
+    get_user_by_username,
+    update_user,
+)
 from app.database.connection import SessionDep
 from app.schemas.user import (
     ChangePasswordRequest,
@@ -8,7 +13,9 @@ from app.schemas.user import (
     ResetPasswordRequest,
     Token,
     UserIn,
+    UserInUpdate,
     UserOut,
+    UserOutUpdate,
 )
 from app.utils.auth import CurrentUserDep, CurrentUserInDBDep
 from app.utils.email import send_reset_password_email
@@ -37,6 +44,36 @@ router = APIRouter(
 )
 def read_users_me(current_user: CurrentUserDep):
     return current_user
+
+
+@router.patch(
+    "/me",
+    response_model=UserOutUpdate,
+    status_code=status.HTTP_200_OK,
+    summary="Update the current user",
+    description="Update the current user information.",
+)
+def update_user_me(
+    user: UserInUpdate, db: SessionDep, current_user: CurrentUserInDBDep
+):
+    existing_user = get_user_by_username(db, user.username)
+    if existing_user and existing_user.id != current_user.id:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="El nombre de usuario ya está en uso.",
+        )
+
+    existing_user = get_user_by_email(db, user.email)
+    if existing_user and existing_user.id != current_user.id:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="El correo electrónico ya está en uso.",
+        )
+
+    updated_user = update_user(db, current_user, user)
+
+    access_token = create_access_token(data={"sub": updated_user.username})
+    return UserOutUpdate(user=updated_user, access_token=access_token)
 
 
 @router.post(
