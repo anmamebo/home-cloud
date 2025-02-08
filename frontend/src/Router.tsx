@@ -3,15 +3,15 @@ import { MainLayout } from "@/components/layout/MainLayout";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { PublicRoute } from "@/components/PublicRoute";
 import { Button } from "@/components/ui/button";
+import { AxiosErrorInterceptor } from "@/interceptors/AxiosErrorInterceptor";
 import { ForgotPasswordPage } from "@/pages/ForgotPasswordPage";
 import { LoginPage } from "@/pages/LoginPage";
 import { PrivacyPolicy } from "@/pages/Privacy";
 import { RegisterPage } from "@/pages/RegisterPage";
+import { ResetPasswordPage } from "@/pages/ResetPasswordPage";
 import { TermsOfService } from "@/pages/Terms";
 import { AuthProvider } from "@/providers/AuthProvider";
 import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
-import { AxiosErrorInterceptor } from "./interceptors/AxiosErrorInterceptor";
-import { ResetPasswordPage } from "./pages/ResetPasswordPage";
 
 export const Router = () => {
   return (
