@@ -2,7 +2,6 @@ import { AuthLayout } from "@/components/layout/AuthLayout";
 import { MainLayout } from "@/components/layout/MainLayout";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { PublicRoute } from "@/components/PublicRoute";
-import { Button } from "@/components/ui/button";
 import { AxiosErrorInterceptor } from "@/interceptors/AxiosErrorInterceptor";
 import { ForgotPasswordPage } from "@/pages/auth/ForgotPasswordPage";
 import { LoginPage } from "@/pages/auth/LoginPage";
@@ -10,8 +9,15 @@ import { RegisterPage } from "@/pages/auth/RegisterPage";
 import { ResetPasswordPage } from "@/pages/auth/ResetPasswordPage";
 import { PrivacyPolicy } from "@/pages/docs/Privacy";
 import { TermsOfService } from "@/pages/docs/Terms";
+import { MainPage } from "@/pages/filesystem/MainPage";
 import { AuthProvider } from "@/providers/AuthProvider";
-import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
+import {
+  BrowserRouter,
+  Navigate,
+  Outlet,
+  Route,
+  Routes,
+} from "react-router-dom";
 
 export const Router = () => {
   return (
@@ -52,13 +58,14 @@ export const Router = () => {
                 path="/"
                 element={
                   <MainLayout>
-                    <h1 className="text-3xl font-bold underline">
-                      Hello world!
-                    </h1>
-                    <Button variant="secondary">Click me</Button>
+                    <Outlet />
                   </MainLayout>
                 }
-              />
+              >
+                <Route path="/" element={<Navigate to="/carpeta" replace />} />
+                <Route path="/carpeta" element={<MainPage />} />
+                <Route path="/carpeta/:folderId" element={<MainPage />} />
+              </Route>
             </Route>
           </Routes>
         </AxiosErrorInterceptor>
