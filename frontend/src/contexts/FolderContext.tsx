@@ -17,6 +17,7 @@ type FolderContextType = {
   files: FileType[];
   numSubfolders?: number;
   numFiles?: number;
+  isLoading: boolean;
   fetchFolderContent: (folderId: number) => Promise<void>;
   refreshFolders: () => void;
 };
@@ -26,6 +27,7 @@ const FolderContext = createContext<FolderContextType>({
   folderName: "",
   subfolders: [],
   files: [],
+  isLoading: false,
   fetchFolderContent: async () => {},
   refreshFolders: () => {},
 });
@@ -39,8 +41,10 @@ export const FolderProvider = ({ children }: { children: ReactNode }) => {
   const [files, setFiles] = useState<FileType[]>([]);
   const [numSubfolders, setNumSubfolders] = useState(0);
   const [numFiles, setNumFiles] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
 
   const fetchFolderContent = useCallback(async (folderId: number) => {
+    setIsLoading(true);
     try {
       const response = await getFolderContent(folderId);
       const {
@@ -59,6 +63,8 @@ export const FolderProvider = ({ children }: { children: ReactNode }) => {
     } catch (error) {
       notify.error("Error al cargar el contenido de la carpeta");
       console.error(error);
+    } finally {
+      setIsLoading(false);
     }
   }, []);
 
@@ -75,6 +81,7 @@ export const FolderProvider = ({ children }: { children: ReactNode }) => {
         files,
         numSubfolders,
         numFiles,
+        isLoading,
         fetchFolderContent,
         refreshFolders,
       }}

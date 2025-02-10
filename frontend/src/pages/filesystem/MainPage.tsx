@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
 import { useFolderContext } from "@/contexts/FolderContext";
 import { FileType } from "@/types/fileType";
 import { FolderType } from "@/types/folderType";
@@ -12,8 +13,14 @@ export const MainPage = () => {
   const { folderId } = useParams<{ folderId: string }>();
   const folderIdNumber = folderId ? parseInt(folderId, 10) : 0;
 
-  const { subfolders, files, numSubfolders, numFiles, fetchFolderContent } =
-    useFolderContext();
+  const {
+    subfolders,
+    files,
+    numSubfolders,
+    numFiles,
+    isLoading,
+    fetchFolderContent,
+  } = useFolderContext();
 
   useEffect(() => {
     fetchFolderContent(folderIdNumber);
@@ -22,6 +29,14 @@ export const MainPage = () => {
   const handleDoubleClick = (folderId: number) => {
     navigate(`/carpeta/${folderId}`);
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex flex-col gap-6">
+        <Spinner size="medium" />
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col gap-6">
@@ -75,6 +90,26 @@ export const MainPage = () => {
               </Button>
             ))}
           </div>
+        </div>
+      )}
+
+      {/* No content */}
+      {!isLoading && !numSubfolders && !numFiles && (
+        <div className="flex flex-col items-center gap-2 text-center">
+          {/* Imagen */}
+          <div className="flex justify-center">
+            <img
+              src="/no-content-folder.svg"
+              alt="No hay contenido"
+              className="lg:w-1/3"
+              style={{ aspectRatio: "1/1" }}
+            />
+          </div>
+
+          {/* Texto */}
+          <p className="font-medium">
+            Parece que aún no has metido nada aquí... ¡Es hora de organizarte!
+          </p>
         </div>
       )}
     </div>
