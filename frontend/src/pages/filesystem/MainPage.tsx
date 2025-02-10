@@ -100,15 +100,10 @@ export const MainPage = () => {
 
       {/* No content */}
       {!isLoading && !numSubfolders && !numFiles && (
-        <div className="flex flex-col items-center gap-2 text-center">
+        <div className="flex flex-col items-center gap-6 text-center">
           {/* Imagen */}
-          <div className="flex justify-center">
-            <img
-              src="/no-content-folder.svg"
-              alt="No hay contenido"
-              className="lg:w-1/3"
-              style={{ aspectRatio: "1/1" }}
-            />
+          <div className="flex justify-center h-72 w-72 bg-sidebar-accent rounded-full">
+            <img src="/no-content-folder.svg" alt="No hay contenido" />
           </div>
 
           {/* Texto */}
