@@ -36,3 +36,7 @@ class FolderContent(FolderOut):
     @property
     def num_subfolders(self):
         return len(self.subfolders)
+
+
+class FolderPath(BaseModel):
+    path: list[FolderOut]

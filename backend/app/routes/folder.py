@@ -11,7 +11,7 @@ from app.crud.folder import (
 )
 from app.database.connection import SessionDep
 from app.models.folder import Folder
-from app.schemas.folder import FolderContent, FolderIn, FolderOut
+from app.schemas.folder import FolderContent, FolderIn, FolderOut, FolderPath
 from app.utils.auth import CurrentUserDep
 from app.utils.filesystem import (
     add_folder_to_zip,
@@ -240,3 +240,22 @@ def move_folder_route(
     db.refresh(folder)
 
     return folder
+
+
+@router.get("/{folder_id}/path", response_model=FolderPath)
+def get_folder_path(db: SessionDep, current_user: CurrentUserDep, folder_id: int):
+    folder = get_folder_by_id(db, folder_id)
+    if not folder:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Carpeta no encontrada.",
+        )
+
+    path = []
+    current_folder = folder
+    while current_folder:
+        path.append(FolderOut(**current_folder.__dict__))
+        current_folder = current_folder.parent
+
+    path.reverse()
+    return FolderPath(path=path)
