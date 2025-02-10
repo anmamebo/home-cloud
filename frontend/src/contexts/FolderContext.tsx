@@ -43,7 +43,13 @@ export const FolderProvider = ({ children }: { children: ReactNode }) => {
   const fetchFolderContent = useCallback(async (folderId: number) => {
     try {
       const response = await getFolderContent(folderId);
-      const { subfolders, files, name, numSubFolders, numFiles } = response;
+      const {
+        subfolders,
+        files,
+        name,
+        num_subfolders: numSubFolders,
+        num_files: numFiles,
+      } = response;
       setCurrentFolderId(folderId);
       setFolderName(name);
       setSubfolders(subfolders);
