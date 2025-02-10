@@ -16,6 +16,7 @@ const handleError = (error: AxiosError) => {
       400: message || "Hubo un problema con la solicitud.",
       401: message || "No autorizado. Por favor, inicia sesión nuevamente.",
       404: message || "No se encontró el recurso solicitado.",
+      409: message || "Hubo un conflicto con la solicitud.",
       500: "Ocurrió un error en el servidor. Por favor, inténtalo más tarde.",
     };
 
