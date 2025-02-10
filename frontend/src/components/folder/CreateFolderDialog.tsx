@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -5,6 +6,15 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+} from "@/components/ui/drawer";
 import { useIsMobile } from "@/hooks/useMobile";
 import { DialogProps } from "@/types/DialogPropsTypes";
 import { createPortal } from "react-dom";
@@ -14,7 +24,32 @@ export const CreateFolderDialog = ({ open, onOpenChange }: DialogProps) => {
   const isMobile = useIsMobile();
 
   if (isMobile) {
-    return <></>;
+    return createPortal(
+      <Drawer open={open} onOpenChange={onOpenChange}>
+        <DrawerContent>
+          {/* Header */}
+          <DrawerHeader className="text-left">
+            <DrawerTitle>Crear carpeta</DrawerTitle>
+            <DrawerDescription>
+              Crea una nueva carpeta para organizar tus archivos.
+            </DrawerDescription>
+          </DrawerHeader>
+
+          {/* Content */}
+          <div className="px-4">
+            <CreateFolderForm onOpenChange={onOpenChange} />
+          </div>
+
+          {/* Footer */}
+          <DrawerFooter className="pt-2">
+            <DrawerClose asChild>
+              <Button variant="outline">Cancelar</Button>
+            </DrawerClose>
+          </DrawerFooter>
+        </DrawerContent>
+      </Drawer>,
+      document.body
+    );
   }
 
   return createPortal(
@@ -24,7 +59,7 @@ export const CreateFolderDialog = ({ open, onOpenChange }: DialogProps) => {
         <DialogHeader>
           <DialogTitle>Crear carpeta</DialogTitle>
           <DialogDescription>
-            Crea una nueva carpeta para organizar tus archivos
+            Crea una nueva carpeta para organizar tus archivos.
           </DialogDescription>
         </DialogHeader>
 
