@@ -49,7 +49,7 @@ export const AxiosErrorInterceptor = ({
     const errInterceptor = (error: AxiosError) => {
       const { config, status } = error;
 
-      if (config?.url?.includes("/auth/me") && status === 401) {
+      if (status === 401 && !config?.url?.includes("/auth/login")) {
         logout();
         navigate("/iniciar-sesion");
         return Promise.reject(
