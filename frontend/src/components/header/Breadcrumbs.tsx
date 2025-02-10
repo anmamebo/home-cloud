@@ -7,6 +7,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 
 export const Breadcrumbs = () => {
@@ -36,19 +37,21 @@ export const Breadcrumbs = () => {
 
         {/* Folders breadcrumbs */}
         {breadcrumbs.map((crumb, index) => (
-          <BreadcrumbItem key={crumb.id}>
+          <React.Fragment key={crumb.id}>
             <BreadcrumbSeparator />
-            {index === breadcrumbs.length - 1 ? (
-              <BreadcrumbPage>{crumb.name}</BreadcrumbPage>
-            ) : (
-              <BreadcrumbLink
-                className="cursor-pointer"
-                onClick={() => handleNavigate(crumb.id)}
-              >
-                {crumb.name}
-              </BreadcrumbLink>
-            )}
-          </BreadcrumbItem>
+            <BreadcrumbItem key={crumb.id}>
+              {index === breadcrumbs.length - 1 ? (
+                <BreadcrumbPage>{crumb.name}</BreadcrumbPage>
+              ) : (
+                <BreadcrumbLink
+                  className="cursor-pointer"
+                  onClick={() => handleNavigate(crumb.id)}
+                >
+                  {crumb.name}
+                </BreadcrumbLink>
+              )}
+            </BreadcrumbItem>
+          </React.Fragment>
         ))}
       </BreadcrumbList>
     </Breadcrumb>
