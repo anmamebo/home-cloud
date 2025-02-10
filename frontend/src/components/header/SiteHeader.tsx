@@ -1,13 +1,8 @@
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbList,
-  BreadcrumbPage,
-} from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { useSidebar } from "@/components/ui/sidebar";
 import { SidebarIcon } from "lucide-react";
+import { Breadcrumbs } from "./Breadcrumbs";
 
 export const SiteHeader = () => {
   const { toggleSidebar } = useSidebar();
@@ -28,13 +23,7 @@ export const SiteHeader = () => {
         <Separator orientation="vertical" className="mr-2 h-4" />
 
         {/* Breadcrumb */}
-        <Breadcrumb className="hidden sm:block">
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbPage>Inicio</BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
+        <Breadcrumbs />
 
         {/* Search */}
         {/* <SearchForm className="w-full sm:ml-auto sm:w-auto" /> */}
