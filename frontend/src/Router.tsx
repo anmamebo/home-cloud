@@ -55,7 +55,6 @@ export const Router = () => {
             {/* Private routes */}
             <Route element={<ProtectedRoute />}>
               <Route
-                path="/"
                 element={
                   <MainLayout>
                     <Outlet />
