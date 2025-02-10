@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { useFolderContext } from "@/contexts/FolderContext";
+import { useIsMobile } from "@/hooks/useMobile";
 import { FileType } from "@/types/fileType";
 import { FolderType } from "@/types/folderType";
 import { EllipsisVertical, File, Folder } from "lucide-react";
@@ -9,6 +10,7 @@ import { useNavigate, useParams } from "react-router-dom";
 
 export const MainPage = () => {
   const navigate = useNavigate();
+  const isMobile = useIsMobile();
 
   const { folderId } = useParams<{ folderId: string }>();
   const folderIdNumber = folderId ? parseInt(folderId, 10) : 0;
@@ -26,7 +28,7 @@ export const MainPage = () => {
     fetchFolderContent(folderIdNumber);
   }, [folderIdNumber, fetchFolderContent]);
 
-  const handleDoubleClick = (folderId: number) => {
+  const handleNavigate = (folderId: number) => {
     navigate(`/carpeta/${folderId}`);
   };
 
@@ -50,7 +52,10 @@ export const MainPage = () => {
                 key={item.id}
                 variant="outline"
                 className="flex text-left items-center gap-4 p-6"
-                onDoubleClick={() => handleDoubleClick(item.id)}
+                onClick={isMobile ? () => handleNavigate(item.id) : undefined}
+                onDoubleClick={
+                  !isMobile ? () => handleNavigate(item.id) : undefined
+                }
               >
                 <div className="flex-none">
                   <Folder size={28} />
