@@ -1,10 +1,9 @@
 import { Button } from "@/components/ui/button";
-import { getFolderContent } from "@/services/folderService";
-import { notify } from "@/services/notifications";
+import { useFolderContext } from "@/contexts/FolderContext";
 import { FileType } from "@/types/fileType";
 import { FolderType } from "@/types/folderType";
 import { EllipsisVertical, File, Folder } from "lucide-react";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 export const MainPage = () => {
@@ -13,30 +12,12 @@ export const MainPage = () => {
   const { folderId } = useParams<{ folderId: string }>();
   const folderIdNumber = folderId ? parseInt(folderId, 10) : 0;
 
-  const [subforlders, setSubforlders] = useState([]);
-  const [files, setFiles] = useState([]);
-  const [numSubfolders, setNumSubfolders] = useState(0);
-  const [numFiles, setNumFiles] = useState(0);
-
-  const fetchFolderContent = useCallback(async () => {
-    try {
-      const response = await getFolderContent(folderIdNumber);
-
-      const { subfolders, files, num_files, num_subfolders } = response;
-
-      setSubforlders(subfolders);
-      setFiles(files);
-      setNumSubfolders(num_subfolders);
-      setNumFiles(num_files);
-    } catch (error) {
-      notify.error("Error al cargar el contenido de la carpeta");
-      console.log(error);
-    }
-  }, [folderIdNumber]);
+  const { subfolders, files, numSubfolders, numFiles, fetchFolderContent } =
+    useFolderContext();
 
   useEffect(() => {
-    fetchFolderContent();
-  }, [fetchFolderContent]);
+    fetchFolderContent(folderIdNumber);
+  }, [folderIdNumber, fetchFolderContent]);
 
   const handleDoubleClick = (folderId: number) => {
     navigate(`/carpeta/${folderId}`);
@@ -49,7 +30,7 @@ export const MainPage = () => {
         <div>
           <h3 className="text-md font-semibold mb-3">Carpetas</h3>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4">
-            {subforlders.map((item: FolderType) => (
+            {subfolders.map((item: FolderType) => (
               <Button
                 key={item.id}
                 variant="outline"

@@ -2,6 +2,7 @@ import { AuthLayout } from "@/components/layout/AuthLayout";
 import { MainLayout } from "@/components/layout/MainLayout";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { PublicRoute } from "@/components/PublicRoute";
+import { FolderProvider } from "@/contexts/FolderContext";
 import { AxiosErrorInterceptor } from "@/interceptors/AxiosErrorInterceptor";
 import { ForgotPasswordPage } from "@/pages/auth/ForgotPasswordPage";
 import { LoginPage } from "@/pages/auth/LoginPage";
@@ -22,53 +23,58 @@ import {
 export const Router = () => {
   return (
     <AuthProvider>
-      <BrowserRouter>
-        <AxiosErrorInterceptor>
-          <Routes>
-            {/* Static pages */}
-            <Route path="/terminos" element={<TermsOfService />} />
-            <Route path="/privacidad" element={<PrivacyPolicy />} />
+      <FolderProvider>
+        <BrowserRouter>
+          <AxiosErrorInterceptor>
+            <Routes>
+              {/* Static pages */}
+              <Route path="/terminos" element={<TermsOfService />} />
+              <Route path="/privacidad" element={<PrivacyPolicy />} />
 
-            {/* Public routes */}
-            <Route element={<PublicRoute />}>
-              {/* Auth routes */}
-              <Route
-                element={
-                  <AuthLayout>
-                    <Outlet />
-                  </AuthLayout>
-                }
-              >
-                <Route path="/iniciar-sesion" element={<LoginPage />} />
-                <Route path="/registro" element={<RegisterPage />} />
+              {/* Public routes */}
+              <Route element={<PublicRoute />}>
+                {/* Auth routes */}
                 <Route
-                  path="/olvide-contrasena"
-                  element={<ForgotPasswordPage />}
-                />
-                <Route
-                  path="/restablecer-contrasena"
-                  element={<ResetPasswordPage />}
-                />
+                  element={
+                    <AuthLayout>
+                      <Outlet />
+                    </AuthLayout>
+                  }
+                >
+                  <Route path="/iniciar-sesion" element={<LoginPage />} />
+                  <Route path="/registro" element={<RegisterPage />} />
+                  <Route
+                    path="/olvide-contrasena"
+                    element={<ForgotPasswordPage />}
+                  />
+                  <Route
+                    path="/restablecer-contrasena"
+                    element={<ResetPasswordPage />}
+                  />
+                </Route>
               </Route>
-            </Route>
 
-            {/* Private routes */}
-            <Route element={<ProtectedRoute />}>
-              <Route
-                element={
-                  <MainLayout>
-                    <Outlet />
-                  </MainLayout>
-                }
-              >
-                <Route path="/" element={<Navigate to="/carpeta" replace />} />
-                <Route path="/carpeta" element={<MainPage />} />
-                <Route path="/carpeta/:folderId" element={<MainPage />} />
+              {/* Private routes */}
+              <Route element={<ProtectedRoute />}>
+                <Route
+                  element={
+                    <MainLayout>
+                      <Outlet />
+                    </MainLayout>
+                  }
+                >
+                  <Route
+                    path="/"
+                    element={<Navigate to="/carpeta" replace />}
+                  />
+                  <Route path="/carpeta" element={<MainPage />} />
+                  <Route path="/carpeta/:folderId" element={<MainPage />} />
+                </Route>
               </Route>
-            </Route>
-          </Routes>
-        </AxiosErrorInterceptor>
-      </BrowserRouter>
+            </Routes>
+          </AxiosErrorInterceptor>
+        </BrowserRouter>
+      </FolderProvider>
     </AuthProvider>
   );
 };
