@@ -1,5 +1,6 @@
+import { FileList } from "@/components/file/FileList";
+import { FolderList } from "@/components/folder/FolderList";
 import { SortItems } from "@/components/shared/SortItems";
-import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import {
   FILE_SORT_OPTIONS,
@@ -10,7 +11,6 @@ import { useIsMobile } from "@/hooks/useMobile";
 import { FileType } from "@/types/fileType";
 import { FolderType } from "@/types/folderType";
 import { SortValue } from "@/types/SortTypes";
-import { EllipsisVertical, File, Folder } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -77,29 +77,11 @@ export const MainPage = () => {
               onSortChange={handleFolderSortChange}
             />
           </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4">
-            {subfolders.map((item: FolderType) => (
-              <Button
-                key={item.id}
-                variant="outline"
-                className="flex text-left items-center gap-4 p-6"
-                onClick={isMobile ? () => handleNavigate(item.id) : undefined}
-                onDoubleClick={
-                  !isMobile ? () => handleNavigate(item.id) : undefined
-                }
-              >
-                <div className="flex-none">
-                  <Folder size={28} />
-                </div>
-                <div className="flex-grow truncate text-md font-medium">
-                  {item.name}
-                </div>
-                <div className="flex-none">
-                  <EllipsisVertical size={22} />
-                </div>
-              </Button>
-            ))}
-          </div>
+          <FolderList
+            folders={subfolders as FolderType[]}
+            onNavigate={handleNavigate}
+            isMobile={isMobile}
+          />
         </div>
       )}
 
@@ -114,25 +96,7 @@ export const MainPage = () => {
               onSortChange={handleFileSortChange}
             />
           </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4">
-            {files.map((item: FileType) => (
-              <Button
-                key={item.id}
-                variant="outline"
-                className="flex text-left items-center gap-4 p-6"
-              >
-                <div className="flex-none">
-                  <File size={28} />
-                </div>
-                <div className="flex-grow truncate text-md font-medium">
-                  {item.filename}
-                </div>
-                <div className="flex-none">
-                  <EllipsisVertical size={22} />
-                </div>
-              </Button>
-            ))}
-          </div>
+          <FileList files={files as FileType[]} />
         </div>
       )}
 
