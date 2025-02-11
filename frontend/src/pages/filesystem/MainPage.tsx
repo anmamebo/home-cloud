@@ -1,11 +1,17 @@
+import { SortItems } from "@/components/shared/SortItems";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
+import {
+  FILE_SORT_OPTIONS,
+  FOLDER_SORT_OPTIONS,
+} from "@/constants/SortOptionsConstants";
 import { useFolderContext } from "@/contexts/FolderContext";
 import { useIsMobile } from "@/hooks/useMobile";
 import { FileType } from "@/types/fileType";
 import { FolderType } from "@/types/folderType";
+import { SortValue } from "@/types/SortTypes";
 import { EllipsisVertical, File, Folder } from "lucide-react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 export const MainPage = () => {
@@ -15,18 +21,36 @@ export const MainPage = () => {
   const { folderId } = useParams<{ folderId: string }>();
   const folderIdNumber = folderId ? parseInt(folderId, 10) : 0;
 
+  const [selectedFolderOrder, setSelectedFolderOrder] =
+    useState("created_at-desc");
+  const [selectedFileOrder, setSelectedFileOrder] = useState("created_at-desc");
+
   const {
     subfolders,
     files,
     numSubfolders,
     numFiles,
     isLoading,
+    sortBy,
+    setSortBy,
     fetchFolderContent,
   } = useFolderContext();
 
+  const handleFolderSortChange = (value: string) => {
+    const [sortByFolders, orderFolders] = value.split("-");
+    setSortBy({ ...sortBy, folders: sortByFolders, orderFolders });
+    setSelectedFolderOrder(value);
+  };
+
+  const handleFileSortChange = (value: string) => {
+    const [sortByFiles, orderFiles] = value.split("-");
+    setSortBy({ ...sortBy, files: sortByFiles, orderFiles });
+    setSelectedFileOrder(value);
+  };
+
   useEffect(() => {
     fetchFolderContent(folderIdNumber);
-  }, [folderIdNumber, fetchFolderContent]);
+  }, [folderIdNumber, fetchFolderContent, sortBy]);
 
   const handleNavigate = (folderId: number) => {
     navigate(`/carpeta/${folderId}`);
@@ -45,7 +69,14 @@ export const MainPage = () => {
       {/* Folders */}
       {numSubfolders !== 0 && (
         <div>
-          <h3 className="text-md font-semibold mb-3">Carpetas</h3>
+          <div className="flex justify-between items-center mb-3">
+            <h3 className="text-md font-semibold">Carpetas</h3>
+            <SortItems
+              options={FOLDER_SORT_OPTIONS}
+              defaultOption={selectedFolderOrder as SortValue}
+              onSortChange={handleFolderSortChange}
+            />
+          </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4">
             {subfolders.map((item: FolderType) => (
               <Button
@@ -75,7 +106,14 @@ export const MainPage = () => {
       {/* Files */}
       {numFiles !== 0 && (
         <div>
-          <h3 className="text-md font-semibold mb-3">Archivos</h3>
+          <div className="flex justify-between items-center mb-3">
+            <h3 className="text-md font-semibold">Archivos</h3>
+            <SortItems
+              options={FILE_SORT_OPTIONS}
+              defaultOption={selectedFileOrder as SortValue}
+              onSortChange={handleFileSortChange}
+            />
+          </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4">
             {files.map((item: FileType) => (
               <Button

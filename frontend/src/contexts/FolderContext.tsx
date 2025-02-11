@@ -10,6 +10,13 @@ import {
   useState,
 } from "react";
 
+type SortByType = {
+  folders: string;
+  files: string;
+  orderFolders: string;
+  orderFiles: string;
+};
+
 type FolderContextType = {
   currentFolderId: number;
   folderName: string;
@@ -18,6 +25,8 @@ type FolderContextType = {
   numSubfolders?: number;
   numFiles?: number;
   isLoading: boolean;
+  sortBy: SortByType;
+  setSortBy: (sortBy: SortByType) => void;
   fetchFolderContent: (folderId: number) => Promise<void>;
   refreshFolders: () => void;
 };
@@ -28,6 +37,13 @@ const FolderContext = createContext<FolderContextType>({
   subfolders: [],
   files: [],
   isLoading: false,
+  sortBy: {
+    folders: "created_at",
+    files: "created_at",
+    orderFolders: "desc",
+    orderFiles: "desc",
+  },
+  setSortBy: () => {},
   fetchFolderContent: async () => {},
   refreshFolders: () => {},
 });
@@ -43,30 +59,46 @@ export const FolderProvider = ({ children }: { children: ReactNode }) => {
   const [numFiles, setNumFiles] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
 
-  const fetchFolderContent = useCallback(async (folderId: number) => {
-    setIsLoading(true);
-    try {
-      const response = await getFolderContent(folderId);
-      const {
-        subfolders,
-        files,
-        name,
-        num_subfolders: numSubFolders,
-        num_files: numFiles,
-      } = response;
-      setCurrentFolderId(folderId);
-      setFolderName(name);
-      setSubfolders(subfolders);
-      setFiles(files);
-      setNumSubfolders(numSubFolders);
-      setNumFiles(numFiles);
-    } catch (error) {
-      notify.error("Error al cargar el contenido de la carpeta");
-      console.error(error);
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
+  const [sortBy, setSortBy] = useState<SortByType>({
+    folders: "created_at",
+    files: "created_at",
+    orderFolders: "desc",
+    orderFiles: "desc",
+  });
+
+  const fetchFolderContent = useCallback(
+    async (folderId: number) => {
+      setIsLoading(true);
+      try {
+        const response = await getFolderContent(
+          folderId,
+          sortBy.folders,
+          sortBy.orderFolders,
+          sortBy.files,
+          sortBy.orderFiles
+        );
+        const {
+          subfolders,
+          files,
+          name,
+          num_subfolders: numSubFolders,
+          num_files: numFiles,
+        } = response;
+        setCurrentFolderId(folderId);
+        setFolderName(name);
+        setSubfolders(subfolders);
+        setFiles(files);
+        setNumSubfolders(numSubFolders);
+        setNumFiles(numFiles);
+      } catch (error) {
+        notify.error("Error al cargar el contenido de la carpeta");
+        console.error(error);
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [sortBy]
+  );
 
   const refreshFolders = useCallback(() => {
     fetchFolderContent(currentFolderId);
@@ -82,6 +114,8 @@ export const FolderProvider = ({ children }: { children: ReactNode }) => {
         numSubfolders,
         numFiles,
         isLoading,
+        sortBy,
+        setSortBy,
         fetchFolderContent,
         refreshFolders,
       }}
