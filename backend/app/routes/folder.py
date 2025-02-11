@@ -1,6 +1,7 @@
 import io
 import zipfile
 from datetime import datetime
+from typing import Optional
 
 from app.crud.folder import (
     check_same_name,
@@ -19,7 +20,8 @@ from app.utils.filesystem import (
     get_file_content,
     is_subfolder,
 )
-from fastapi import APIRouter, HTTPException, status
+from app.utils.sort import OrderDirection, SortByFiles, SortByFolders
+from fastapi import APIRouter, HTTPException, Query, status
 from fastapi.responses import StreamingResponse
 
 router = APIRouter(
@@ -77,16 +79,52 @@ def get_folder_contents_route(
     db: SessionDep,
     current_user: CurrentUserDep,
     folder_id: int,
+    sort_by_folders: Optional[SortByFolders] = Query(
+        default=None,
+        description="Field to sort folders by. Allowed values: name, created_at.",
+    ),
+    sort_by_files: Optional[SortByFiles] = Query(
+        default=None,
+        description="Field to sort files by. Allowed values: filename, filesize, created_at.",
+    ),
+    order_folders: Optional[OrderDirection] = Query(
+        default=None,
+        description="Order direction for folders. Allowed values: asc, desc.",
+    ),
+    order_files: Optional[OrderDirection] = Query(
+        default=None,
+        description="Order direction for files. Allowed values: asc, desc.",
+    ),
 ):
-    if folder_id == 0:
-        return get_root_folder(db)
+    sort_folders = sort_by_folders.value if sort_by_folders else None
+    sort_files = sort_by_files.value if sort_by_files else None
+    order_folders = order_folders.value if order_folders else None
+    order_files = order_files.value if order_files else None
 
-    folder = get_folder_by_id(db, folder_id)
+    if folder_id == 0:
+        return get_root_folder(
+            db,
+            sort_folders,
+            sort_files,
+            order_folders,
+            order_files,
+        )
+
+    folder = get_folder_by_id(
+        db,
+        folder_id,
+        sort_folders,
+        sort_files,
+        order_folders,
+        order_files,
+    )
+
     if not folder:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Carpeta no encontrada.",
         )
+
     return folder
 
 
