@@ -15,12 +15,12 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from "@/components/ui/drawer";
+import { ChangePasswordForm } from "@/features/user";
 import { useIsMobile } from "@/hooks/useMobile";
 import { DialogProps } from "@/types";
 import { createPortal } from "react-dom";
-import { EditProfileForm } from "./EditProfileForm";
 
-export const ProfileDialog = ({ open, onOpenChange }: DialogProps) => {
+export const ChangePasswordDialog = ({ open, onOpenChange }: DialogProps) => {
   const isMobile = useIsMobile();
 
   if (isMobile) {
@@ -29,15 +29,16 @@ export const ProfileDialog = ({ open, onOpenChange }: DialogProps) => {
         <DrawerContent>
           {/* Header */}
           <DrawerHeader className="text-left">
-            <DrawerTitle>Editar perfil</DrawerTitle>
+            <DrawerTitle>Cambiar contraseña</DrawerTitle>
             <DrawerDescription>
-              Actualiza tu información personal
+              Realiza cambios en tu contraseña aquí. Haz clic en actualizar
+              cuando termines.
             </DrawerDescription>
           </DrawerHeader>
 
           {/* Content */}
           <div className="px-4">
-            <EditProfileForm />
+            <ChangePasswordForm />
           </div>
 
           {/* Footer */}
@@ -57,15 +58,15 @@ export const ProfileDialog = ({ open, onOpenChange }: DialogProps) => {
       <DialogContent className="sm:max-w-[550px]">
         {/* Header */}
         <DialogHeader>
-          <DialogTitle>Editar perfil</DialogTitle>
+          <DialogTitle>Cambiar contraseña</DialogTitle>
           <DialogDescription>
-            Realiza cambios en tu perfil aquí. Haz clic en guardar cuando
+            Realiza cambios en tu contraseña aquí. Haz clic en actualizar cuando
             termines.
           </DialogDescription>
         </DialogHeader>
 
         {/* Content */}
-        <EditProfileForm />
+        <ChangePasswordForm />
       </DialogContent>
     </Dialog>,
     document.body

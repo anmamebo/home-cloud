@@ -1,5 +1,3 @@
-import { ChangePasswordDialog } from "@/components/profile/ChangePasswordDialog";
-import { ProfileDialog } from "@/components/profile/ProfileDialog";
 import { useTheme } from "@/components/theme";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -23,6 +21,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { useAuth } from "@/contexts/AuthContext";
+import { ChangePasswordDialog, ProfileDialog } from "@/features/user";
 import {
   BadgeCheck,
   ChevronsUpDown,
