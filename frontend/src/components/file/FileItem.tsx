@@ -18,7 +18,7 @@ export const FileItem = ({ file }: FileItemProps) => {
       <Tooltip>
         <TooltipTrigger asChild>
           <Card
-            className="p-4 cursor-pointer hover:bg-accent hover:text-accent-foreground transition-colors"
+            className="p-4 cursor-pointer hover:bg-muted/40 transition-colors"
             role="button"
             tabIndex={0}
           >
@@ -26,7 +26,7 @@ export const FileItem = ({ file }: FileItemProps) => {
               <div className="flex-none">
                 <FileIcon size={22} />
               </div>
-              <div className="flex-grow truncate text-md font-medium">
+              <div className="flex-grow truncate text-md font-medium select-none">
                 {file.filename}
               </div>
               <div className="flex-none">
