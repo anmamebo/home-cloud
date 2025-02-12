@@ -1,5 +1,5 @@
-import axiosInstance from "@/config/axios";
 import { useAuth } from "@/contexts/AuthContext";
+import axiosInstance from "@/services/api";
 import { AxiosError } from "axios";
 import { ReactNode, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";

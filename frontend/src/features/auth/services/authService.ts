@@ -1,4 +1,4 @@
-import axiosInstance from "@/config/axios";
+import axiosInstance from "@/services/api";
 
 type LoginData = {
   username: string;
