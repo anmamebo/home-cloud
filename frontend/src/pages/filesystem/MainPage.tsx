@@ -9,9 +9,7 @@ import {
 } from "@/constants/SortOptionsConstants";
 import { useFolderContext } from "@/contexts/FolderContext";
 import { useIsMobile } from "@/hooks/useMobile";
-import { FileType } from "@/types/fileType";
-import { FolderType } from "@/types/folderType";
-import { SortValue } from "@/types/SortTypes";
+import { File, Folder, SortValue } from "@/types";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -79,7 +77,7 @@ export const MainPage = () => {
             />
           </div>
           <FolderList
-            folders={subfolders as FolderType[]}
+            folders={subfolders as Folder[]}
             onNavigate={handleNavigate}
             isMobile={isMobile}
           />
@@ -97,7 +95,7 @@ export const MainPage = () => {
               onSortChange={handleFileSortChange}
             />
           </div>
-          <FileList files={files as FileType[]} />
+          <FileList files={files as File[]} />
         </div>
       )}
 

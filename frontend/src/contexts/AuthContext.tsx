@@ -1,5 +1,5 @@
 import { fetchAuthenticatedUser } from "@/features/auth";
-import { User } from "@/types/UserTypes";
+import { User } from "@/types";
 import {
   createContext,
   ReactNode,

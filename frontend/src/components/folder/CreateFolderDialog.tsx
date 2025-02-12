@@ -16,7 +16,7 @@ import {
   DrawerTitle,
 } from "@/components/ui/drawer";
 import { useIsMobile } from "@/hooks/useMobile";
-import { DialogProps } from "@/types/DialogPropsTypes";
+import { DialogProps } from "@/types";
 import { createPortal } from "react-dom";
 import { CreateFolderForm } from "./CreateFolderForm";
 

@@ -1,5 +1,5 @@
 import { getFolderPath } from "@/services/folderService";
-import { Breadcrumb } from "@/types/breadcrumbType";
+import { Breadcrumb } from "@/types";
 import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 

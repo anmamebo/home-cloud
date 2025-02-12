@@ -1,4 +1,4 @@
-import { SortOption } from "@/types/SortTypes";
+import { SortOption } from "@/types";
 
 export const FILE_SORT_OPTIONS: SortOption[] = [
   { value: "filename-asc", label: "Nombre: ascendente" },

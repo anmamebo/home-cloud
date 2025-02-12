@@ -1,7 +1,6 @@
 import { getFolderContent } from "@/services/folderService";
 import { notify } from "@/services/notifications";
-import { FileType } from "@/types/fileType";
-import { FolderType } from "@/types/folderType";
+import { File, Folder } from "@/types";
 import {
   createContext,
   ReactNode,
@@ -20,8 +19,8 @@ type SortByType = {
 type FolderContextType = {
   currentFolderId: number;
   folderName: string;
-  subfolders: FolderType[];
-  files: FileType[];
+  subfolders: Folder[];
+  files: File[];
   numSubfolders?: number;
   numFiles?: number;
   isLoading: boolean;
@@ -53,8 +52,8 @@ export const useFolderContext = () => useContext(FolderContext);
 export const FolderProvider = ({ children }: { children: ReactNode }) => {
   const [currentFolderId, setCurrentFolderId] = useState(0);
   const [folderName, setFolderName] = useState("");
-  const [subfolders, setSubfolders] = useState<FolderType[]>([]);
-  const [files, setFiles] = useState<FileType[]>([]);
+  const [subfolders, setSubfolders] = useState<Folder[]>([]);
+  const [files, setFiles] = useState<File[]>([]);
   const [numSubfolders, setNumSubfolders] = useState(0);
   const [numFiles, setNumFiles] = useState(0);
   const [isLoading, setIsLoading] = useState(false);

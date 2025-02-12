@@ -1,9 +1,9 @@
 import { Button } from "@/components/ui/button";
-import { FolderType } from "@/types/folderType";
-import { EllipsisVertical, Folder } from "lucide-react";
+import { Folder } from "@/types";
+import { EllipsisVertical, Folder as FolderIcon } from "lucide-react";
 
 type FolderListProps = {
-  folders: FolderType[];
+  folders: Folder[];
   onNavigate: (folderId: number) => void;
   isMobile: boolean;
 };
@@ -15,7 +15,7 @@ export const FolderList = ({
 }: FolderListProps) => {
   return (
     <div className="grid sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4">
-      {folders.map((item: FolderType) => (
+      {folders.map((item: Folder) => (
         <Button
           key={item.id}
           variant="outline"
@@ -24,7 +24,7 @@ export const FolderList = ({
           onDoubleClick={!isMobile ? () => onNavigate(item.id) : undefined}
         >
           <div className="flex-none">
-            <Folder size={28} />
+            <FolderIcon size={28} />
           </div>
           <div className="flex-grow truncate text-md font-medium">
             {item.name}

@@ -6,7 +6,7 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { SortOption, SortValue } from "@/types/SortTypes";
+import { SortOption, SortValue } from "@/types";
 import React from "react";
 
 type SortItemsProps = {

@@ -1,4 +1,4 @@
-export type FolderType = {
+export type Folder = {
   id: number;
   name: string;
 };
