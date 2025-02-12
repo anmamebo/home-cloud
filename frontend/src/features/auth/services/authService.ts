@@ -40,12 +40,12 @@ export const updateAuthenticatedUser = async (data: UpdateUserData) => {
   return response.data;
 };
 
-export const registerUser = async (data: RegisterData) => {
+export const register = async (data: RegisterData) => {
   const response = await axiosInstance.post("/auth/register", data);
   return response.data;
 };
 
-export const loginUser = async (data: LoginData) => {
+export const login = async (data: LoginData) => {
   const params = new URLSearchParams();
   params.append("username", data.username);
   params.append("password", data.password);

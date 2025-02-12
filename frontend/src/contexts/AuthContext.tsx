@@ -1,4 +1,4 @@
-import { fetchAuthenticatedUser } from "@/services/authService";
+import { fetchAuthenticatedUser } from "@/features/auth";
 import { User } from "@/types/UserTypes";
 import {
   createContext,

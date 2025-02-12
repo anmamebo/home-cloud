@@ -9,7 +9,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { PasswordInput } from "@/components/ui/password-input";
-import { registerUser } from "@/services/authService";
+import { useAuth } from "@/contexts/AuthContext";
+import { login as loginService } from "@/features/auth";
 import { getErrorMessage } from "@/utils/errorUtils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Cloudy } from "lucide-react";
@@ -20,21 +21,17 @@ import { z } from "zod";
 
 const formSchema = z.object({
   username: z.string().nonempty("El nombre de usuario es requerido"),
-  email: z
-    .string()
-    .nonempty("El correo electrónico es requerido")
-    .email("El correo electrónico es inválido"),
   password: z.string().nonempty("La contraseña es requerida"),
 });
 
-export const RegisterForm = () => {
+export const LoginForm = () => {
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       username: "",
-      email: "",
       password: "",
     },
   });
@@ -46,8 +43,9 @@ export const RegisterForm = () => {
       setErrorMessage(null);
 
       try {
-        await registerUser(values);
-        navigate("/iniciar-sesion");
+        const response = await loginService(values);
+        login(response.access_token);
+        navigate("/");
       } catch (error) {
         setErrorMessage(getErrorMessage(error));
         console.error(error);
@@ -79,12 +77,9 @@ export const RegisterForm = () => {
               <h1 className="text-xl font-bold">Bienvenido a HomeCloud</h1>
 
               <div className="text-center text-sm">
-                ¿Ya tienes una cuenta?{" "}
-                <Link
-                  to="/iniciar-sesion"
-                  className="underline underline-offset-4"
-                >
-                  Inicia sesión
+                ¿No tienes una cuenta todavía?{" "}
+                <Link to="/registro" className="underline underline-offset-4">
+                  Registrate
                 </Link>
               </div>
             </div>
@@ -100,25 +95,6 @@ export const RegisterForm = () => {
                       <FormLabel>Nombre de usuario</FormLabel>
                       <FormControl>
                         <Input placeholder="usuario123" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <div className="grid gap-2">
-                <FormField
-                  control={form.control}
-                  name="email"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Correo electrónico</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="email"
-                          placeholder="usuario1234@ejemplo.com"
-                          {...field}
-                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -149,7 +125,11 @@ export const RegisterForm = () => {
               )}
 
               <Button type="submit" className="w-full">
-                Registrarme
+                Iniciar sesión
+              </Button>
+
+              <Button asChild variant="outline" className="w-full">
+                <Link to="/olvide-contrasena">¿Olvidaste tu contraseña?</Link>
               </Button>
             </div>
 

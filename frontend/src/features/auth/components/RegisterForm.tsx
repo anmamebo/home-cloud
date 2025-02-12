@@ -9,8 +9,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { PasswordInput } from "@/components/ui/password-input";
-import { useAuth } from "@/contexts/AuthContext";
-import { loginUser } from "@/services/authService";
+import { register } from "@/features/auth";
 import { getErrorMessage } from "@/utils/errorUtils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Cloudy } from "lucide-react";
@@ -21,17 +20,21 @@ import { z } from "zod";
 
 const formSchema = z.object({
   username: z.string().nonempty("El nombre de usuario es requerido"),
+  email: z
+    .string()
+    .nonempty("El correo electrónico es requerido")
+    .email("El correo electrónico es inválido"),
   password: z.string().nonempty("La contraseña es requerida"),
 });
 
-export const LoginForm = () => {
+export const RegisterForm = () => {
   const navigate = useNavigate();
-  const { login } = useAuth();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       username: "",
+      email: "",
       password: "",
     },
   });
@@ -43,9 +46,8 @@ export const LoginForm = () => {
       setErrorMessage(null);
 
       try {
-        const response = await loginUser(values);
-        login(response.access_token);
-        navigate("/");
+        await register(values);
+        navigate("/iniciar-sesion");
       } catch (error) {
         setErrorMessage(getErrorMessage(error));
         console.error(error);
@@ -77,9 +79,12 @@ export const LoginForm = () => {
               <h1 className="text-xl font-bold">Bienvenido a HomeCloud</h1>
 
               <div className="text-center text-sm">
-                ¿No tienes una cuenta todavía?{" "}
-                <Link to="/registro" className="underline underline-offset-4">
-                  Registrate
+                ¿Ya tienes una cuenta?{" "}
+                <Link
+                  to="/iniciar-sesion"
+                  className="underline underline-offset-4"
+                >
+                  Inicia sesión
                 </Link>
               </div>
             </div>
@@ -95,6 +100,25 @@ export const LoginForm = () => {
                       <FormLabel>Nombre de usuario</FormLabel>
                       <FormControl>
                         <Input placeholder="usuario123" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="grid gap-2">
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Correo electrónico</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="email"
+                          placeholder="usuario1234@ejemplo.com"
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -125,11 +149,7 @@ export const LoginForm = () => {
               )}
 
               <Button type="submit" className="w-full">
-                Iniciar sesión
-              </Button>
-
-              <Button asChild variant="outline" className="w-full">
-                <Link to="/olvide-contrasena">¿Olvidaste tu contraseña?</Link>
+                Registrarme
               </Button>
             </div>
 

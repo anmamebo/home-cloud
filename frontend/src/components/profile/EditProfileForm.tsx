@@ -13,7 +13,8 @@ import { useAuth } from "@/contexts/AuthContext";
 import {
   fetchAuthenticatedUser,
   updateAuthenticatedUser,
-} from "@/services/authService";
+} from "@/features/auth";
+// TODO: Don't use fetchAuthenticatedUser
 import { notify } from "@/services/notifications";
 import { getErrorMessage } from "@/utils/errorUtils";
 import { zodResolver } from "@hookform/resolvers/zod";

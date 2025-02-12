@@ -7,44 +7,43 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { PasswordInput } from "@/components/ui/password-input";
-import { resetPassword } from "@/services/authService";
+import { Input } from "@/components/ui/input";
+import { forgotPassword } from "@/features/auth";
 import { getErrorMessage } from "@/utils/errorUtils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Cloudy } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { z } from "zod";
 
 const formSchema = z.object({
-  token: z.string().nonempty("El token es requerido"),
-  new_password: z.string().nonempty("La nueva contraseña es requerida"),
+  email: z
+    .string()
+    .nonempty("El correo electrónico es requerido")
+    .email("El correo electrónico es inválido"),
 });
 
-export const ResetPasswordForm = () => {
-  const [searchParams] = useSearchParams();
-  const token = searchParams.get("token");
-
-  const navigate = useNavigate();
-
+export const ForgotPasswordForm = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      token: token || "",
-      new_password: "",
+      email: "",
     },
   });
 
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const onSubmit = form.handleSubmit(
     async (values: z.infer<typeof formSchema>) => {
+      setSuccessMessage(null);
       setErrorMessage(null);
 
       try {
-        await resetPassword(values);
-        navigate("/iniciar-sesion");
+        const response = await forgotPassword(values);
+        setSuccessMessage(response);
+        form.reset();
       } catch (error) {
         setErrorMessage(getErrorMessage(error));
         console.error(error);
@@ -74,7 +73,7 @@ export const ResetPasswordForm = () => {
               </a>
 
               <h1 className="text-xl font-bold">
-                Reinicia y vuelve al control de tu cuenta
+                Encuentra tu cuenta de HomeCloud
               </h1>
 
               <div className="text-center text-sm">
@@ -93,18 +92,29 @@ export const ResetPasswordForm = () => {
               <div className="grid gap-2">
                 <FormField
                   control={form.control}
-                  name="new_password"
+                  name="email"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Nueva contraseña</FormLabel>
+                      <FormLabel>Correo electrónico</FormLabel>
                       <FormControl>
-                        <PasswordInput placeholder="********" {...field} />
+                        <Input
+                          type="email"
+                          placeholder="usuario1234@ejemplo.com"
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
               </div>
+
+              {/* Success message */}
+              {successMessage && (
+                <div className="text-sm font-semibold text-green-700">
+                  {successMessage}
+                </div>
+              )}
 
               {/* Error message */}
               {errorMessage && (
@@ -114,7 +124,7 @@ export const ResetPasswordForm = () => {
               )}
 
               <Button type="submit" className="w-full">
-                Restablecer contraseña
+                Enviar correo de recuperación
               </Button>
             </div>
           </div>

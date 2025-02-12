@@ -4,11 +4,13 @@ import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { PublicRoute } from "@/components/PublicRoute";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { FolderProvider } from "@/contexts/FolderContext";
+import {
+  ForgotPasswordPage,
+  LoginPage,
+  RegisterPage,
+  ResetPasswordPage,
+} from "@/features/auth";
 import { AxiosErrorInterceptor } from "@/interceptors/AxiosErrorInterceptor";
-import { ForgotPasswordPage } from "@/pages/auth/ForgotPasswordPage";
-import { LoginPage } from "@/pages/auth/LoginPage";
-import { RegisterPage } from "@/pages/auth/RegisterPage";
-import { ResetPasswordPage } from "@/pages/auth/ResetPasswordPage";
 import { PrivacyPolicy } from "@/pages/docs/Privacy";
 import { TermsOfService } from "@/pages/docs/Terms";
 import { MainPage } from "@/pages/filesystem/MainPage";
