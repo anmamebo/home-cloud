@@ -1,7 +1,5 @@
 import { AuthLayout } from "@/components/layout/AuthLayout";
 import { MainLayout } from "@/components/layout/MainLayout";
-import { ProtectedRoute } from "@/components/ProtectedRoute";
-import { PublicRoute } from "@/components/PublicRoute";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { FolderProvider } from "@/contexts/FolderContext";
 import {
@@ -14,6 +12,7 @@ import { AxiosErrorInterceptor } from "@/interceptors/AxiosErrorInterceptor";
 import { PrivacyPolicy } from "@/pages/docs/Privacy";
 import { TermsOfService } from "@/pages/docs/Terms";
 import { MainPage } from "@/pages/filesystem/MainPage";
+import { ProtectedRoute, PublicRoute } from "@/routes/utils";
 import {
   BrowserRouter,
   Navigate,
