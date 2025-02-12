@@ -1,5 +1,5 @@
-import { AuthLayout } from "@/components/layout/AuthLayout";
-import { MainLayout } from "@/components/layout/MainLayout";
+import { AuthLayout } from "@/components/layouts/AuthLayout";
+import { MainLayout } from "@/components/layouts/MainLayout";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { FolderProvider } from "@/contexts/FolderContext";
 import {
