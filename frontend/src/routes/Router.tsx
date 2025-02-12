@@ -8,9 +8,9 @@ import {
   RegisterPage,
   ResetPasswordPage,
 } from "@/features/auth";
+import { MainPage } from "@/features/filesystem";
 import { AxiosErrorInterceptor } from "@/interceptors/AxiosErrorInterceptor";
 import { PrivacyPolicy, TermsOfService } from "@/pages/docs";
-import { MainPage } from "@/pages/filesystem/MainPage";
 import { ProtectedRoute, PublicRoute } from "@/routes/utils";
 import {
   BrowserRouter,
