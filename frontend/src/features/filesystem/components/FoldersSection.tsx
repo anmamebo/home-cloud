@@ -1,23 +1,28 @@
 import { FolderList } from "@/components/folder/FolderList";
 import { SortItems } from "@/components/shared/SortItems";
 import { FOLDER_SORT_OPTIONS } from "@/constants/SortOptionsConstants";
+import { useIsMobile } from "@/hooks/useMobile";
 import { Folder, SortValue } from "@/types";
+import { useNavigate } from "react-router-dom";
 
 type FoldersSectionProps = {
   folders: Folder[];
   selectedFolderOrder: string;
   onFolderSortChange: (value: string) => void;
-  onNavigate: (folderId: number) => void;
-  isMobile: boolean;
 };
 
 export const FoldersSection = ({
   folders,
   selectedFolderOrder,
   onFolderSortChange,
-  onNavigate,
-  isMobile,
 }: FoldersSectionProps) => {
+  const navigate = useNavigate();
+  const isMobile = useIsMobile();
+
+  const handleNavigate = (folderId: number) => {
+    navigate(`/carpeta/${folderId}`);
+  };
+
   return (
     <div>
       <div className="flex justify-between items-center mb-3">
@@ -30,7 +35,7 @@ export const FoldersSection = ({
       </div>
       <FolderList
         folders={folders}
-        onNavigate={onNavigate}
+        onNavigate={handleNavigate}
         isMobile={isMobile}
       />
     </div>

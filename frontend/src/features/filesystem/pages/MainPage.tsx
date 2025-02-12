@@ -1,15 +1,11 @@
 import { Spinner } from "@/components/ui/spinner";
 import { useFolderContext } from "@/contexts/FolderContext";
 import { FilesSection, FoldersSection, NoContent } from "@/features/filesystem";
-import { useIsMobile } from "@/hooks/useMobile";
 import { File, Folder } from "@/types";
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 export const MainPage = () => {
-  const navigate = useNavigate();
-  const isMobile = useIsMobile();
-
   const { folderId } = useParams<{ folderId: string }>();
   const folderIdNumber = folderId ? parseInt(folderId, 10) : 0;
 
@@ -44,10 +40,6 @@ export const MainPage = () => {
     fetchFolderContent(folderIdNumber);
   }, [folderIdNumber, fetchFolderContent, sortBy]);
 
-  const handleNavigate = (folderId: number) => {
-    navigate(`/carpeta/${folderId}`);
-  };
-
   if (isLoading) {
     return (
       <div className="flex flex-col gap-6">
@@ -64,8 +56,6 @@ export const MainPage = () => {
           folders={subfolders as Folder[]}
           selectedFolderOrder={selectedFolderOrder}
           onFolderSortChange={handleFolderSortChange}
-          onNavigate={handleNavigate}
-          isMobile={isMobile}
         />
       )}
 
