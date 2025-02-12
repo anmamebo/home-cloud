@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { useSidebar } from "@/components/ui/sidebar";
 import { SidebarIcon } from "lucide-react";
-import { Breadcrumbs } from "./Breadcrumbs";
+import { Breadcrumbs } from "./components/Breadcrumbs";
 
 export const SiteHeader = () => {
   const { toggleSidebar } = useSidebar();
