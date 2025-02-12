@@ -9,8 +9,7 @@ import {
   ResetPasswordPage,
 } from "@/features/auth";
 import { AxiosErrorInterceptor } from "@/interceptors/AxiosErrorInterceptor";
-import { PrivacyPolicy } from "@/pages/docs/Privacy";
-import { TermsOfService } from "@/pages/docs/Terms";
+import { PrivacyPolicy, TermsOfService } from "@/pages/docs";
 import { MainPage } from "@/pages/filesystem/MainPage";
 import { ProtectedRoute, PublicRoute } from "@/routes/utils";
 import {
