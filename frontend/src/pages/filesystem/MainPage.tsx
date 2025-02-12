@@ -1,3 +1,4 @@
+import noContentImage from "@/assets/no-content-folder.svg";
 import { FileList } from "@/components/file/FileList";
 import { FolderList } from "@/components/folder/FolderList";
 import { SortItems } from "@/components/shared/SortItems";
@@ -105,7 +106,7 @@ export const MainPage = () => {
         <div className="flex flex-col items-center gap-6 text-center">
           {/* Imagen */}
           <div className="flex justify-center h-72 w-72 bg-sidebar-accent rounded-full">
-            <img src="/no-content-folder.svg" alt="No hay contenido" />
+            <img src={noContentImage} alt="No hay contenido" />
           </div>
 
           {/* Texto */}
