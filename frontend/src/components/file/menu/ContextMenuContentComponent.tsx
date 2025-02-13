@@ -51,7 +51,7 @@ export const ContextMenuContentComponent = ({
         <ContextMenuSub>
           <ContextMenuSubTrigger>
             <InfoIcon className="mr-2 h-4 w-4" />
-            Información de la carpeta
+            Información del archivo
           </ContextMenuSubTrigger>
           <ContextMenuPortal>
             <ContextMenuSubContent className="w-60">
