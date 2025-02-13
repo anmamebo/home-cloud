@@ -30,6 +30,13 @@ export const createFolder = async (folderName: string, parentId: number) => {
   return response.data;
 };
 
+export const updateFolder = async (folderId: number, folderName: string) => {
+  const response = await axiosInstance.patch(`filesystem/folders/${folderId}`, {
+    name: folderName,
+  });
+  return response.data;
+};
+
 export const downloadFolder = async (
   folderId: number,
   onProgress?: (progress: number) => void

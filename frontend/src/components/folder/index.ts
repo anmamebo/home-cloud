@@ -1,7 +1,9 @@
 // dialog
+export { ChangeNameFolderDialog } from "./dialog/ChangeNameFolderDialog";
 export { CreateFolderDialog } from "./dialog/CreateFolderDialog";
 
 // form
+export { ChangeNameFolderForm } from "./form/ChangeNameFolderForm";
 export { CreateFolderForm } from "./form/CreateFolderForm";
 
 // item

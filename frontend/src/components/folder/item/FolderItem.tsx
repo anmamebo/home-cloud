@@ -1,4 +1,5 @@
 import {
+  ChangeNameFolderDialog,
   ContextMenuContentComponent,
   FolderDropdownMenu,
 } from "@/components/folder";
@@ -15,6 +16,7 @@ import { useIsMobile } from "@/hooks/useMobile";
 import { downloadFolder } from "@/services/folderService";
 import { Folder } from "@/types";
 import { FolderIcon } from "lucide-react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 type FolderItemProps = {
@@ -25,15 +27,16 @@ export const FolderItem = ({ folder }: FolderItemProps) => {
   const navigate = useNavigate();
   const isMobile = useIsMobile();
 
+  const [isChangeNameFolderDialogOpen, setIsChangeNameFolderDialogOpen] =
+    useState(false);
+
   const handleNavigate = (folderId: number) => {
     navigate(`/carpeta/${folderId}`);
   };
 
   const { handleDownload } = useDownloadWithProgress(downloadFolder, folder);
 
-  const handleRename = () => {
-    console.log("Cambiar nombre de la carpeta:", folder.id);
-  };
+  const handleRename = () => setIsChangeNameFolderDialogOpen(true);
 
   const handleDetails = () => {
     console.log("Ver detalles de la carpeta:", folder.id);
@@ -48,64 +51,74 @@ export const FolderItem = ({ folder }: FolderItemProps) => {
   };
 
   return (
-    <ContextMenu>
-      <ContextMenuTrigger>
-        <Card
-          className="p-4 cursor-pointer hover:bg-muted/40 transition-colors"
-          onClick={isMobile ? () => handleNavigate(folder.id) : undefined}
-          onDoubleClick={
-            !isMobile ? () => handleNavigate(folder.id) : undefined
-          }
-          role="button"
-          tabIndex={0}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" || e.key === " ") {
-              handleNavigate(folder.id);
+    <>
+      <ContextMenu>
+        <ContextMenuTrigger>
+          <Card
+            className="p-4 cursor-pointer hover:bg-muted/40 transition-colors"
+            onClick={isMobile ? () => handleNavigate(folder.id) : undefined}
+            onDoubleClick={
+              !isMobile ? () => handleNavigate(folder.id) : undefined
             }
-          }}
-        >
-          <CardContent className="flex items-center gap-4 p-0">
-            {/* Icon */}
-            <div className="flex-none">
-              <FolderIcon size={22} />
-            </div>
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                handleNavigate(folder.id);
+              }
+            }}
+          >
+            <CardContent className="flex items-center gap-4 p-0">
+              {/* Icon */}
+              <div className="flex-none">
+                <FolderIcon size={22} />
+              </div>
 
-            {/* Name */}
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <div className="flex-grow truncate text-md font-medium select-none">
-                    {folder.name}
-                  </div>
-                </TooltipTrigger>
-                <TooltipContent side="bottom">{folder.name}</TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
+              {/* Name */}
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <div className="flex-grow truncate text-md font-medium select-none">
+                      {folder.name}
+                    </div>
+                  </TooltipTrigger>
+                  <TooltipContent side="bottom">{folder.name}</TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
 
-            {/* Actions */}
-            <div className="flex-none">
-              <FolderDropdownMenu
-                folder={folder}
-                onDownload={handleDownload}
-                onRename={handleRename}
-                onDetails={handleDetails}
-                onActivity={handleActivity}
-                onMoveToTrash={handleMoveToTrash}
-              />
-            </div>
-          </CardContent>
-        </Card>
-      </ContextMenuTrigger>
+              {/* Actions */}
+              <div className="flex-none">
+                <FolderDropdownMenu
+                  folder={folder}
+                  onDownload={handleDownload}
+                  onRename={handleRename}
+                  onDetails={handleDetails}
+                  onActivity={handleActivity}
+                  onMoveToTrash={handleMoveToTrash}
+                />
+              </div>
+            </CardContent>
+          </Card>
+        </ContextMenuTrigger>
 
-      {/* Context Menu Actions */}
-      <ContextMenuContentComponent
-        folder={folder}
-        onDownload={handleDownload}
-        onRename={handleRename}
-        onDetails={handleDetails}
-        onActivity={handleActivity}
-        onMoveToTrash={handleMoveToTrash}
+        {/* Context Menu Actions */}
+        <ContextMenuContentComponent
+          folder={folder}
+          onDownload={handleDownload}
+          onRename={handleRename}
+          onDetails={handleDetails}
+          onActivity={handleActivity}
+          onMoveToTrash={handleMoveToTrash}
+        />
+      </ContextMenu>
+
+      {/* Dialogs */}
+      <ChangeNameFolderDialog
+        folderId={folder.id}
+        folderName={folder.name}
+        open={isChangeNameFolderDialogOpen}
+        onOpenChange={setIsChangeNameFolderDialogOpen}
       />
-    </ContextMenu>
+    </>
   );
 };
