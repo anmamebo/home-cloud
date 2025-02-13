@@ -34,3 +34,20 @@ export const downloadFile = async (
 
   return { blob: response.data, filename };
 };
+
+export const uploadFile = async (file: File, folderId: number) => {
+  const formData = new FormData();
+  formData.append("file", file);
+
+  const response = await axiosInstance.post(
+    `filesystem/files?folder_id=${folderId}`,
+    formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }
+  );
+
+  return response.data;
+};

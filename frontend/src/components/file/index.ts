@@ -1,3 +1,9 @@
+// dialog
+export { UploadFileDialog } from "./dialog/UploadFileDialog";
+
+// form
+export { UploadFileForm } from "./form/UploadFileForm";
+
 // item
 export { FileItem } from "./item/FileItem";
 
