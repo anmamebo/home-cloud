@@ -1,5 +1,5 @@
+import { FileItem } from "@/components/file";
 import { File } from "@/types";
-import { FileItem } from "./FileItem";
 
 type FileListProps = {
   files: File[];

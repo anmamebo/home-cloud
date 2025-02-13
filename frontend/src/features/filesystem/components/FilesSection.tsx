@@ -1,4 +1,4 @@
-import { FileList } from "@/components/file/FileList";
+import { FileList } from "@/components/file/list/FileList";
 import { SortItems } from "@/components/shared/SortItems";
 import { FILE_SORT_OPTIONS } from "@/constants/SortOptionsConstants";
 import { File, SortValue } from "@/types";
