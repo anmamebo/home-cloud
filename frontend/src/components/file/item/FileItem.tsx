@@ -13,8 +13,8 @@ import {
 import { useDownloadWithProgress } from "@/hooks/useDownloadWithProgress";
 import { downloadFile } from "@/services/fileService";
 import { File } from "@/types";
+import { getFileIcon } from "@/utils/fileIconUtils";
 import { formatFileSize } from "@/utils/formatUtils";
-import { FileIcon } from "lucide-react";
 
 type FileItemProps = {
   file: File;
@@ -22,6 +22,8 @@ type FileItemProps = {
 
 export const FileItem = ({ file }: FileItemProps) => {
   const { handleDownload } = useDownloadWithProgress(downloadFile, file);
+
+  const FileIcon = getFileIcon(file.filename);
 
   return (
     <ContextMenu>
@@ -34,7 +36,7 @@ export const FileItem = ({ file }: FileItemProps) => {
           <CardContent className="flex items-center gap-4 p-0">
             {/* Icon */}
             <div className="flex-none">
-              <FileIcon size={22} />
+              <FileIcon />
             </div>
 
             {/* Name */}
