@@ -30,11 +30,25 @@ export const createFolder = async (folderName: string, parentId: number) => {
   return response.data;
 };
 
-export const downloadFolder = async (folderId: number) => {
+export const downloadFolder = async (
+  folderId: number,
+  onProgress?: (progress: number) => void
+) => {
   const response = await axiosInstance.get(
     `filesystem/folders/${folderId}/download`,
     {
       responseType: "blob",
+      onDownloadProgress: (progressEvent) => {
+        if (progressEvent.total) {
+          const percentCompleted = Math.round(
+            (progressEvent.loaded * 100) / progressEvent.total
+          );
+
+          if (onProgress) {
+            onProgress(percentCompleted);
+          }
+        }
+      },
     }
   );
 
