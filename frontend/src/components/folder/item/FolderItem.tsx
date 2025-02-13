@@ -65,9 +65,12 @@ export const FolderItem = ({ folder }: FolderItemProps) => {
           }}
         >
           <CardContent className="flex items-center gap-4 p-0">
+            {/* Icon */}
             <div className="flex-none">
               <FolderIcon size={22} />
             </div>
+
+            {/* Name */}
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
@@ -78,12 +81,23 @@ export const FolderItem = ({ folder }: FolderItemProps) => {
                 <TooltipContent side="bottom">{folder.name}</TooltipContent>
               </Tooltip>
             </TooltipProvider>
+
+            {/* Actions */}
             <div className="flex-none">
-              <FolderDropdownMenu folder={folder} />
+              <FolderDropdownMenu
+                folder={folder}
+                onDownload={handleDownload}
+                onRename={handleRename}
+                onDetails={handleDetails}
+                onActivity={handleActivity}
+                onMoveToTrash={handleMoveToTrash}
+              />
             </div>
           </CardContent>
         </Card>
       </ContextMenuTrigger>
+
+      {/* Context Menu Actions */}
       <ContextMenuContentComponent
         folder={folder}
         onDownload={handleDownload}

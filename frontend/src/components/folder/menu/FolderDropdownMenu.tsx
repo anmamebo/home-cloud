@@ -5,33 +5,25 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Folder } from "@/types";
-import { EllipsisVertical } from "lucide-react";
+import { EllipsisVerticalIcon } from "lucide-react";
 
 type FolderDropdownMenuProps = {
   folder: Folder;
+  onDownload: () => void;
+  onRename: () => void;
+  onDetails: () => void;
+  onActivity: () => void;
+  onMoveToTrash: () => void;
 };
 
-export const FolderDropdownMenu = ({ folder }: FolderDropdownMenuProps) => {
-  const handleDownload = () => {
-    console.log("Descargar carpeta:", folder.id);
-  };
-
-  const handleRename = () => {
-    console.log("Cambiar nombre de la carpeta:", folder.id);
-  };
-
-  const handleDetails = () => {
-    console.log("Ver detalles de la carpeta:", folder.id);
-  };
-
-  const handleActivity = () => {
-    console.log("Ver actividad de la carpeta:", folder.id);
-  };
-
-  const handleMoveToTrash = () => {
-    console.log("Mover a la papelera:", folder.id);
-  };
-
+export const FolderDropdownMenu = ({
+  folder,
+  onDownload,
+  onRename,
+  onDetails,
+  onActivity,
+  onMoveToTrash,
+}: FolderDropdownMenuProps) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -39,20 +31,21 @@ export const FolderDropdownMenu = ({ folder }: FolderDropdownMenuProps) => {
           variant="ghost"
           size="icon"
           onClick={(e) => {
-            e.stopPropagation(); // Detiene la propagación del evento
-            e.preventDefault(); // Evita el comportamiento predeterminado
+            e.stopPropagation();
+            e.preventDefault();
           }}
         >
-          <EllipsisVertical size={18} />
+          <EllipsisVerticalIcon size={18} />
         </Button>
       </DropdownMenuTrigger>
+
       <DropdownMenuContentComponent
         folder={folder}
-        onDownload={handleDownload}
-        onRename={handleRename}
-        onDetails={handleDetails}
-        onActivity={handleActivity}
-        onMoveToTrash={handleMoveToTrash}
+        onDownload={onDownload}
+        onRename={onRename}
+        onDetails={onDetails}
+        onActivity={onActivity}
+        onMoveToTrash={onMoveToTrash}
       />
     </DropdownMenu>
   );
