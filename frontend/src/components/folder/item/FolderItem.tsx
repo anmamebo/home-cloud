@@ -11,7 +11,10 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useIsMobile } from "@/hooks/useMobile";
+import { downloadFolder } from "@/services/folderService";
+import { notify } from "@/services/notifications";
 import { Folder } from "@/types";
+import { saveAs } from "file-saver";
 import { FolderIcon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
@@ -27,8 +30,15 @@ export const FolderItem = ({ folder }: FolderItemProps) => {
     navigate(`/carpeta/${folderId}`);
   };
 
-  const handleDownload = () => {
-    console.log("Descargar carpeta:", folder.id);
+  const handleDownload = async () => {
+    try {
+      const { blob, filename } = await downloadFolder(folder.id);
+
+      saveAs(blob, filename || `${folder.name}.zip`);
+    } catch (error) {
+      notify.error("No se pudo descargar la carpeta.");
+      console.error(error);
+    }
   };
 
   const handleRename = () => {

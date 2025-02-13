@@ -29,3 +29,24 @@ export const createFolder = async (folderName: string, parentId: number) => {
   );
   return response.data;
 };
+
+export const downloadFolder = async (folderId: number) => {
+  const response = await axiosInstance.get(
+    `filesystem/folders/${folderId}/download`,
+    {
+      responseType: "blob",
+    }
+  );
+
+  const contentDisposition = response.headers["content-disposition"];
+  let filename = "archivo.zip";
+
+  if (contentDisposition) {
+    const match = contentDisposition.match(/filename="?(.+?)"?$/);
+    if (match) {
+      filename = match[1];
+    }
+  }
+
+  return { blob: response.data, filename };
+};
