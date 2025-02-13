@@ -22,7 +22,7 @@ export const useUploadWithProgress = <T extends { filename: string }>(
     setUploadProgress(0);
 
     toastId.current = toast(
-      <div>
+      <div className="flex flex-col w-full">
         <p>Subiendo {file.name}...</p>
         <Progress value={0} className="mt-2" />
       </div>,

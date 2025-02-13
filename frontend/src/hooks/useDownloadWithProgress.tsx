@@ -27,7 +27,7 @@ export const useDownloadWithProgress = <T extends DownloadableItem>(
       setDownloadProgress(0);
 
       toastId.current = toast(
-        <div>
+        <div className="flex flex-col w-full">
           <p>Descargando {item.name || item.filename}...</p>
           <Progress value={0} className="mt-2" />
         </div>,
@@ -60,7 +60,7 @@ export const useDownloadWithProgress = <T extends DownloadableItem>(
   useEffect(() => {
     if (downloadProgress !== null && toastId.current !== null) {
       toast(
-        <div>
+        <div className="flex flex-col w-full">
           <p>Descargando {item.name || item.filename}...</p>
           <Progress value={downloadProgress} className="mt-2" />
         </div>,
