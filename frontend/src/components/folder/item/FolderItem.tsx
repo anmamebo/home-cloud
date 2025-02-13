@@ -1,3 +1,7 @@
+import {
+  ContextMenuContentComponent,
+  FolderDropdownMenu,
+} from "@/components/folder";
 import { Card, CardContent } from "@/components/ui/card";
 import { ContextMenu, ContextMenuTrigger } from "@/components/ui/context-menu";
 import {
@@ -10,8 +14,6 @@ import { useIsMobile } from "@/hooks/useMobile";
 import { Folder } from "@/types";
 import { FolderIcon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { ContextMenuContentComponent } from "../menu/ContextMenuContentComponent";
-import { FolderDropdownMenu } from "../menu/FolderDropdownMenu";
 
 type FolderItemProps = {
   folder: Folder;

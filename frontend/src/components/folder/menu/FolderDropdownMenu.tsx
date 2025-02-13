@@ -1,3 +1,4 @@
+import { DropdownMenuContentComponent } from "@/components/folder";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -5,7 +6,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Folder } from "@/types";
 import { EllipsisVertical } from "lucide-react";
-import { DropdownMenuContentComponent } from "./DropdownMenuContentComponent";
 
 type FolderDropdownMenuProps = {
   folder: Folder;

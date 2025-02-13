@@ -1,4 +1,4 @@
-import { CreateFolderDialog } from "@/components/folder/dialog/CreateFolderDialog";
+import { CreateFolderDialog } from "@/components/folder";
 import {
   SidebarMenu,
   SidebarMenuButton,
