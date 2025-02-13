@@ -4,22 +4,18 @@ import {
 } from "@/components/folder";
 import { Card, CardContent } from "@/components/ui/card";
 import { ContextMenu, ContextMenuTrigger } from "@/components/ui/context-menu";
-import { Progress } from "@/components/ui/progress";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useDownloadWithProgress } from "@/hooks/useDownloadWithProgress";
 import { useIsMobile } from "@/hooks/useMobile";
 import { downloadFolder } from "@/services/folderService";
-import { notify } from "@/services/notifications";
 import { Folder } from "@/types";
-import { saveAs } from "file-saver";
 import { FolderIcon } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { toast } from "sonner";
 
 type FolderItemProps = {
   folder: Folder;
@@ -29,57 +25,11 @@ export const FolderItem = ({ folder }: FolderItemProps) => {
   const navigate = useNavigate();
   const isMobile = useIsMobile();
 
-  const [downloadProgress, setDownloadProgress] = useState<number | null>(null);
-  const toastId = useRef<string | number | null>(null);
-
   const handleNavigate = (folderId: number) => {
     navigate(`/carpeta/${folderId}`);
   };
 
-  const handleDownload = async () => {
-    try {
-      setDownloadProgress(0);
-
-      toastId.current = toast(
-        <div>
-          <p>Descargando {folder.name}...</p>
-          <Progress value={0} className="mt-2" />
-        </div>,
-        {
-          duration: Infinity, // Toast doesn't close automatically
-        }
-      );
-
-      const { blob, filename } = await downloadFolder(
-        folder.id,
-        setDownloadProgress
-      );
-
-      saveAs(blob, filename || `${folder.name}.zip`);
-      setDownloadProgress(null);
-      toast.dismiss(toastId.current);
-      notify.success("Descarga completada");
-    } catch (error) {
-      notify.error("No se pudo descargar la carpeta.");
-      console.error(error);
-      setDownloadProgress(null);
-    }
-  };
-
-  useEffect(() => {
-    if (downloadProgress !== null && toastId.current !== null) {
-      toast(
-        <div>
-          <p>Descargando {folder.name}...</p>
-          <Progress value={downloadProgress} className="mt-2" />
-        </div>,
-        {
-          id: toastId.current, // Use the same toast ID to update the existing toast
-          duration: Infinity,
-        }
-      );
-    }
-  }, [downloadProgress, folder.name]);
+  const { handleDownload } = useDownloadWithProgress(downloadFolder, folder);
 
   const handleRename = () => {
     console.log("Cambiar nombre de la carpeta:", folder.id);
