@@ -35,7 +35,11 @@ export const downloadFile = async (
   return { blob: response.data, filename };
 };
 
-export const uploadFile = async (file: File, folderId: number) => {
+export const uploadFile = async (
+  file: File,
+  folderId: number,
+  onUploadProgress?: (progress: number) => void
+) => {
   const formData = new FormData();
   formData.append("file", file);
 
@@ -45,6 +49,17 @@ export const uploadFile = async (file: File, folderId: number) => {
     {
       headers: {
         "Content-Type": "multipart/form-data",
+      },
+      onUploadProgress: (progressEvent) => {
+        if (progressEvent.total) {
+          const percentCompleted = Math.round(
+            (progressEvent.loaded * 100) / progressEvent.total
+          );
+
+          if (onUploadProgress) {
+            onUploadProgress(percentCompleted);
+          }
+        }
       },
     }
   );
