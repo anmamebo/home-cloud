@@ -1,4 +1,5 @@
 import io
+import os
 import zipfile
 from datetime import datetime
 from typing import Optional
@@ -192,6 +193,9 @@ def download_folder_route(
         # Adding subfolders and their contents recursively
         add_folder_to_zip(db, zip_file, root_folders, base_path)
 
+    zip_buffer.seek(0, os.SEEK_END)
+    zip_size = zip_buffer.tell()
+
     # Adjust the buffer position at startup
     zip_buffer.seek(0)
 
@@ -206,6 +210,7 @@ def download_folder_route(
         headers={
             "Content-Disposition": f"attachment; filename={zip_filename}",
             "Content-Type": "application/zip",
+            "Content-Length": str(zip_size),
         },
     )
 
