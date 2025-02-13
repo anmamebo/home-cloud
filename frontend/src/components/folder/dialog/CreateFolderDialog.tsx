@@ -18,7 +18,7 @@ import {
 import { useIsMobile } from "@/hooks/useMobile";
 import { DialogProps } from "@/types";
 import { createPortal } from "react-dom";
-import { CreateFolderForm } from "./CreateFolderForm";
+import { CreateFolderForm } from "../form/CreateFolderForm";
 
 export const CreateFolderDialog = ({ open, onOpenChange }: DialogProps) => {
   const isMobile = useIsMobile();

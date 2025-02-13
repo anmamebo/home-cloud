@@ -1,4 +1,4 @@
-import { FolderList } from "@/components/folder/FolderList";
+import { FolderList } from "@/components/folder/list/FolderList";
 import { SortItems } from "@/components/shared/SortItems";
 import { FOLDER_SORT_OPTIONS } from "@/constants/SortOptionsConstants";
 import { Folder, SortValue } from "@/types";
