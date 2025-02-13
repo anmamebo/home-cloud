@@ -23,12 +23,12 @@ import {
 import { useAuth } from "@/contexts/AuthContext";
 import { ChangePasswordDialog, ProfileDialog } from "@/features/user";
 import {
-  BadgeCheck,
-  ChevronsUpDown,
-  KeyRound,
-  LogOut,
-  Moon,
-  Sun,
+  BadgeCheckIcon,
+  ChevronsUpDownIcon,
+  KeyRoundIcon,
+  LogOutIcon,
+  MoonIcon,
+  SunIcon,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -88,7 +88,7 @@ export const NavUser = () => {
                   </span>
                   <span className="truncate text-xs">{user.email}</span>
                 </div>
-                <ChevronsUpDown className="ml-auto size-4" />
+                <ChevronsUpDownIcon className="ml-auto size-4" />
               </SidebarMenuButton>
             </DropdownMenuTrigger>
 
@@ -122,13 +122,13 @@ export const NavUser = () => {
               {/* Menu Items */}
               <DropdownMenuGroup>
                 <DropdownMenuItem onClick={() => setIsProfileDialogOpen(true)}>
-                  <BadgeCheck />
+                  <BadgeCheckIcon />
                   Mi cuenta
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={() => setIsChangePasswordDialogOpen(true)}
                 >
-                  <KeyRound />
+                  <KeyRoundIcon />
                   Cambiar contraseña
                 </DropdownMenuItem>
               </DropdownMenuGroup>
@@ -139,8 +139,8 @@ export const NavUser = () => {
               <DropdownMenuGroup>
                 <DropdownMenuSub>
                   <DropdownMenuSubTrigger>
-                    <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-                    <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+                    <SunIcon className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+                    <MoonIcon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
                     Cambiar tema
                   </DropdownMenuSubTrigger>
 
@@ -173,7 +173,7 @@ export const NavUser = () => {
 
               {/* Log out */}
               <DropdownMenuItem onClick={handleLogOut}>
-                <LogOut />
+                <LogOutIcon />
                 Cerrar sesión
               </DropdownMenuItem>
             </DropdownMenuContent>

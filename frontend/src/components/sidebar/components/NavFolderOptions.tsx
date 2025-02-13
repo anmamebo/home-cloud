@@ -4,7 +4,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { Plus } from "lucide-react";
+import { PlusIcon } from "lucide-react";
 import { useState } from "react";
 
 export const NavFolderOptions = () => {
@@ -22,7 +22,7 @@ export const NavFolderOptions = () => {
             onClick={() => setIsCreateFolderDialogOpen(true)}
           >
             <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-              <Plus className="size-4" />
+              <PlusIcon className="size-4" />
             </div>
             <span className="truncate font-semibold text-md">
               Crear carpeta

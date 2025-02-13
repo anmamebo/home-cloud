@@ -6,7 +6,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { File } from "@/types";
-import { EllipsisVertical, FileIcon } from "lucide-react";
+import { EllipsisVerticalIcon, FileIcon } from "lucide-react";
 
 type FileItemProps = {
   file: File;
@@ -30,7 +30,7 @@ export const FileItem = ({ file }: FileItemProps) => {
                 {file.filename}
               </div>
               <div className="flex-none">
-                <EllipsisVertical size={18} />
+                <EllipsisVerticalIcon size={18} />
               </div>
             </CardContent>
           </Card>

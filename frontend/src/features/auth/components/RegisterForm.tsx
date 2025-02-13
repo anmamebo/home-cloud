@@ -12,7 +12,7 @@ import { PasswordInput } from "@/components/ui/password-input";
 import { register } from "@/features/auth";
 import { getErrorMessage } from "@/utils/errorUtils";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Cloudy } from "lucide-react";
+import { CloudyIcon } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
@@ -71,7 +71,7 @@ export const RegisterForm = () => {
                 className="flex flex-col items-center gap-2 font-medium"
               >
                 <div className="flex h-8 w-8 items-center justify-center rounded-md">
-                  <Cloudy className="size-6" />
+                  <CloudyIcon className="size-6" />
                 </div>
                 <span className="sr-only">HomeCloud</span>
               </a>
