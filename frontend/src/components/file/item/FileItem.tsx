@@ -13,6 +13,7 @@ import {
 import { useDownloadWithProgress } from "@/hooks/useDownloadWithProgress";
 import { downloadFile } from "@/services/fileService";
 import { File } from "@/types";
+import { formatFileSize } from "@/utils/formatUtils";
 import { FileIcon } from "lucide-react";
 
 type FileItemProps = {
@@ -37,16 +38,23 @@ export const FileItem = ({ file }: FileItemProps) => {
             </div>
 
             {/* Name */}
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <div className="flex-grow truncate text-md font-medium select-none">
-                    {file.filename}
-                  </div>
-                </TooltipTrigger>
-                <TooltipContent side="bottom">{file.filename}</TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
+            <div className="flex-grow truncate select-none">
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <div className="truncate text-md font-medium">
+                      {file.filename}
+                    </div>
+                  </TooltipTrigger>
+                  <TooltipContent side="bottom">{file.filename}</TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+              <div>
+                <span className="text-xs text-primary/60">
+                  {formatFileSize(file.filesize)}
+                </span>
+              </div>
+            </div>
 
             {/* Actions */}
             <div className="flex-none">
