@@ -36,8 +36,10 @@ export const ChangeNameFileForm = ({
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const name = fileName.split(".").shift();
-  const extension = fileName.split(".").pop();
+  const nameParts = fileName.split(".");
+  const hasExtension = nameParts.length > 1;
+  const name = hasExtension ? nameParts.slice(0, -1).join(".") : fileName;
+  const extension = hasExtension ? nameParts.pop()?.toLowerCase() : null;
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -52,7 +54,7 @@ export const ChangeNameFileForm = ({
       try {
         const response = await updateFile(
           fileId,
-          `${values.name}.${extension}`
+          extension ? `${values.name}.${extension}` : values.name
         );
         const { filename } = response;
 
