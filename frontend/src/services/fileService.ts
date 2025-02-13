@@ -66,3 +66,10 @@ export const uploadFile = async (
 
   return response.data;
 };
+
+export const updateFile = async (fileId: number, fileName: string) => {
+  const response = await axiosInstance.patch(`filesystem/files/${fileId}`, {
+    filename: fileName,
+  });
+  return response.data;
+};
