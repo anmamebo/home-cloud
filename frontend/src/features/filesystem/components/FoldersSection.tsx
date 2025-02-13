@@ -15,7 +15,8 @@ export const FoldersSection = ({
   onFolderSortChange,
 }: FoldersSectionProps) => {
   return (
-    <div>
+    <div className="flex flex-col">
+      {/* Header */}
       <div className="flex justify-between items-center mb-3">
         <h3 className="text-md font-semibold">Carpetas</h3>
         <SortItems
@@ -24,6 +25,8 @@ export const FoldersSection = ({
           onSortChange={onFolderSortChange}
         />
       </div>
+
+      {/* List */}
       <FolderList folders={folders} />
     </div>
   );

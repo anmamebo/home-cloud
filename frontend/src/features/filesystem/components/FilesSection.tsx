@@ -15,7 +15,8 @@ export const FilesSection = ({
   onFileSortChange,
 }: FilesSectionProps) => {
   return (
-    <div>
+    <div className="flex flex-col">
+      {/* Header */}
       <div className="flex justify-between items-center mb-3">
         <h3 className="text-md font-semibold">Archivos</h3>
         <SortItems
@@ -24,6 +25,8 @@ export const FilesSection = ({
           onSortChange={onFileSortChange}
         />
       </div>
+
+      {/* List */}
       <FileList files={files as File[]} />
     </div>
   );
