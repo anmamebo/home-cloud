@@ -37,11 +37,21 @@ export const DropdownMenuContentComponent = ({
   return (
     <DropdownMenuContent align="end" className="w-80">
       <DropdownMenuGroup>
-        <DropdownMenuItem onSelect={onDownload}>
+        <DropdownMenuItem
+          onSelect={onDownload}
+          onClick={(event) => {
+            event.stopPropagation();
+          }}
+        >
           <DownloadIcon className="mr-2 h-4 w-4" />
           Descargar
         </DropdownMenuItem>
-        <DropdownMenuItem onSelect={onRename}>
+        <DropdownMenuItem
+          onSelect={onRename}
+          onClick={(event) => {
+            event.stopPropagation();
+          }}
+        >
           <PencilLineIcon className="mr-2 h-4 w-4" />
           Cambiar nombre
         </DropdownMenuItem>
@@ -49,17 +59,31 @@ export const DropdownMenuContentComponent = ({
       <DropdownMenuSeparator />
       <DropdownMenuGroup>
         <DropdownMenuSub>
-          <DropdownMenuSubTrigger>
+          <DropdownMenuSubTrigger
+            onClick={(event) => {
+              event.stopPropagation();
+            }}
+          >
             <InfoIcon className="mr-2 h-4 w-4" />
             Información del archivo
           </DropdownMenuSubTrigger>
           <DropdownMenuPortal>
             <DropdownMenuSubContent className="w-60">
-              <DropdownMenuItem onSelect={onDetails}>
+              <DropdownMenuItem
+                onSelect={onDetails}
+                onClick={(event) => {
+                  event.stopPropagation();
+                }}
+              >
                 <InfoIcon className="mr-2 h-4 w-4" />
                 Detalles
               </DropdownMenuItem>
-              <DropdownMenuItem onSelect={onActivity}>
+              <DropdownMenuItem
+                onSelect={onActivity}
+                onClick={(event) => {
+                  event.stopPropagation();
+                }}
+              >
                 <TrendingUpIcon className="mr-2 h-4 w-4" />
                 Actividad
               </DropdownMenuItem>
@@ -69,7 +93,12 @@ export const DropdownMenuContentComponent = ({
       </DropdownMenuGroup>
       <DropdownMenuSeparator />
       <DropdownMenuGroup>
-        <DropdownMenuItem onSelect={onMoveToTrash}>
+        <DropdownMenuItem
+          onSelect={onMoveToTrash}
+          onClick={(event) => {
+            event.stopPropagation();
+          }}
+        >
           <Trash2Icon className="mr-2 h-4 w-4" />
           Mover a la papelera
         </DropdownMenuItem>
