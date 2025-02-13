@@ -73,3 +73,8 @@ export const updateFile = async (fileId: number, fileName: string) => {
   });
   return response.data;
 };
+
+export const deleteFile = async (fileId: number) => {
+  const response = await axiosInstance.delete(`filesystem/files/${fileId}`);
+  return response.data;
+};

@@ -1,3 +1,4 @@
+import { DeleteConfirmationDialog } from "@/components/dialogs/DeleteConfirmationDialog";
 import {
   ChangeNameFileDialog,
   ContextMenuContentComponent,
@@ -11,8 +12,10 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useFolderContext } from "@/contexts/FolderContext";
+import { useDeleteItem } from "@/hooks/useDeleteItem";
 import { useDownloadWithProgress } from "@/hooks/useDownloadWithProgress";
-import { downloadFile } from "@/services/fileService";
+import { deleteFile, downloadFile } from "@/services/fileService";
 import { File } from "@/types";
 import { getFileIcon } from "@/utils/fileIconUtils";
 import { formatFileSize } from "@/utils/formatUtils";
@@ -26,9 +29,20 @@ export const FileItem = ({ file }: FileItemProps) => {
   const [isChangeNameFileDialogOpen, setIsChangeNameFileDialogOpen] =
     useState(false);
 
+  const { fetchFolderContent, currentFolderId } = useFolderContext();
+
   const { handleDownload } = useDownloadWithProgress(downloadFile, file);
 
   const handleRename = () => setIsChangeNameFileDialogOpen(true);
+
+  const {
+    isDeleteDialogOpen,
+    setIsDeleteDialogOpen,
+    handleDelete,
+    openDeleteDialog,
+  } = useDeleteItem({
+    onSuccess: () => fetchFolderContent(currentFolderId),
+  });
 
   const FileIcon = getFileIcon(file.filename);
 
@@ -76,7 +90,7 @@ export const FileItem = ({ file }: FileItemProps) => {
                   onRename={handleRename}
                   onDetails={() => {}}
                   onActivity={() => {}}
-                  onMoveToTrash={() => {}}
+                  onMoveToTrash={() => openDeleteDialog(file.id, file.filename)}
                 />
               </div>
             </CardContent>
@@ -90,7 +104,7 @@ export const FileItem = ({ file }: FileItemProps) => {
           onRename={handleRename}
           onDetails={() => {}}
           onActivity={() => {}}
-          onMoveToTrash={() => {}}
+          onMoveToTrash={() => openDeleteDialog(file.id, file.filename)}
         />
       </ContextMenu>
 
@@ -100,6 +114,14 @@ export const FileItem = ({ file }: FileItemProps) => {
         fileName={file.filename}
         open={isChangeNameFileDialogOpen}
         onOpenChange={setIsChangeNameFileDialogOpen}
+      />
+
+      {/* Delete Dialog */}
+      <DeleteConfirmationDialog
+        isOpen={isDeleteDialogOpen}
+        onOpenChange={setIsDeleteDialogOpen}
+        onConfirm={() => handleDelete(deleteFile, file.id)}
+        itemName={file.filename}
       />
     </>
   );

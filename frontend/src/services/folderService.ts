@@ -71,3 +71,8 @@ export const downloadFolder = async (
 
   return { blob: response.data, filename };
 };
+
+export const deleteFolder = async (folderId: number) => {
+  const response = await axiosInstance.delete(`filesystem/folders/${folderId}`);
+  return response.data;
+};
