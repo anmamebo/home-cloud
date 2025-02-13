@@ -4,7 +4,7 @@ export const NoContent = () => {
   return (
     <div className="flex flex-col items-center gap-6 text-center">
       {/* Imagen */}
-      <div className="flex justify-center h-72 w-72 bg-sidebar-accent rounded-full">
+      <div className="flex justify-center h-72 w-72 bg-sidebar-accent dark:bg-gray-500/80 rounded-full">
         <img src={noContentImage} alt="No hay contenido" />
       </div>
 
