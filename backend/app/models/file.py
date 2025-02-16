@@ -1,14 +1,15 @@
 from datetime import datetime
 from typing import TYPE_CHECKING, Optional
 
-from sqlmodel import Field, Relationship, SQLModel
+from app.models.historical import AuditableModel
+from sqlmodel import Field, Relationship
 
 if TYPE_CHECKING:
     from .folder import Folder
     from .user import User
 
 
-class File(SQLModel, table=True):
+class File(AuditableModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
     filename: str = Field(index=True)
     storage_path: str = Field(unique=True)

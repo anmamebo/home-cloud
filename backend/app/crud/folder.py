@@ -1,6 +1,7 @@
 from datetime import datetime
 from typing import Optional
 
+from app.enums import ActionType
 from app.models.file import File
 from app.models.folder import Folder
 from app.schemas.folder import FolderIn
@@ -8,20 +9,37 @@ from app.utils.sort import sort_items
 from sqlmodel import Session, select
 
 
-def create_folder(db: Session, folder: Folder):
+def create_folder(
+    db: Session, user_id: int, folder: Folder, action: ActionType = ActionType.CREATE
+):
     db.add(folder)
     db.commit()
     db.refresh(folder)
+
+    folder.log_action(
+        db,
+        action=action,
+        user_id=user_id,
+        details="Folder created.",
+    )
+
     return folder
 
 
-def update_folder(db: Session, folder: Folder, update_data: FolderIn):
+def update_folder(db: Session, user_id: int, folder: Folder, update_data: FolderIn):
     folder_data = update_data.model_dump(exclude_unset=True)
     folder.sqlmodel_update(folder_data)
     folder.updated_at = datetime.now()
     db.add(folder)
     db.commit()
     db.refresh(folder)
+
+    folder.log_action(
+        db,
+        action=ActionType.UPDATE,
+        user_id=user_id,
+        details="Folder updated.",
+    )
 
     return folder
 
@@ -64,9 +82,16 @@ def get_folder_by_id(
     return folder
 
 
-def delete_folder(db: Session, folder: Folder):
+def delete_folder(db: Session, user_id: int, folder: Folder):
     db.delete(folder)
     db.commit()
+
+    folder.log_action(
+        db,
+        action=ActionType.DELETE,
+        user_id=user_id,
+        details="Folder deleted.",
+    )
 
 
 def check_same_name(db: Session, parent_id: int, name: str) -> bool:

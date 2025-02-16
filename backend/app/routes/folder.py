@@ -12,7 +12,7 @@ from app.crud.folder import (
     update_folder,
 )
 from app.database.connection import SessionDep
-from app.models.folder import Folder
+from app.enums import ActionType
 from app.schemas.folder import FolderContent, FolderIn, FolderOut, FolderPath
 from app.utils.auth import CurrentUserDep
 from app.utils.filesystem import (
@@ -66,7 +66,7 @@ def create_folder_route(
         parent_id=parent_id,
         user_id=current_user.id,
     )
-    return create_folder(db, new_folder)
+    return create_folder(db, current_user.id, new_folder)
 
 
 @router.get(
@@ -149,7 +149,7 @@ def update_folder_route(
             detail="Carpeta no encontrada.",
         )
 
-    return update_folder(db, folder_db, folder)
+    return update_folder(db, current_user.id, folder_db, folder)
 
 
 @router.get(
@@ -180,6 +180,13 @@ def download_folder_route(
         base_path = folder.name + "/"
         root_folders = folder.subfolders
         root_files = folder.files
+
+        folder.log_action(
+            db,
+            action=ActionType.DOWNLOAD,
+            user_id=current_user.id,
+            details="Folder downloaded.",
+        )
 
     # Create an in-memory buffer for the ZIP
     zip_buffer = io.BytesIO()
@@ -229,7 +236,7 @@ def delete_folder_route(db: SessionDep, current_user: CurrentUserDep, folder_id:
             detail="Carpeta no encontrada.",
         )
 
-    delete_folder_recursive(db, folder)
+    delete_folder_recursive(db, current_user.id, folder)
 
     return None
 
@@ -281,6 +288,13 @@ def move_folder_route(
     folder.parent_id = new_parent_id
     db.commit()
     db.refresh(folder)
+
+    folder.log_action(
+        db,
+        action=ActionType.UPDATE,
+        user_id=current_user.id,
+        details="Folder moved.",
+    )
 
     return folder
 

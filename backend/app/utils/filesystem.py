@@ -32,19 +32,19 @@ def get_file_content(file: File) -> bytes:
         return f.read()
 
 
-def delete_folder_recursive(db: Session, folder: Folder):
+def delete_folder_recursive(db: Session, user_id: int, folder: Folder):
     """Delete a folder and its contents recursively."""
     # Obtain and delete files in this folder
     for file in folder.files:
         delete_file_from_disk(file.storage_path)
-        delete_file(db, file)
+        delete_file(db, user_id, file)
 
     # Obtain and delete subfolders recursively
     for subfolder in folder.subfolders:
-        delete_folder_recursive(db, subfolder)
+        delete_folder_recursive(db, user_id, subfolder)
 
     # Finally, delete the folder itself
-    delete_folder(db, folder)
+    delete_folder(db, user_id, folder)
 
 
 def delete_file_from_disk(file_path: str):

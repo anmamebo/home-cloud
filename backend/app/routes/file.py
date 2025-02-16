@@ -13,6 +13,7 @@ from app.crud.file import (
 )
 from app.crud.folder import get_folder_by_id
 from app.database.connection import SessionDep
+from app.enums import ActionType
 from app.models.file import File
 from app.schemas.file import FileIn, FileOut
 from app.utils.auth import CurrentUserDep
@@ -74,7 +75,7 @@ def upload_file(
         folder_id=folder_id,
         user_id=current_user.id,
     )
-    return create_file(db, db_file)
+    return create_file(db, current_user.id, db_file, action=ActionType.UPLOAD)
 
 
 @router.get(
@@ -102,6 +103,13 @@ def download_file(
     file.download_count += 1
     db.commit()
 
+    file.log_action(
+        db,
+        action=ActionType.DOWNLOAD,
+        user_id=current_user.id,
+        details="File downloaded.",
+    )
+
     return FileResponse(file.storage_path, filename=file.filename)
 
 
@@ -124,7 +132,7 @@ def delete_file_route(
         )
 
     # Delete record from database
-    delete_file(db, file)
+    delete_file(db, current_user.id, file)
 
     # Delete file from file system
     os.remove(file.storage_path)
@@ -165,7 +173,7 @@ def update_file_route(
             )
 
     # Update file fields
-    return update_file(db, file_db, file)
+    return update_file(db, current_user.id, file_db, file)
 
 
 @router.put(
@@ -207,6 +215,13 @@ def move_file_route(
     db.commit()
     db.refresh(file_db)
 
+    file_db.log_action(
+        db,
+        action=ActionType.UPDATE,
+        user_id=current_user.id,
+        details="File moved.",
+    )
+
     return file_db
 
 
@@ -247,4 +262,4 @@ def make_file_copy_route(
         filetype=file_db.filetype,
     )
 
-    return create_file(db, new_file)
+    return create_file(db, current_user.id, new_file)
