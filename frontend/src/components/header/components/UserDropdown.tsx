@@ -53,7 +53,7 @@ export const UserDropdown = () => {
       <DropdownMenu>
         {/* Trigger */}
         <DropdownMenuTrigger asChild>
-          <Avatar>
+          <Avatar className="cursor-pointer">
             <AvatarImage src={user.avatar} alt={user.username} />
             <AvatarFallback>{usernameFirstLetter}</AvatarFallback>
           </Avatar>
