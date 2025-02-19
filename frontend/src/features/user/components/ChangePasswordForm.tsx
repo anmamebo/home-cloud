@@ -9,28 +9,18 @@ import {
 } from "@/components/ui/form";
 import { PasswordInput } from "@/components/ui/password-input";
 import { changePassword } from "@/features/auth";
+import {
+  ChangePasswordFormValues,
+  changePasswordSchema,
+} from "@/schemas/userSchemas";
 import { notify } from "@/services/notifications";
 import { getErrorMessage } from "@/utils/errorUtils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
-
-const formSchema = z
-  .object({
-    password: z.string().nonempty("La contraseña es requerida"),
-    newPassword: z.string().nonempty("La nueva contraseña es requerida"),
-    confirmNewPassword: z
-      .string()
-      .nonempty("La confirmación de la contraseña es requerida"),
-  })
-  .refine((data) => data.newPassword === data.confirmNewPassword, {
-    message: "Las contraseñas no coinciden",
-    path: ["confirmNewPassword"],
-  });
 
 export const ChangePasswordForm = () => {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<ChangePasswordFormValues>({
+    resolver: zodResolver(changePasswordSchema),
     defaultValues: {
       password: "",
       newPassword: "",
@@ -39,7 +29,7 @@ export const ChangePasswordForm = () => {
   });
 
   const onSubmit = form.handleSubmit(
-    async (values: z.infer<typeof formSchema>) => {
+    async (values: ChangePasswordFormValues) => {
       try {
         const response = await changePassword({
           old_password: values.password,

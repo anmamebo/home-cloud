@@ -14,27 +14,22 @@ import {
   fetchAuthenticatedUser,
   updateAuthenticatedUser,
 } from "@/features/auth";
+import {
+  EditProfileFormValues,
+  editProfileSchema,
+} from "@/schemas/userSchemas";
 // TODO: Don't use fetchAuthenticatedUser
 import { notify } from "@/services/notifications";
 import { getErrorMessage } from "@/utils/errorUtils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
-
-const formSchema = z.object({
-  username: z.string().nonempty("El nombre de usuario es requerido"),
-  email: z
-    .string()
-    .nonempty("El correo electrónico es requerido")
-    .email("El correo electrónico es inválido"),
-});
 
 export const EditProfileForm = () => {
   const { login } = useAuth();
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<EditProfileFormValues>({
+    resolver: zodResolver(editProfileSchema),
     defaultValues: {
       username: "",
       email: "",
@@ -62,21 +57,19 @@ export const EditProfileForm = () => {
     fetchUserData();
   }, [fetchUserData]);
 
-  const onSubmit = form.handleSubmit(
-    async (values: z.infer<typeof formSchema>) => {
-      try {
-        const response = await updateAuthenticatedUser(values);
-        const { access_token } = response;
+  const onSubmit = form.handleSubmit(async (values: EditProfileFormValues) => {
+    try {
+      const response = await updateAuthenticatedUser(values);
+      const { access_token } = response;
 
-        login(access_token);
+      login(access_token);
 
-        notify.success("Información actualizada correctamente.");
-      } catch (error) {
-        notify.error(getErrorMessage(error));
-        console.error(error);
-      }
+      notify.success("Información actualizada correctamente.");
+    } catch (error) {
+      notify.error(getErrorMessage(error));
+      console.error(error);
     }
-  );
+  });
 
   if (isLoading) {
     return (

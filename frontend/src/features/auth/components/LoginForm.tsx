@@ -11,25 +11,20 @@ import { Input } from "@/components/ui/input";
 import { PasswordInput } from "@/components/ui/password-input";
 import { useAuth } from "@/contexts/AuthContext";
 import { login as loginService } from "@/features/auth";
+import { LoginFormValues, loginSchema } from "@/schemas/authSchemas";
 import { getErrorMessage } from "@/utils/errorUtils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CloudyIcon } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
-import { z } from "zod";
-
-const formSchema = z.object({
-  username: z.string().nonempty("El nombre de usuario es requerido"),
-  password: z.string().nonempty("La contraseña es requerida"),
-});
 
 export const LoginForm = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<LoginFormValues>({
+    resolver: zodResolver(loginSchema),
     defaultValues: {
       username: "",
       password: "",
@@ -38,24 +33,22 @@ export const LoginForm = () => {
 
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const onSubmit = form.handleSubmit(
-    async (values: z.infer<typeof formSchema>) => {
-      setErrorMessage(null);
+  const onSubmit = form.handleSubmit(async (values: LoginFormValues) => {
+    setErrorMessage(null);
 
-      try {
-        const response = await loginService(values);
-        login(response.access_token);
-        navigate("/");
-      } catch (error) {
-        setErrorMessage(getErrorMessage(error));
-        console.error(error);
+    try {
+      const response = await loginService(values);
+      login(response.access_token);
+      navigate("/");
+    } catch (error) {
+      setErrorMessage(getErrorMessage(error));
+      console.error(error);
 
-        setTimeout(() => {
-          setErrorMessage("");
-        }, 3000);
-      }
+      setTimeout(() => {
+        setErrorMessage("");
+      }, 3000);
     }
-  );
+  });
 
   return (
     <div className="flex flex-col gap-6">

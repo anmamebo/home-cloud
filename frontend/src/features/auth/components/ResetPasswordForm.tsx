@@ -9,18 +9,16 @@ import {
 } from "@/components/ui/form";
 import { PasswordInput } from "@/components/ui/password-input";
 import { resetPassword } from "@/features/auth";
+import {
+  ResetPasswordFormValues,
+  resetPasswordSchema,
+} from "@/schemas/authSchemas";
 import { getErrorMessage } from "@/utils/errorUtils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CloudyIcon } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import { z } from "zod";
-
-const formSchema = z.object({
-  token: z.string().nonempty("El token es requerido"),
-  new_password: z.string().nonempty("La nueva contraseña es requerida"),
-});
 
 export const ResetPasswordForm = () => {
   const [searchParams] = useSearchParams();
@@ -28,8 +26,8 @@ export const ResetPasswordForm = () => {
 
   const navigate = useNavigate();
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<ResetPasswordFormValues>({
+    resolver: zodResolver(resetPasswordSchema),
     defaultValues: {
       token: token || "",
       new_password: "",
@@ -39,7 +37,7 @@ export const ResetPasswordForm = () => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const onSubmit = form.handleSubmit(
-    async (values: z.infer<typeof formSchema>) => {
+    async (values: ResetPasswordFormValues) => {
       setErrorMessage(null);
 
       try {

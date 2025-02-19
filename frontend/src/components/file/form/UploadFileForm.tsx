@@ -10,14 +10,13 @@ import {
 import { Input } from "@/components/ui/input";
 import { useFolderContext } from "@/contexts/FolderContext";
 import { useUploadWithProgress } from "@/hooks/useUploadWithProgress"; // Importar el hook personalizado
+import {
+  UploadFileFormValues,
+  uploadFileSchema,
+} from "@/schemas/filesystemSchemas";
 import { uploadFile } from "@/services/fileService";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
-
-const formSchema = z.object({
-  file: z.instanceof(File, { message: "Debes seleccionar un archivo" }),
-});
 
 interface UploadFileFormProps {
   onOpenChange: (open: boolean) => void;
@@ -31,25 +30,23 @@ export const UploadFileForm = ({ onOpenChange }: UploadFileFormProps) => {
     currentFolderId
   );
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<UploadFileFormValues>({
+    resolver: zodResolver(uploadFileSchema),
     defaultValues: {
       file: undefined,
     },
   });
 
-  const onSubmit = form.handleSubmit(
-    async (values: z.infer<typeof formSchema>) => {
-      try {
-        await handleUpload(values.file);
-        refreshFolders();
-        form.reset();
-        onOpenChange(false);
-      } catch (error) {
-        console.error(error);
-      }
+  const onSubmit = form.handleSubmit(async (values: UploadFileFormValues) => {
+    try {
+      await handleUpload(values.file);
+      refreshFolders();
+      form.reset();
+      onOpenChange(false);
+    } catch (error) {
+      console.error(error);
     }
-  );
+  });
 
   return (
     <div className="flex flex-col gap-6">
