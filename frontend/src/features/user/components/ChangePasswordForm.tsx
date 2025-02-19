@@ -31,10 +31,7 @@ export const ChangePasswordForm = () => {
   const onSubmit = form.handleSubmit(
     async (values: ChangePasswordFormValues) => {
       try {
-        const response = await changePassword({
-          old_password: values.password,
-          new_password: values.newPassword,
-        });
+        const response = await changePassword(values);
 
         notify.success(response);
         form.reset();

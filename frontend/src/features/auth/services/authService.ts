@@ -1,51 +1,31 @@
+import {
+  ForgotPasswordFormValues,
+  LoginFormValues,
+  RegisterFormValues,
+  ResetPasswordFormValues,
+} from "@/schemas/authSchemas";
+import {
+  ChangePasswordFormValues,
+  EditProfileFormValues,
+} from "@/schemas/userSchemas";
 import axiosInstance from "@/services/api";
-
-type LoginData = {
-  username: string;
-  password: string;
-};
-
-type RegisterData = {
-  username: string;
-  email: string;
-  password: string;
-};
-
-type ForgotPasswordData = {
-  email: string;
-};
-
-type ChangePasswordData = {
-  old_password: string;
-  new_password: string;
-};
-
-type ResetPasswordData = {
-  token: string;
-  new_password: string;
-};
-
-type UpdateUserData = {
-  username: string;
-  email: string;
-};
 
 export const fetchAuthenticatedUser = async () => {
   const response = await axiosInstance.get("/auth/me");
   return response.data;
 };
 
-export const updateAuthenticatedUser = async (data: UpdateUserData) => {
+export const updateAuthenticatedUser = async (data: EditProfileFormValues) => {
   const response = await axiosInstance.patch("/auth/me", data);
   return response.data;
 };
 
-export const register = async (data: RegisterData) => {
+export const register = async (data: RegisterFormValues) => {
   const response = await axiosInstance.post("/auth/register", data);
   return response.data;
 };
 
-export const login = async (data: LoginData) => {
+export const login = async (data: LoginFormValues) => {
   const params = new URLSearchParams();
   params.append("username", data.username);
   params.append("password", data.password);
@@ -54,8 +34,16 @@ export const login = async (data: LoginData) => {
   return response.data;
 };
 
-export const changePassword = async (data: ChangePasswordData) => {
-  const response = await axiosInstance.post("/auth/change-password", data);
+export const changePassword = async (data: ChangePasswordFormValues) => {
+  const dataFormated = {
+    old_password: data.password,
+    new_password: data.newPassword,
+  };
+
+  const response = await axiosInstance.post(
+    "/auth/change-password",
+    dataFormated
+  );
 
   if (response.status === 204) {
     return "Contraseña actualizada correctamente.";
@@ -64,7 +52,7 @@ export const changePassword = async (data: ChangePasswordData) => {
   return response.data;
 };
 
-export const forgotPassword = async (data: ForgotPasswordData) => {
+export const forgotPassword = async (data: ForgotPasswordFormValues) => {
   const response = await axiosInstance.post("/auth/forgot-password", data);
 
   if (response.status === 204) {
@@ -74,7 +62,7 @@ export const forgotPassword = async (data: ForgotPasswordData) => {
   return response.data;
 };
 
-export const resetPassword = async (data: ResetPasswordData) => {
+export const resetPassword = async (data: ResetPasswordFormValues) => {
   const response = await axiosInstance.post("/auth/reset-password", data);
   return response.data;
 };
