@@ -13,6 +13,7 @@ from app.crud.folder import (
 )
 from app.database.connection import SessionDep
 from app.enums import ActionType
+from app.models.folder import Folder
 from app.schemas.folder import FolderContent, FolderIn, FolderOut, FolderPath
 from app.utils.auth import CurrentUserDep
 from app.utils.filesystem import (
