@@ -14,10 +14,10 @@ import { login as loginService } from "@/features/auth";
 import { LoginFormValues, loginSchema } from "@/schemas/authSchemas";
 import { getErrorMessage } from "@/utils/errorUtils";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CloudyIcon } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
+import { AuthHeader } from "./AuthHeader";
 
 export const LoginForm = () => {
   const navigate = useNavigate();
@@ -55,27 +55,12 @@ export const LoginForm = () => {
       <Form {...form}>
         <form onSubmit={onSubmit}>
           <div className="flex flex-col gap-6">
-            {/* Logo and title */}
-            <div className="flex flex-col items-center gap-2">
-              <a
-                href="#"
-                className="flex flex-col items-center gap-2 font-medium"
-              >
-                <div className="flex h-8 w-8 items-center justify-center rounded-md">
-                  <CloudyIcon className="size-6" />
-                </div>
-                <span className="sr-only">HomeCloud</span>
-              </a>
-
-              <h1 className="text-xl font-bold">Bienvenido a HomeCloud</h1>
-
-              <div className="text-center text-sm">
-                ¿No tienes una cuenta todavía?{" "}
-                <Link to="/registro" className="underline underline-offset-4">
-                  Registrate
-                </Link>
-              </div>
-            </div>
+            <AuthHeader
+              title="Bienvenido/a a HomeCloud"
+              subtitle="¿No tienes una cuenta todavía?"
+              linkText="Regístrate"
+              linkTo="/registro"
+            />
 
             {/* Form fields */}
             <div className="flex flex-col gap-6">

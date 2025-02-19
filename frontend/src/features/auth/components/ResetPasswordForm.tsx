@@ -15,10 +15,10 @@ import {
 } from "@/schemas/authSchemas";
 import { getErrorMessage } from "@/utils/errorUtils";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CloudyIcon } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { AuthHeader } from "./AuthHeader";
 
 export const ResetPasswordForm = () => {
   const [searchParams] = useSearchParams();
@@ -59,32 +59,12 @@ export const ResetPasswordForm = () => {
       <Form {...form}>
         <form onSubmit={onSubmit}>
           <div className="flex flex-col gap-6">
-            {/* Logo and title */}
-            <div className="flex flex-col items-center gap-2">
-              <a
-                href="#"
-                className="flex flex-col items-center gap-2 font-medium"
-              >
-                <div className="flex h-8 w-8 items-center justify-center rounded-md">
-                  <CloudyIcon className="size-6" />
-                </div>
-                <span className="sr-only">HomeCloud</span>
-              </a>
-
-              <h1 className="text-xl font-bold">
-                Reinicia y vuelve al control de tu cuenta
-              </h1>
-
-              <div className="text-center text-sm">
-                ¿Recuerdas tu contraseña?{" "}
-                <Link
-                  to="/iniciar-sesion"
-                  className="underline underline-offset-4"
-                >
-                  Inicia sesión
-                </Link>
-              </div>
-            </div>
+            <AuthHeader
+              title="Reinicia y vuelve al control de tu cuenta"
+              subtitle="¿Recuerdas tu contraseña?"
+              linkText="Inicia sesión"
+              linkTo="/iniciar-sesion"
+            />
 
             {/* Form fields */}
             <div className="flex flex-col gap-6">
