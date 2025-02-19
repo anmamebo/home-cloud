@@ -42,10 +42,6 @@ export const UserDropdown = () => {
     setTheme(newTheme);
   };
 
-  const handleLogOut = () => {
-    logout();
-  };
-
   if (!user) {
     return null;
   }
@@ -141,7 +137,7 @@ export const UserDropdown = () => {
           <DropdownMenuSeparator />
 
           {/* Log out */}
-          <DropdownMenuItem onClick={handleLogOut}>
+          <DropdownMenuItem onClick={logout}>
             <LogOutIcon />
             Cerrar sesión
           </DropdownMenuItem>
