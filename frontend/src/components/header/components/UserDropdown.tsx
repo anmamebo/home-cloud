@@ -27,25 +27,19 @@ import {
   MoonIcon,
   SunIcon,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export const UserDropdown = () => {
   const { user, logout } = useAuth();
 
   const { theme, setTheme } = useTheme();
-  const [selectedTheme, setSelectedTheme] = useState<Theme>(theme);
 
   const [isProfileDialogOpen, setIsProfileDialogOpen] = useState(false);
   const [isChangePasswordDialogOpen, setIsChangePasswordDialogOpen] =
     useState(false);
 
-  useEffect(() => {
-    setSelectedTheme(theme);
-  }, [theme]);
-
   const handleThemeChange = (newTheme: Theme) => {
     setTheme(newTheme);
-    setSelectedTheme(newTheme);
   };
 
   const handleLogOut = () => {
@@ -122,19 +116,19 @@ export const UserDropdown = () => {
               <DropdownMenuPortal>
                 <DropdownMenuSubContent>
                   <DropdownMenuCheckboxItem
-                    checked={selectedTheme === Theme.Light}
+                    checked={theme === Theme.Light}
                     onCheckedChange={() => handleThemeChange(Theme.Light)}
                   >
                     {THEME_LABELS[Theme.Light]}
                   </DropdownMenuCheckboxItem>
                   <DropdownMenuCheckboxItem
-                    checked={selectedTheme === Theme.Dark}
+                    checked={theme === Theme.Dark}
                     onCheckedChange={() => handleThemeChange(Theme.Dark)}
                   >
                     {THEME_LABELS[Theme.Dark]}
                   </DropdownMenuCheckboxItem>
                   <DropdownMenuCheckboxItem
-                    checked={selectedTheme === Theme.System}
+                    checked={theme === Theme.System}
                     onCheckedChange={() => handleThemeChange(Theme.System)}
                   >
                     {THEME_LABELS[Theme.System]}
