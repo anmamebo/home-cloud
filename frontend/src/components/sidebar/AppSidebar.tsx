@@ -5,7 +5,6 @@ import {
   SidebarHeader,
 } from "@/components/ui/sidebar";
 import { NavFolderOptions } from "./components/NavFolderOptions";
-import { NavUser } from "./components/NavUser";
 
 export const AppSidebar = ({
   ...props
@@ -22,9 +21,7 @@ export const AppSidebar = ({
 
       <SidebarContent></SidebarContent>
 
-      <SidebarFooter>
-        <NavUser />
-      </SidebarFooter>
+      <SidebarFooter></SidebarFooter>
     </Sidebar>
   );
 };
