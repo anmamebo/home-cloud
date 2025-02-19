@@ -4,7 +4,7 @@ import { Router } from "@/routes/Router";
 
 function App() {
   return (
-    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+    <ThemeProvider storageKey="vite-ui-theme">
       <Router />
       <Toaster />
     </ThemeProvider>

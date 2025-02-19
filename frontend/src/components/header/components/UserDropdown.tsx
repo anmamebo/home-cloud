@@ -1,4 +1,8 @@
 import { useTheme } from "@/components/theme";
+import {
+  Theme,
+  THEME_LABELS,
+} from "@/components/theme/constants/ThemeConstants";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -29,9 +33,7 @@ export const UserDropdown = () => {
   const { user, logout } = useAuth();
 
   const { theme, setTheme } = useTheme();
-  const [selectedTheme, setSelectedTheme] = useState<
-    "light" | "dark" | "system"
-  >(theme);
+  const [selectedTheme, setSelectedTheme] = useState<Theme>(theme);
 
   const [isProfileDialogOpen, setIsProfileDialogOpen] = useState(false);
   const [isChangePasswordDialogOpen, setIsChangePasswordDialogOpen] =
@@ -41,7 +43,7 @@ export const UserDropdown = () => {
     setSelectedTheme(theme);
   }, [theme]);
 
-  const handleThemeChange = (newTheme: "light" | "dark" | "system") => {
+  const handleThemeChange = (newTheme: Theme) => {
     setTheme(newTheme);
     setSelectedTheme(newTheme);
   };
@@ -120,22 +122,22 @@ export const UserDropdown = () => {
               <DropdownMenuPortal>
                 <DropdownMenuSubContent>
                   <DropdownMenuCheckboxItem
-                    checked={selectedTheme === "light"}
-                    onCheckedChange={() => handleThemeChange("light")}
+                    checked={selectedTheme === Theme.Light}
+                    onCheckedChange={() => handleThemeChange(Theme.Light)}
                   >
-                    Claro
+                    {THEME_LABELS[Theme.Light]}
                   </DropdownMenuCheckboxItem>
                   <DropdownMenuCheckboxItem
-                    checked={selectedTheme === "dark"}
-                    onCheckedChange={() => handleThemeChange("dark")}
+                    checked={selectedTheme === Theme.Dark}
+                    onCheckedChange={() => handleThemeChange(Theme.Dark)}
                   >
-                    Oscuro
+                    {THEME_LABELS[Theme.Dark]}
                   </DropdownMenuCheckboxItem>
                   <DropdownMenuCheckboxItem
-                    checked={selectedTheme === "system"}
-                    onCheckedChange={() => handleThemeChange("system")}
+                    checked={selectedTheme === Theme.System}
+                    onCheckedChange={() => handleThemeChange(Theme.System)}
                   >
-                    Tema del sistema
+                    {THEME_LABELS[Theme.System]}
                   </DropdownMenuCheckboxItem>
                 </DropdownMenuSubContent>
               </DropdownMenuPortal>
