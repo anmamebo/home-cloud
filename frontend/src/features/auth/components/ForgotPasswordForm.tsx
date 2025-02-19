@@ -8,7 +8,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { forgotPassword } from "@/features/auth";
+import { AuthHeader, forgotPassword } from "@/features/auth";
 import {
   ForgotPasswordFormValues,
   forgotPasswordSchema,
@@ -17,7 +17,6 @@ import { getErrorMessage } from "@/utils/errorUtils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { AuthHeader } from "./AuthHeader";
 
 export const ForgotPasswordForm = () => {
   const form = useForm<ForgotPasswordFormValues>({

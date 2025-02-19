@@ -10,14 +10,13 @@ import {
 import { Input } from "@/components/ui/input";
 import { PasswordInput } from "@/components/ui/password-input";
 import { useAuth } from "@/contexts/AuthContext";
-import { login as loginService } from "@/features/auth";
+import { AuthFooter, AuthHeader, login as loginService } from "@/features/auth";
 import { LoginFormValues, loginSchema } from "@/schemas/authSchemas";
 import { getErrorMessage } from "@/utils/errorUtils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
-import { AuthHeader } from "./AuthHeader";
 
 export const LoginForm = () => {
   const navigate = useNavigate();
@@ -142,12 +141,7 @@ export const LoginForm = () => {
         </form>
       </Form>
 
-      {/* Terms of service */}
-      <div className="text-balance text-center text-xs text-muted-foreground [&_a]:underline [&_a]:underline-offset-4 hover:[&_a]:text-primary  ">
-        Al hacer clic en continuar, aceptas nuestros{" "}
-        <Link to="/terminos">Términos de servicio</Link> y nuestra{" "}
-        <Link to="/privacidad">Política de privacidad</Link>.
-      </div>
+      <AuthFooter />
     </div>
   );
 };

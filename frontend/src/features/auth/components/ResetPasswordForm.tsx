@@ -8,7 +8,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { PasswordInput } from "@/components/ui/password-input";
-import { resetPassword } from "@/features/auth";
+import { AuthHeader, resetPassword } from "@/features/auth";
 import {
   ResetPasswordFormValues,
   resetPasswordSchema,
@@ -18,7 +18,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { AuthHeader } from "./AuthHeader";
 
 export const ResetPasswordForm = () => {
   const [searchParams] = useSearchParams();

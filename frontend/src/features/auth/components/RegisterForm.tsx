@@ -9,14 +9,13 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { PasswordInput } from "@/components/ui/password-input";
-import { register } from "@/features/auth";
+import { AuthFooter, AuthHeader, register } from "@/features/auth";
 import { RegisterFormValues, registerSchema } from "@/schemas/authSchemas";
 import { getErrorMessage } from "@/utils/errorUtils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router-dom";
-import { AuthHeader } from "./AuthHeader";
+import { useNavigate } from "react-router-dom";
 
 export const RegisterForm = () => {
   const navigate = useNavigate();
@@ -155,12 +154,7 @@ export const RegisterForm = () => {
         </form>
       </Form>
 
-      {/* Terms of service */}
-      <div className="text-balance text-center text-xs text-muted-foreground [&_a]:underline [&_a]:underline-offset-4 hover:[&_a]:text-primary  ">
-        Al hacer clic en continuar, aceptas nuestros{" "}
-        <Link to="/terminos">Términos de servicio</Link> y nuestra{" "}
-        <Link to="/privacidad">Política de privacidad</Link>.
-      </div>
+      <AuthFooter />
     </div>
   );
 };

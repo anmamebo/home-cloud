@@ -1,4 +1,6 @@
 // components
+export { AuthFooter } from "./components/AuthFooter";
+export { AuthHeader } from "./components/AuthHeader";
 export { ForgotPasswordForm } from "./components/ForgotPasswordForm";
 export { LoginForm } from "./components/LoginForm";
 export { RegisterForm } from "./components/RegisterForm";
