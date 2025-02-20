@@ -2,7 +2,7 @@ import { Order, SortByFile, SortByFolder } from "@/constants/SortConstants";
 import { FolderAction, FolderState } from "@/types";
 
 export const initialState: FolderState = {
-  folderId: null,
+  folderId: 0,
   folderName: "",
   subfolders: [],
   files: [],

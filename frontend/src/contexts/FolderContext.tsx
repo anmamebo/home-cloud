@@ -13,7 +13,7 @@ import {
 const useFolderReducer = () => {
   const [state, dispatch] = useReducer(folderReducer, initialState);
 
-  const setFolderId = (folderId: number | null) => {
+  const setFolderId = (folderId: number) => {
     dispatch({ type: "SET_FOLDER_ID", payload: folderId });
   };
 
@@ -57,12 +57,12 @@ const useFolderReducer = () => {
 
 type FolderContextType = {
   isLoading: boolean;
-  folderId: number | null;
+  folderId: number;
   folderName: string;
   subfolders: Folder[];
   files: File[];
   sortBy: SortingOptions;
-  setFolderId: (folderId: number | null) => void;
+  setFolderId: (folderId: number) => void;
   fetchFolderContent: () => Promise<void>;
   setSortBy: (sortBy: SortingOptions) => void;
 };
