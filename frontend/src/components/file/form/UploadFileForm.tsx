@@ -23,11 +23,11 @@ interface UploadFileFormProps {
 }
 
 export const UploadFileForm = ({ onOpenChange }: UploadFileFormProps) => {
-  const { refreshFolders, currentFolderId } = useFolderContext();
+  const { folderId, fetchFolderContent } = useFolderContext();
 
   const { handleUpload, isUploading } = useUploadWithProgress(
     uploadFile,
-    currentFolderId
+    folderId
   );
 
   const form = useForm<UploadFileFormValues>({
@@ -40,7 +40,7 @@ export const UploadFileForm = ({ onOpenChange }: UploadFileFormProps) => {
   const onSubmit = form.handleSubmit(async (values: UploadFileFormValues) => {
     try {
       await handleUpload(values.file);
-      refreshFolders();
+      fetchFolderContent();
       form.reset();
       onOpenChange(false);
     } catch (error) {

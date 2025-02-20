@@ -29,7 +29,7 @@ export const FileItem = ({ file }: FileItemProps) => {
   const [isChangeNameFileDialogOpen, setIsChangeNameFileDialogOpen] =
     useState(false);
 
-  const { fetchFolderContent, currentFolderId } = useFolderContext();
+  const { fetchFolderContent } = useFolderContext();
 
   const { handleDownload } = useDownloadWithProgress(downloadFile, file);
 
@@ -41,7 +41,7 @@ export const FileItem = ({ file }: FileItemProps) => {
     handleDelete,
     openDeleteDialog,
   } = useDeleteItem({
-    onSuccess: () => fetchFolderContent(currentFolderId),
+    onSuccess: () => fetchFolderContent(),
   });
 
   const FileIcon = getFileIcon(file.filename);

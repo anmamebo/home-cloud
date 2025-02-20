@@ -31,7 +31,7 @@ export const ChangeNameFileForm = ({
   fileName,
   onOpenChange,
 }: ChangeNameFileFormProps) => {
-  const { refreshFolders } = useFolderContext();
+  const { fetchFolderContent } = useFolderContext();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -58,7 +58,7 @@ export const ChangeNameFileForm = ({
 
       notify.success(`Archivo "${filename}" actualizado correctamente`);
 
-      refreshFolders();
+      fetchFolderContent();
 
       form.reset();
       onOpenChange(false);

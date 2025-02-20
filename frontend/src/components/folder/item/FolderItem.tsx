@@ -33,7 +33,7 @@ export const FolderItem = ({ folder }: FolderItemProps) => {
   const [isChangeNameFolderDialogOpen, setIsChangeNameFolderDialogOpen] =
     useState(false);
 
-  const { fetchFolderContent, currentFolderId } = useFolderContext();
+  const { fetchFolderContent } = useFolderContext();
 
   const handleNavigate = (folderId: number) => {
     navigate(`/carpeta/${folderId}`);
@@ -49,7 +49,7 @@ export const FolderItem = ({ folder }: FolderItemProps) => {
     handleDelete,
     openDeleteDialog,
   } = useDeleteItem({
-    onSuccess: () => fetchFolderContent(currentFolderId),
+    onSuccess: () => fetchFolderContent(),
   });
 
   const handleDetails = () => {

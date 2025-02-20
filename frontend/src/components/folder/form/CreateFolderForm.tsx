@@ -25,7 +25,7 @@ interface CreateFolderFormProps {
 }
 
 export const CreateFolderForm = ({ onOpenChange }: CreateFolderFormProps) => {
-  const { refreshFolders, currentFolderId } = useFolderContext();
+  const { folderId, fetchFolderContent } = useFolderContext();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -39,12 +39,12 @@ export const CreateFolderForm = ({ onOpenChange }: CreateFolderFormProps) => {
   const onSubmit = form.handleSubmit(async (values: CreateFolderFormValues) => {
     setIsSubmitting(true);
     try {
-      const response = await createFolder(values.name, currentFolderId);
+      const response = await createFolder(values.name, folderId);
       const { name: folderName } = response;
 
       notify.success(`Carpeta "${folderName}" creada correctamente`);
 
-      refreshFolders();
+      fetchFolderContent();
 
       form.reset();
       onOpenChange(false);

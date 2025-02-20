@@ -31,7 +31,7 @@ export const ChangeNameFolderForm = ({
   folderName,
   onOpenChange,
 }: ChangeNameFolderFormProps) => {
-  const { refreshFolders } = useFolderContext();
+  const { fetchFolderContent } = useFolderContext();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -50,7 +50,7 @@ export const ChangeNameFolderForm = ({
 
       notify.success(`Carpeta "${folderName}" actualizada correctamente`);
 
-      refreshFolders();
+      fetchFolderContent();
 
       form.reset();
       onOpenChange(false);
