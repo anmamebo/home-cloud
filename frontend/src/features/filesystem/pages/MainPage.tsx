@@ -1,44 +1,30 @@
+import { FileList } from "@/components/file";
+import { FolderList } from "@/components/folder";
 import { Spinner } from "@/components/ui/spinner";
 import { useFolderContext } from "@/contexts/FolderContext";
-import { FilesSection, FoldersSection, NoContent } from "@/features/filesystem";
-import { File, Folder } from "@/types";
-import { useEffect, useState } from "react";
+import {
+  FileFilters,
+  FilesystemSection,
+  FolderFilters,
+  NoContent,
+} from "@/features/filesystem";
+import { useEffect } from "react";
 import { useParams } from "react-router-dom";
+import {} from "../components/FileFilters";
 
 export const MainPage = () => {
   const { folderId } = useParams<{ folderId: string }>();
   const folderIdNumber = folderId ? parseInt(folderId, 10) : 0;
 
-  const [selectedFolderOrder, setSelectedFolderOrder] =
-    useState("created_at-desc");
-  const [selectedFileOrder, setSelectedFileOrder] = useState("created_at-desc");
-
-  const {
-    subfolders,
-    files,
-    numSubfolders,
-    numFiles,
-    isLoading,
-    sortBy,
-    setSortBy,
-    fetchFolderContent,
-  } = useFolderContext();
-
-  const handleFolderSortChange = (value: string) => {
-    const [sortByFolders, orderFolders] = value.split("-");
-    setSortBy({ ...sortBy, folders: sortByFolders, orderFolders });
-    setSelectedFolderOrder(value);
-  };
-
-  const handleFileSortChange = (value: string) => {
-    const [sortByFiles, orderFiles] = value.split("-");
-    setSortBy({ ...sortBy, files: sortByFiles, orderFiles });
-    setSelectedFileOrder(value);
-  };
+  const { subfolders, files, isLoading, fetchFolderContent } =
+    useFolderContext();
 
   useEffect(() => {
     fetchFolderContent(folderIdNumber);
-  }, [folderIdNumber, fetchFolderContent, sortBy]);
+  }, [folderIdNumber]);
+
+  const isFolders = subfolders.length !== 0;
+  const isFiles = files.length !== 0;
 
   if (isLoading) {
     return (
@@ -51,25 +37,21 @@ export const MainPage = () => {
   return (
     <div className="flex flex-col gap-6">
       {/* Folders */}
-      {numSubfolders !== 0 && (
-        <FoldersSection
-          folders={subfolders as Folder[]}
-          selectedFolderOrder={selectedFolderOrder}
-          onFolderSortChange={handleFolderSortChange}
-        />
+      {isFolders && (
+        <FilesystemSection title="Carpetas" filters={<FolderFilters />}>
+          <FolderList folders={subfolders} />
+        </FilesystemSection>
       )}
 
       {/* Files */}
-      {numFiles !== 0 && (
-        <FilesSection
-          files={files as File[]}
-          selectedFileOrder={selectedFileOrder}
-          onFileSortChange={handleFileSortChange}
-        />
+      {isFiles && (
+        <FilesystemSection title="Archivos" filters={<FileFilters />}>
+          <FileList files={files} />
+        </FilesystemSection>
       )}
 
       {/* No content */}
-      {!isLoading && !numSubfolders && !numFiles && <NoContent />}
+      {!isLoading && !isFolders && !isFiles && <NoContent />}
     </div>
   );
 };

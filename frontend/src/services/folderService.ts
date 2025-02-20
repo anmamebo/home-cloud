@@ -1,15 +1,18 @@
 import axiosInstance from "@/services/api";
+import { SortingOptions } from "@/types";
 
 export const getFolderContent = async (
   folderId: number,
-  sortByFolders: string,
-  orderFolders: string,
-  sortByFiles: string,
-  orderFiles: string
+  sortBy: SortingOptions
 ) => {
-  const response = await axiosInstance.get(
-    `filesystem/folders/${folderId}?sort_by_folders=${sortByFolders}&sort_by_files=${sortByFiles}&order_folders=${orderFolders}&order_files=${orderFiles}`
-  );
+  const response = await axiosInstance.get(`filesystem/folders/${folderId}`, {
+    params: {
+      sort_by_folders: sortBy.folders,
+      order_folders: sortBy.orderFolders,
+      sort_by_files: sortBy.files,
+      order_files: sortBy.orderFiles,
+    },
+  });
   return response.data;
 };
 

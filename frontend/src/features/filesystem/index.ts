@@ -1,6 +1,7 @@
 // components
-export { FilesSection } from "./components/FilesSection";
-export { FoldersSection } from "./components/FoldersSection";
+export { FileFilters } from "./components/FileFilters";
+export { FilesystemSection } from "./components/FilesystemSection";
+export { FolderFilters } from "./components/FolderFilters";
 export { NoContent } from "./components/NoContent";
 
 // pages
