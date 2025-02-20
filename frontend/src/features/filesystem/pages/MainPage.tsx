@@ -10,17 +10,15 @@ import {
 } from "@/features/filesystem";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import {} from "../components/FileFilters";
 
 export const MainPage = () => {
   const { folderId } = useParams<{ folderId: string }>();
   const folderIdNumber = folderId ? parseInt(folderId, 10) : 0;
 
-  const { subfolders, files, isLoading, fetchFolderContent } =
-    useFolderContext();
+  const { subfolders, files, isLoading, setFolderId } = useFolderContext();
 
   useEffect(() => {
-    fetchFolderContent(folderIdNumber);
+    setFolderId(folderIdNumber);
   }, [folderIdNumber]);
 
   const isFolders = subfolders.length !== 0;

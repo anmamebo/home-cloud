@@ -12,6 +12,7 @@ export interface FolderState {
 }
 
 export type FolderAction =
+  | { type: "SET_FOLDER_ID"; payload: number | null }
   | { type: "SET_LOADING"; payload: boolean }
   | {
       type: "SET_FOLDER_CONTENT";

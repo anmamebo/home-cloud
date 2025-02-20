@@ -18,6 +18,10 @@ export const initialState: FolderState = {
 export const folderReducer = (state: FolderState, action: FolderAction) => {
   const { type } = action;
 
+  if (type === "SET_FOLDER_ID") {
+    return { ...state, folderId: action.payload };
+  }
+
   if (type === "SET_LOADING") {
     return { ...state, isLoading: action.payload };
   }

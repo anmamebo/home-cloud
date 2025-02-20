@@ -13,11 +13,19 @@ import {
 const useFolderReducer = () => {
   const [state, dispatch] = useReducer(folderReducer, initialState);
 
+  const setFolderId = (folderId: number | null) => {
+    dispatch({ type: "SET_FOLDER_ID", payload: folderId });
+  };
+
   const setLoading = (isLoading: boolean) => {
     dispatch({ type: "SET_LOADING", payload: isLoading });
   };
 
-  const fetchFolderContent = async (folderId: number) => {
+  const fetchFolderContent = async () => {
+    const folderId = state.folderId;
+
+    if (folderId === null) return;
+
     setLoading(true);
     try {
       const response = await getFolderContent(folderId, state.sortBy);
@@ -44,7 +52,7 @@ const useFolderReducer = () => {
     dispatch({ type: "SET_SORT_BY", payload: sortBy });
   };
 
-  return { state, fetchFolderContent, setSortBy };
+  return { state, setFolderId, fetchFolderContent, setSortBy };
 };
 
 type FolderContextType = {
@@ -54,27 +62,30 @@ type FolderContextType = {
   subfolders: Folder[];
   files: File[];
   sortBy: SortingOptions;
-  fetchFolderContent: (folderId: number) => Promise<void>;
+  setFolderId: (folderId: number | null) => void;
+  fetchFolderContent: () => Promise<void>;
   setSortBy: (sortBy: SortingOptions) => void;
 };
 
 const FolderContext = createContext<FolderContextType>({
   ...initialState,
+  setFolderId: () => {},
   fetchFolderContent: async () => {},
   setSortBy: () => {},
 });
 
 export const FolderProvider = ({ children }: { children: ReactNode }) => {
-  const { state, fetchFolderContent, setSortBy } = useFolderReducer();
+  const { state, setFolderId, fetchFolderContent, setSortBy } =
+    useFolderReducer();
 
   const { isLoading, folderId, folderName, subfolders, files, sortBy } = state;
 
   // Update folder content when sortBy changes
   useEffect(() => {
     if (folderId !== null) {
-      fetchFolderContent(folderId);
+      fetchFolderContent();
     }
-  }, [sortBy]);
+  }, [folderId, sortBy]);
 
   return (
     <FolderContext.Provider
@@ -85,6 +96,7 @@ export const FolderProvider = ({ children }: { children: ReactNode }) => {
         subfolders,
         files,
         sortBy,
+        setFolderId,
         fetchFolderContent,
         setSortBy,
       }}
