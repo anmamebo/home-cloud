@@ -37,3 +37,4 @@ export { MainPage } from "./pages/MainPage";
 
 // hooks
 export { useFileActions } from "./hooks/useFileActions";
+export { useFolderActions } from "./hooks/useFolderActions";

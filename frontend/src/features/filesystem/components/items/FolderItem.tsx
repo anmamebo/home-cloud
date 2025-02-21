@@ -7,21 +7,17 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { useFolderContext } from "@/contexts/FolderContext";
 import {
   ChangeNameDialog,
   ChangeNameFolderForm,
   FolderContextMenuContent,
   FolderDropdownMenuContent,
   ItemDropdownMenu,
+  useFolderActions,
 } from "@/features/filesystem";
-import { useDeleteItem } from "@/hooks/useDeleteItem";
-import { useDownloadWithProgress } from "@/hooks/useDownloadWithProgress";
 import { useIsMobile } from "@/hooks/useMobile";
-import { deleteFolder, downloadFolder } from "@/services/folderService";
 import { Folder } from "@/types";
 import { FolderIcon } from "lucide-react";
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 type FolderItemProps = {
@@ -32,34 +28,19 @@ export const FolderItem = ({ folder }: FolderItemProps) => {
   const navigate = useNavigate();
   const isMobile = useIsMobile();
 
-  const [isChangeNameFolderDialogOpen, setIsChangeNameFolderDialogOpen] =
-    useState(false);
-
-  const { fetchFolderContent } = useFolderContext();
+  const {
+    isChangeNameDialogOpen,
+    setIsChangeNameDialogOpen,
+    isDeleteDialogOpen,
+    setIsDeleteDialogOpen,
+    handleDownload,
+    handleRename,
+    handleConfirmDelete,
+    handleDelete,
+  } = useFolderActions(folder);
 
   const handleNavigate = (folderId: number) => {
     navigate(`/carpeta/${folderId}`);
-  };
-
-  const { handleDownload } = useDownloadWithProgress(downloadFolder, folder);
-
-  const handleRename = () => setIsChangeNameFolderDialogOpen(true);
-
-  const {
-    isDeleteDialogOpen,
-    setIsDeleteDialogOpen,
-    handleDelete,
-    openDeleteDialog,
-  } = useDeleteItem({
-    onSuccess: () => fetchFolderContent(),
-  });
-
-  const handleDetails = () => {
-    console.log("Ver detalles de la carpeta:", folder.id);
-  };
-
-  const handleActivity = () => {
-    console.log("Ver actividad de la carpeta:", folder.id);
   };
 
   return (
@@ -104,11 +85,9 @@ export const FolderItem = ({ folder }: FolderItemProps) => {
                   <FolderDropdownMenuContent
                     onDownload={handleDownload}
                     onRename={handleRename}
-                    onDetails={handleDetails}
-                    onActivity={handleActivity}
-                    onMoveToTrash={() =>
-                      openDeleteDialog(folder.id, folder.name)
-                    }
+                    onDetails={() => {}}
+                    onActivity={() => {}}
+                    onMoveToTrash={handleConfirmDelete}
                   />
                 </ItemDropdownMenu>
               </div>
@@ -120,9 +99,9 @@ export const FolderItem = ({ folder }: FolderItemProps) => {
         <FolderContextMenuContent
           onDownload={handleDownload}
           onRename={handleRename}
-          onDetails={handleDetails}
-          onActivity={handleActivity}
-          onMoveToTrash={() => openDeleteDialog(folder.id, folder.name)}
+          onDetails={() => {}}
+          onActivity={() => {}}
+          onMoveToTrash={handleConfirmDelete}
         />
       </ContextMenu>
 
@@ -134,18 +113,18 @@ export const FolderItem = ({ folder }: FolderItemProps) => {
           <ChangeNameFolderForm
             folderId={folder.id}
             folderName={folder.name}
-            onOpenChange={setIsChangeNameFolderDialogOpen}
+            onOpenChange={setIsChangeNameDialogOpen}
           />
         }
-        open={isChangeNameFolderDialogOpen}
-        onOpenChange={setIsChangeNameFolderDialogOpen}
+        open={isChangeNameDialogOpen}
+        onOpenChange={setIsChangeNameDialogOpen}
       />
 
       {/* Delete Dialog */}
       <DeleteConfirmationDialog
         isOpen={isDeleteDialogOpen}
         onOpenChange={setIsDeleteDialogOpen}
-        onConfirm={() => handleDelete(deleteFolder, folder.id)}
+        onConfirm={handleDelete}
         itemName={folder.name}
       />
     </>
