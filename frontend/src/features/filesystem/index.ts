@@ -4,6 +4,10 @@ export { ChangeNameDialog } from "./components/dialogs/ChangeNameDialog";
 export { CreateFolderDialog } from "./components/dialogs/CreateFolderDialog";
 export { UploadFileDialog } from "./components/dialogs/UploadFileDialog";
 
+// filters
+export { FileFilters } from "./components/filters/FileFilters";
+export { FolderFilters } from "./components/filters/FolderFilters";
+
 // forms
 export { ChangeNameFileForm } from "./components/forms/ChangeNameFileForm";
 export { ChangeNameFolderForm } from "./components/forms/ChangeNameFolderForm";
@@ -17,9 +21,7 @@ export { FolderContextMenuContent } from "./components/menus/FolderContextMenuCo
 export { FolderDropdownMenuContent } from "./components/menus/FolderDropdownMenuContent";
 export { ItemDropdownMenu } from "./components/menus/ItemDropdownMenu";
 
-export { FileFilters } from "./components/FileFilters";
 export { FilesystemSection } from "./components/FilesystemSection";
-export { FolderFilters } from "./components/FolderFilters";
 export { NoContent } from "./components/NoContent";
 
 // pages
