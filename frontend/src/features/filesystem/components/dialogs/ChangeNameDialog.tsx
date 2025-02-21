@@ -1,4 +1,3 @@
-import { ChangeNameFolderForm } from "@/components/folder";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -18,19 +17,22 @@ import {
 } from "@/components/ui/drawer";
 import { useIsMobile } from "@/hooks/useMobile";
 import { DialogProps } from "@/types";
+import { ReactNode } from "react";
 import { createPortal } from "react-dom";
 
-type ChangeNameFolderDialogProps = {
-  folderId: number;
-  folderName: string;
-} & DialogProps;
+type ChangeNameDialogProps = DialogProps & {
+  title: string;
+  description: string;
+  formComponent: ReactNode;
+};
 
-export const ChangeNameFolderDialog = ({
-  folderId,
-  folderName,
+export const ChangeNameDialog = ({
+  title,
+  description,
+  formComponent,
   open,
   onOpenChange,
-}: ChangeNameFolderDialogProps) => {
+}: ChangeNameDialogProps) => {
   const isMobile = useIsMobile();
 
   if (isMobile) {
@@ -39,20 +41,12 @@ export const ChangeNameFolderDialog = ({
         <DrawerContent>
           {/* Header */}
           <DrawerHeader className="text-left">
-            <DrawerTitle>Cambiar nombre de la carpeta</DrawerTitle>
-            <DrawerDescription>
-              Introduce el nuevo nombre de la carpeta.
-            </DrawerDescription>
+            <DrawerTitle>{title}</DrawerTitle>
+            <DrawerDescription>{description}</DrawerDescription>
           </DrawerHeader>
 
           {/* Content */}
-          <div className="px-4">
-            <ChangeNameFolderForm
-              folderId={folderId}
-              folderName={folderName}
-              onOpenChange={onOpenChange}
-            />
-          </div>
+          <div className="px-4">{formComponent}</div>
 
           {/* Footer */}
           <DrawerFooter className="pt-2">
@@ -71,18 +65,12 @@ export const ChangeNameFolderDialog = ({
       <DialogContent className="sm:max-w-[550px]">
         {/* Header */}
         <DialogHeader>
-          <DialogTitle>Cambiar nombre de la carpeta</DialogTitle>
-          <DialogDescription>
-            Introduce el nuevo nombre de la carpeta.
-          </DialogDescription>
+          <DialogTitle>{title}</DialogTitle>
+          <DialogDescription>{description}</DialogDescription>
         </DialogHeader>
 
         {/* Content */}
-        <ChangeNameFolderForm
-          folderId={folderId}
-          folderName={folderName}
-          onOpenChange={onOpenChange}
-        />
+        {formComponent}
       </DialogContent>
     </Dialog>,
     document.body

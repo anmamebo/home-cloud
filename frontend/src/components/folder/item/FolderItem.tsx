@@ -1,6 +1,6 @@
 import { DeleteConfirmationDialog } from "@/components/dialogs/DeleteConfirmationDialog";
 import {
-  ChangeNameFolderDialog,
+  ChangeNameFolderForm,
   ContextMenuContentComponent,
   FolderDropdownMenuContent,
 } from "@/components/folder";
@@ -13,7 +13,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useFolderContext } from "@/contexts/FolderContext";
-import { ItemDropdownMenu } from "@/features/filesystem";
+import { ChangeNameDialog, ItemDropdownMenu } from "@/features/filesystem";
 import { useDeleteItem } from "@/hooks/useDeleteItem";
 import { useDownloadWithProgress } from "@/hooks/useDownloadWithProgress";
 import { useIsMobile } from "@/hooks/useMobile";
@@ -127,9 +127,16 @@ export const FolderItem = ({ folder }: FolderItemProps) => {
       </ContextMenu>
 
       {/* Dialogs */}
-      <ChangeNameFolderDialog
-        folderId={folder.id}
-        folderName={folder.name}
+      <ChangeNameDialog
+        title="Cambiar nombre de la carpeta"
+        description="Introduce el nuevo nombre de la carpeta."
+        formComponent={
+          <ChangeNameFolderForm
+            folderId={folder.id}
+            folderName={folder.name}
+            onOpenChange={setIsChangeNameFolderDialogOpen}
+          />
+        }
         open={isChangeNameFolderDialogOpen}
         onOpenChange={setIsChangeNameFolderDialogOpen}
       />

@@ -1,5 +1,4 @@
 // dialog
-export { ChangeNameFolderDialog } from "./dialog/ChangeNameFolderDialog";
 export { CreateFolderDialog } from "./dialog/CreateFolderDialog";
 
 // form

@@ -1,6 +1,6 @@
 import { DeleteConfirmationDialog } from "@/components/dialogs/DeleteConfirmationDialog";
 import {
-  ChangeNameFileDialog,
+  ChangeNameFileForm,
   ContextMenuContentComponent,
   FileDropdownMenuContent,
 } from "@/components/file";
@@ -13,7 +13,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useFolderContext } from "@/contexts/FolderContext";
-import { ItemDropdownMenu } from "@/features/filesystem";
+import { ChangeNameDialog, ItemDropdownMenu } from "@/features/filesystem";
 import { useDeleteItem } from "@/hooks/useDeleteItem";
 import { useDownloadWithProgress } from "@/hooks/useDownloadWithProgress";
 import { deleteFile, downloadFile } from "@/services/fileService";
@@ -113,9 +113,16 @@ export const FileItem = ({ file }: FileItemProps) => {
       </ContextMenu>
 
       {/* Dialogs */}
-      <ChangeNameFileDialog
-        fileId={file.id}
-        fileName={file.filename}
+      <ChangeNameDialog
+        title="Cambiar nombre del archivo"
+        description="Introduce el nuevo nombre del archivo."
+        formComponent={
+          <ChangeNameFileForm
+            fileId={file.id}
+            fileName={file.filename}
+            onOpenChange={setIsChangeNameFileDialogOpen}
+          />
+        }
         open={isChangeNameFileDialogOpen}
         onOpenChange={setIsChangeNameFileDialogOpen}
       />

@@ -1,4 +1,7 @@
 // components
+// dialogs
+export { ChangeNameDialog } from "./components/dialogs/ChangeNameDialog";
+
 export { FileFilters } from "./components/FileFilters";
 export { FilesystemSection } from "./components/FilesystemSection";
 export { FolderFilters } from "./components/FolderFilters";
