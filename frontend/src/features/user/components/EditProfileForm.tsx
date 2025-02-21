@@ -10,52 +10,27 @@ import {
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useAuth } from "@/contexts/AuthContext";
-import {
-  fetchAuthenticatedUser,
-  updateAuthenticatedUser,
-} from "@/features/auth";
+import { updateAuthenticatedUser } from "@/features/auth";
 import {
   EditProfileFormValues,
   editProfileSchema,
 } from "@/schemas/userSchemas";
-// TODO: Don't use fetchAuthenticatedUser
+
 import { notify } from "@/services/notifications";
 import { getErrorMessage } from "@/utils/errorUtils";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 export const EditProfileForm = () => {
-  const { login } = useAuth();
+  const { user, login } = useAuth();
 
   const form = useForm<EditProfileFormValues>({
     resolver: zodResolver(editProfileSchema),
     defaultValues: {
-      username: "",
-      email: "",
+      username: user?.username || "",
+      email: user?.email || "",
     },
   });
-
-  const [isLoading, setIsLoading] = useState(true);
-
-  const fetchUserData = useCallback(async () => {
-    try {
-      const response = await fetchAuthenticatedUser();
-
-      form.reset({
-        username: response.username,
-        email: response.email,
-      });
-    } catch (error) {
-      notify.error(getErrorMessage(error));
-    } finally {
-      setIsLoading(false);
-    }
-  }, [form]);
-
-  useEffect(() => {
-    fetchUserData();
-  }, [fetchUserData]);
 
   const onSubmit = form.handleSubmit(async (values: EditProfileFormValues) => {
     try {
@@ -63,7 +38,6 @@ export const EditProfileForm = () => {
       const { access_token } = response;
 
       login(access_token);
-
       notify.success("Información actualizada correctamente.");
     } catch (error) {
       notify.error(getErrorMessage(error));
@@ -71,7 +45,7 @@ export const EditProfileForm = () => {
     }
   });
 
-  if (isLoading) {
+  if (!user) {
     return (
       <div className="flex flex-col gap-6">
         <div className="grid gap-2">
