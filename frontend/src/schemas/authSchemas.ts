@@ -3,14 +3,15 @@ import { z } from "zod";
 
 // Schemas
 export const loginSchema = z.object({
-  username: z.string().nonempty(ERROR_MESSAGES.REQUIRED),
+  username: z.string().trim().nonempty(ERROR_MESSAGES.REQUIRED),
   password: z.string().nonempty(ERROR_MESSAGES.REQUIRED),
 });
 
 export const registerSchema = z.object({
-  username: z.string().nonempty(ERROR_MESSAGES.REQUIRED),
+  username: z.string().trim().nonempty(ERROR_MESSAGES.REQUIRED),
   email: z
     .string()
+    .trim()
     .nonempty(ERROR_MESSAGES.REQUIRED)
     .email(ERROR_MESSAGES.INVALID_EMAIL),
   password: z.string().nonempty(ERROR_MESSAGES.REQUIRED),
@@ -24,6 +25,7 @@ export const resetPasswordSchema = z.object({
 export const forgotPasswordSchema = z.object({
   email: z
     .string()
+    .trim()
     .nonempty(ERROR_MESSAGES.REQUIRED)
     .email(ERROR_MESSAGES.INVALID_EMAIL),
 });

@@ -3,7 +3,7 @@ import { z } from "zod";
 
 // Schemas
 export const changeNameSchema = z.object({
-  name: z.string().nonempty(ERROR_MESSAGES.REQUIRED),
+  name: z.string().trim().nonempty(ERROR_MESSAGES.REQUIRED),
 });
 
 export const uploadFileSchema = z.object({
@@ -11,7 +11,7 @@ export const uploadFileSchema = z.object({
 });
 
 export const createFolderSchema = z.object({
-  name: z.string().nonempty(ERROR_MESSAGES.REQUIRED),
+  name: z.string().trim().nonempty(ERROR_MESSAGES.REQUIRED),
 });
 
 // Types
