@@ -29,6 +29,9 @@ export { FolderContextMenuContent } from "./components/menus/FolderContextMenuCo
 export { FolderDropdownMenuContent } from "./components/menus/FolderDropdownMenuContent";
 export { ItemDropdownMenu } from "./components/menus/ItemDropdownMenu";
 
+// tables
+export { FilesystemTable } from "./components/tables/FilesystemTable";
+
 export { FilesystemSection } from "./components/FilesystemSection";
 export { NoContent } from "./components/NoContent";
 

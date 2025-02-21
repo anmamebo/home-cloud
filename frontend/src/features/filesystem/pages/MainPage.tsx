@@ -1,9 +1,12 @@
+import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
+import { ViewMode } from "@/constants/ViewModeConstants";
 import { useFolderContext } from "@/contexts/FolderContext";
 import {
   FileFilters,
   FileList,
   FilesystemSection,
+  FilesystemTable,
   FolderFilters,
   FolderList,
   NoContent,
@@ -15,7 +18,8 @@ export const MainPage = () => {
   const { folderId } = useParams<{ folderId: string }>();
   const folderIdNumber = folderId ? parseInt(folderId, 10) : 0;
 
-  const { subfolders, files, isLoading, setFolderId } = useFolderContext();
+  const { subfolders, files, isLoading, viewMode, setFolderId, setViewMode } =
+    useFolderContext();
 
   useEffect(() => {
     setFolderId(folderIdNumber);
@@ -34,18 +38,35 @@ export const MainPage = () => {
 
   return (
     <div className="flex flex-col gap-6">
-      {/* Folders */}
-      {isFolders && (
-        <FilesystemSection title="Carpetas" filters={<FolderFilters />}>
-          <FolderList folders={subfolders} />
-        </FilesystemSection>
+      <div className="flex gap-2">
+        <Button variant="default" onClick={() => setViewMode(ViewMode.GRID)}>
+          GRID
+        </Button>
+        <Button variant="default" onClick={() => setViewMode(ViewMode.TABLE)}>
+          TABLA
+        </Button>
+      </div>
+
+      {viewMode === ViewMode.GRID && (
+        <>
+          {/* Folders */}
+          {isFolders && (
+            <FilesystemSection title="Carpetas" filters={<FolderFilters />}>
+              <FolderList folders={subfolders} />
+            </FilesystemSection>
+          )}
+
+          {/* Files */}
+          {isFiles && (
+            <FilesystemSection title="Archivos" filters={<FileFilters />}>
+              <FileList files={files} />
+            </FilesystemSection>
+          )}
+        </>
       )}
 
-      {/* Files */}
-      {isFiles && (
-        <FilesystemSection title="Archivos" filters={<FileFilters />}>
-          <FileList files={files} />
-        </FilesystemSection>
+      {viewMode === ViewMode.TABLE && (
+        <FilesystemTable folders={subfolders} files={files} />
       )}
 
       {/* No content */}

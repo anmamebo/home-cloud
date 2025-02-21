@@ -1,3 +1,4 @@
+import { ViewMode } from "@/constants/ViewModeConstants";
 import { File } from "./fileTypes";
 import { Folder } from "./folderTypes";
 import { SortingOptions } from "./sortTypes";
@@ -9,6 +10,7 @@ export interface FolderState {
   files: File[];
   isLoading: boolean;
   sortBy: SortingOptions;
+  viewMode: ViewMode;
 }
 
 export type FolderAction =
@@ -22,4 +24,5 @@ export type FolderAction =
         files: File[];
       };
     }
-  | { type: "SET_SORT_BY"; payload: SortingOptions };
+  | { type: "SET_SORT_BY"; payload: SortingOptions }
+  | { type: "SET_VIEW_MODE"; payload: ViewMode };

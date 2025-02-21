@@ -1,4 +1,5 @@
 import { Order, SortByFile, SortByFolder } from "@/constants/SortConstants";
+import { ViewMode } from "@/constants/ViewModeConstants";
 import { FolderAction, FolderState } from "@/types";
 
 export const initialState: FolderState = {
@@ -13,6 +14,7 @@ export const initialState: FolderState = {
     orderFolders: Order.DESC,
     orderFiles: Order.DESC,
   },
+  viewMode: ViewMode.GRID,
 };
 
 export const folderReducer = (state: FolderState, action: FolderAction) => {
@@ -37,6 +39,13 @@ export const folderReducer = (state: FolderState, action: FolderAction) => {
 
   if (type === "SET_SORT_BY") {
     return { ...state, sortBy: action.payload };
+  }
+
+  if (type === "SET_VIEW_MODE") {
+    return {
+      ...state,
+      viewMode: action.payload,
+    };
   }
 
   return state;
