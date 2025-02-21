@@ -23,58 +23,55 @@ import {
 export const Router = () => {
   return (
     <AuthProvider>
-      <FolderProvider>
-        <BrowserRouter>
-          <AxiosErrorInterceptor>
-            <Routes>
-              {/* Static pages */}
-              <Route path="/terminos" element={<TermsOfService />} />
-              <Route path="/privacidad" element={<PrivacyPolicy />} />
+      <BrowserRouter>
+        <AxiosErrorInterceptor>
+          <Routes>
+            {/* Static pages */}
+            <Route path="/terminos" element={<TermsOfService />} />
+            <Route path="/privacidad" element={<PrivacyPolicy />} />
 
-              {/* Public routes */}
-              <Route element={<PublicRoute />}>
-                {/* Auth routes */}
+            {/* Public routes */}
+            <Route element={<PublicRoute />}>
+              {/* Auth routes */}
+              <Route
+                element={
+                  <AuthLayout>
+                    <Outlet />
+                  </AuthLayout>
+                }
+              >
+                <Route path="/iniciar-sesion" element={<LoginPage />} />
+                <Route path="/registro" element={<RegisterPage />} />
                 <Route
-                  element={
-                    <AuthLayout>
-                      <Outlet />
-                    </AuthLayout>
-                  }
-                >
-                  <Route path="/iniciar-sesion" element={<LoginPage />} />
-                  <Route path="/registro" element={<RegisterPage />} />
-                  <Route
-                    path="/olvide-contrasena"
-                    element={<ForgotPasswordPage />}
-                  />
-                  <Route
-                    path="/restablecer-contrasena"
-                    element={<ResetPasswordPage />}
-                  />
-                </Route>
+                  path="/olvide-contrasena"
+                  element={<ForgotPasswordPage />}
+                />
+                <Route
+                  path="/restablecer-contrasena"
+                  element={<ResetPasswordPage />}
+                />
               </Route>
+            </Route>
 
-              {/* Private routes */}
-              <Route element={<ProtectedRoute />}>
-                <Route
-                  element={
+            {/* Private routes */}
+            <Route element={<ProtectedRoute />}>
+              <Route
+                element={
+                  <FolderProvider>
                     <MainLayout>
                       <Outlet />
                     </MainLayout>
-                  }
-                >
-                  <Route
-                    path="/"
-                    element={<Navigate to="/carpeta" replace />}
-                  />
-                  <Route path="/carpeta" element={<MainPage />} />
-                  <Route path="/carpeta/:folderId" element={<MainPage />} />
-                </Route>
+                  </FolderProvider>
+                }
+              >
+                <Route path="/" element={<Navigate to="/carpeta" replace />} />
+                <Route path="/carpeta" element={<MainPage />} />
+                <Route path="/carpeta/:folderId" element={<MainPage />} />
               </Route>
-            </Routes>
-          </AxiosErrorInterceptor>
-        </BrowserRouter>
-      </FolderProvider>
+            </Route>
+          </Routes>
+        </AxiosErrorInterceptor>
+      </BrowserRouter>
     </AuthProvider>
   );
 };
