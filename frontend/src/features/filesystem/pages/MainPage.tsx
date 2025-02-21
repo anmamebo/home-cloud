@@ -1,11 +1,11 @@
-import { FileList } from "@/components/file";
-import { FolderList } from "@/components/folder";
 import { Spinner } from "@/components/ui/spinner";
 import { useFolderContext } from "@/contexts/FolderContext";
 import {
   FileFilters,
+  FileList,
   FilesystemSection,
   FolderFilters,
+  FolderList,
   NoContent,
 } from "@/features/filesystem";
 import { useEffect } from "react";

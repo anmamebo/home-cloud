@@ -1,4 +1,4 @@
-import { FileItem } from "@/components/file";
+import { FileItem } from "@/features/filesystem";
 import { File } from "@/types";
 
 type FileListProps = {

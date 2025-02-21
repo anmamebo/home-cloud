@@ -1,6 +1,5 @@
-import { FolderItem } from "@/components/folder";
+import { FolderItem } from "@/features/filesystem";
 import { Folder } from "@/types";
-
 type FolderListProps = {
   folders: Folder[];
 };

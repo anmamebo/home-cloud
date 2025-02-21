@@ -14,6 +14,14 @@ export { ChangeNameFolderForm } from "./components/forms/ChangeNameFolderForm";
 export { CreateFolderForm } from "./components/forms/CreateFolderForm";
 export { UploadFileForm } from "./components/forms/UploadFileForm";
 
+// items
+export { FileItem } from "./components/items/FileItem";
+export { FolderItem } from "./components/items/FolderItem";
+
+// lists
+export { FileList } from "./components/lists/FileList";
+export { FolderList } from "./components/lists/FolderList";
+
 // menus
 export { FileContextMenuContent } from "./components/menus/FileContextMenuContent";
 export { FileDropdownMenuContent } from "./components/menus/FileDropdownMenuContent";
