@@ -1,4 +1,3 @@
-import { CreateFolderForm } from "@/components/folder";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -16,6 +15,7 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from "@/components/ui/drawer";
+import { CreateFolderForm } from "@/features/filesystem";
 import { useIsMobile } from "@/hooks/useMobile";
 import { DialogProps } from "@/types";
 import { createPortal } from "react-dom";

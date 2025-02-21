@@ -1,6 +1,5 @@
 import { DeleteConfirmationDialog } from "@/components/dialogs/DeleteConfirmationDialog";
 import {
-  ChangeNameFolderForm,
   ContextMenuContentComponent,
   FolderDropdownMenuContent,
 } from "@/components/folder";
@@ -13,7 +12,11 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useFolderContext } from "@/contexts/FolderContext";
-import { ChangeNameDialog, ItemDropdownMenu } from "@/features/filesystem";
+import {
+  ChangeNameDialog,
+  ChangeNameFolderForm,
+  ItemDropdownMenu,
+} from "@/features/filesystem";
 import { useDeleteItem } from "@/hooks/useDeleteItem";
 import { useDownloadWithProgress } from "@/hooks/useDownloadWithProgress";
 import { useIsMobile } from "@/hooks/useMobile";

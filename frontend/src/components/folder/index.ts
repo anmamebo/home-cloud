@@ -1,7 +1,3 @@
-// form
-export { ChangeNameFolderForm } from "./form/ChangeNameFolderForm";
-export { CreateFolderForm } from "./form/CreateFolderForm";
-
 // item
 export { FolderItem } from "./item/FolderItem";
 

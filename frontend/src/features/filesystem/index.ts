@@ -6,6 +6,8 @@ export { UploadFileDialog } from "./components/dialogs/UploadFileDialog";
 
 // forms
 export { ChangeNameFileForm } from "./components/forms/ChangeNameFileForm";
+export { ChangeNameFolderForm } from "./components/forms/ChangeNameFolderForm";
+export { CreateFolderForm } from "./components/forms/CreateFolderForm";
 export { UploadFileForm } from "./components/forms/UploadFileForm";
 
 export { FileFilters } from "./components/FileFilters";
