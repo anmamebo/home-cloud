@@ -11,13 +11,18 @@ type UploadFunction<T> = (
 
 export const useUploadWithProgress = <T extends { filename: string }>(
   uploadFunction: UploadFunction<T>,
-  folderId: number
+  folderId: number | null
 ) => {
   const [uploadProgress, setUploadProgress] = useState<number | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const toastId = useRef<string | number | null>(null);
 
   const handleUpload = async (file: File) => {
+    if (folderId === null) {
+      notify.error("No se puede subir un archivo sin una carpeta destino.");
+      return;
+    }
+
     setIsUploading(true);
     setUploadProgress(0);
 

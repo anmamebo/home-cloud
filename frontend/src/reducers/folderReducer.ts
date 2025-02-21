@@ -2,7 +2,7 @@ import { Order, SortByFile, SortByFolder } from "@/constants/SortConstants";
 import { FolderAction, FolderState } from "@/types";
 
 export const initialState: FolderState = {
-  folderId: 0,
+  folderId: null,
   folderName: "",
   subfolders: [],
   files: [],
@@ -29,7 +29,6 @@ export const folderReducer = (state: FolderState, action: FolderAction) => {
   if (type === "SET_FOLDER_CONTENT") {
     return {
       ...state,
-      folderId: action.payload.folderId,
       folderName: action.payload.folderName,
       subfolders: action.payload.subfolders,
       files: action.payload.files,

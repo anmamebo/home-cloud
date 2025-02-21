@@ -37,6 +37,11 @@ export const CreateFolderForm = ({ onOpenChange }: CreateFolderFormProps) => {
   });
 
   const onSubmit = form.handleSubmit(async (values: CreateFolderFormValues) => {
+    if (folderId === null) {
+      notify.error("No se puede crear una carpeta sin una carpeta destino.");
+      return;
+    }
+
     setIsSubmitting(true);
     try {
       const response = await createFolder(values.name, folderId);

@@ -3,7 +3,7 @@ import { Folder } from "./folderTypes";
 import { SortingOptions } from "./sortTypes";
 
 export interface FolderState {
-  folderId: number;
+  folderId: number | null;
   folderName: string;
   subfolders: Folder[];
   files: File[];
@@ -17,7 +17,6 @@ export type FolderAction =
   | {
       type: "SET_FOLDER_CONTENT";
       payload: {
-        folderId: number;
         folderName: string;
         subfolders: Folder[];
         files: File[];

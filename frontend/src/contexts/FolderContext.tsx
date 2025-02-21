@@ -34,7 +34,6 @@ const useFolderReducer = () => {
       dispatch({
         type: "SET_FOLDER_CONTENT",
         payload: {
-          folderId,
           folderName: name,
           subfolders,
           files,
@@ -57,7 +56,7 @@ const useFolderReducer = () => {
 
 type FolderContextType = {
   isLoading: boolean;
-  folderId: number;
+  folderId: number | null;
   folderName: string;
   subfolders: Folder[];
   files: File[];
