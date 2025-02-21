@@ -7,57 +7,34 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { useFolderContext } from "@/contexts/FolderContext";
 import {
   ChangeNameDialog,
   ChangeNameFileForm,
   FileContextMenuContent,
   FileDropdownMenuContent,
   ItemDropdownMenu,
+  useFileActions,
 } from "@/features/filesystem";
-import { useDeleteItem } from "@/hooks/useDeleteItem";
-import { useDownloadWithProgress } from "@/hooks/useDownloadWithProgress";
-import { copyFile, deleteFile, downloadFile } from "@/services/fileService";
-import { notify } from "@/services/notifications";
 import { File } from "@/types";
-import { getErrorMessage } from "@/utils/errorUtils";
 import { getFileIcon } from "@/utils/fileIconUtils";
 import { formatFileSize } from "@/utils/formatUtils";
-import { useState } from "react";
 
 type FileItemProps = {
   file: File;
 };
 
 export const FileItem = ({ file }: FileItemProps) => {
-  const [isChangeNameFileDialogOpen, setIsChangeNameFileDialogOpen] =
-    useState(false);
-
-  const { fetchFolderContent } = useFolderContext();
-
-  const { handleDownload } = useDownloadWithProgress(downloadFile, file);
-
-  const handleRename = () => setIsChangeNameFileDialogOpen(true);
-
-  const handleCreateCopy = async () => {
-    try {
-      await copyFile(file.id);
-      notify.success("Copia creada con éxito.");
-      fetchFolderContent();
-    } catch (error) {
-      notify.error(getErrorMessage(error));
-      console.error(error);
-    }
-  };
-
   const {
+    isChangeNameDialogOpen,
+    setIsChangeNameDialogOpen,
     isDeleteDialogOpen,
     setIsDeleteDialogOpen,
+    handleDownload,
+    handleRename,
+    handleCreateCopy,
+    handleConfirmDelete,
     handleDelete,
-    openDeleteDialog,
-  } = useDeleteItem({
-    onSuccess: () => fetchFolderContent(),
-  });
+  } = useFileActions(file);
 
   const FileIcon = getFileIcon(file.filename);
 
@@ -106,9 +83,7 @@ export const FileItem = ({ file }: FileItemProps) => {
                     onCreateCopy={handleCreateCopy}
                     onDetails={() => {}}
                     onActivity={() => {}}
-                    onMoveToTrash={() =>
-                      openDeleteDialog(file.id, file.filename)
-                    }
+                    onMoveToTrash={handleConfirmDelete}
                   />
                 </ItemDropdownMenu>
               </div>
@@ -123,7 +98,7 @@ export const FileItem = ({ file }: FileItemProps) => {
           onCreateCopy={handleCreateCopy}
           onDetails={() => {}}
           onActivity={() => {}}
-          onMoveToTrash={() => openDeleteDialog(file.id, file.filename)}
+          onMoveToTrash={handleConfirmDelete}
         />
       </ContextMenu>
 
@@ -135,18 +110,18 @@ export const FileItem = ({ file }: FileItemProps) => {
           <ChangeNameFileForm
             fileId={file.id}
             fileName={file.filename}
-            onOpenChange={setIsChangeNameFileDialogOpen}
+            onOpenChange={setIsChangeNameDialogOpen}
           />
         }
-        open={isChangeNameFileDialogOpen}
-        onOpenChange={setIsChangeNameFileDialogOpen}
+        open={isChangeNameDialogOpen}
+        onOpenChange={setIsChangeNameDialogOpen}
       />
 
       {/* Delete Dialog */}
       <DeleteConfirmationDialog
         isOpen={isDeleteDialogOpen}
         onOpenChange={setIsDeleteDialogOpen}
-        onConfirm={() => handleDelete(deleteFile, file.id)}
+        onConfirm={handleDelete}
         itemName={file.filename}
       />
     </>

@@ -34,3 +34,6 @@ export { NoContent } from "./components/NoContent";
 
 // pages
 export { MainPage } from "./pages/MainPage";
+
+// hooks
+export { useFileActions } from "./hooks/useFileActions";
