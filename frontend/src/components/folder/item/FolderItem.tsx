@@ -1,8 +1,4 @@
 import { DeleteConfirmationDialog } from "@/components/dialogs/DeleteConfirmationDialog";
-import {
-  FolderContextMenuContent,
-  FolderDropdownMenuContent,
-} from "@/components/folder";
 import { Card, CardContent } from "@/components/ui/card";
 import { ContextMenu, ContextMenuTrigger } from "@/components/ui/context-menu";
 import {
@@ -15,6 +11,8 @@ import { useFolderContext } from "@/contexts/FolderContext";
 import {
   ChangeNameDialog,
   ChangeNameFolderForm,
+  FolderContextMenuContent,
+  FolderDropdownMenuContent,
   ItemDropdownMenu,
 } from "@/features/filesystem";
 import { useDeleteItem } from "@/hooks/useDeleteItem";

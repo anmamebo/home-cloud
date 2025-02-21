@@ -10,10 +10,16 @@ export { ChangeNameFolderForm } from "./components/forms/ChangeNameFolderForm";
 export { CreateFolderForm } from "./components/forms/CreateFolderForm";
 export { UploadFileForm } from "./components/forms/UploadFileForm";
 
+// menus
+export { FileContextMenuContent } from "./components/menus/FileContextMenuContent";
+export { FileDropdownMenuContent } from "./components/menus/FileDropdownMenuContent";
+export { FolderContextMenuContent } from "./components/menus/FolderContextMenuContent";
+export { FolderDropdownMenuContent } from "./components/menus/FolderDropdownMenuContent";
+export { ItemDropdownMenu } from "./components/menus/ItemDropdownMenu";
+
 export { FileFilters } from "./components/FileFilters";
 export { FilesystemSection } from "./components/FilesystemSection";
 export { FolderFilters } from "./components/FolderFilters";
-export { ItemDropdownMenu } from "./components/ItemDropdownMenu";
 export { NoContent } from "./components/NoContent";
 
 // pages
