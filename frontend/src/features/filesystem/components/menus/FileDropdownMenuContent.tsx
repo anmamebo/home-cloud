@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import {
   DownloadIcon,
+  FilesIcon,
   InfoIcon,
   PencilLineIcon,
   Trash2Icon,
@@ -19,6 +20,7 @@ import {
 type FileDropdownMenuContentProps = {
   onDownload: () => void;
   onRename: () => void;
+  onCreateCopy: () => void;
   onDetails: () => void;
   onActivity: () => void;
   onMoveToTrash: () => void;
@@ -27,6 +29,7 @@ type FileDropdownMenuContentProps = {
 export const FileDropdownMenuContent = ({
   onDownload,
   onRename,
+  onCreateCopy,
   onDetails,
   onActivity,
   onMoveToTrash,
@@ -52,8 +55,19 @@ export const FileDropdownMenuContent = ({
           <PencilLineIcon className="mr-2 h-4 w-4" />
           Cambiar nombre
         </DropdownMenuItem>
+        <DropdownMenuItem
+          onSelect={onCreateCopy}
+          onClick={(event) => {
+            event.stopPropagation();
+          }}
+        >
+          <FilesIcon className="mr-2 h-4 w-4" />
+          Hacer una copia
+        </DropdownMenuItem>
       </DropdownMenuGroup>
+
       <DropdownMenuSeparator />
+
       <DropdownMenuGroup>
         <DropdownMenuSub>
           <DropdownMenuSubTrigger
@@ -88,7 +102,9 @@ export const FileDropdownMenuContent = ({
           </DropdownMenuPortal>
         </DropdownMenuSub>
       </DropdownMenuGroup>
+
       <DropdownMenuSeparator />
+
       <DropdownMenuGroup>
         <DropdownMenuItem
           onSelect={onMoveToTrash}

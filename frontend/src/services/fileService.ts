@@ -78,3 +78,8 @@ export const deleteFile = async (fileId: number) => {
   const response = await axiosInstance.delete(`filesystem/files/${fileId}`);
   return response.data;
 };
+
+export const copyFile = async (fileId: number) => {
+  const response = await axiosInstance.post(`filesystem/files/${fileId}/copy`);
+  return response.data;
+};

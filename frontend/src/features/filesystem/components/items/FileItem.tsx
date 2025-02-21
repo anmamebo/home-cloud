@@ -17,8 +17,10 @@ import {
 } from "@/features/filesystem";
 import { useDeleteItem } from "@/hooks/useDeleteItem";
 import { useDownloadWithProgress } from "@/hooks/useDownloadWithProgress";
-import { deleteFile, downloadFile } from "@/services/fileService";
+import { copyFile, deleteFile, downloadFile } from "@/services/fileService";
+import { notify } from "@/services/notifications";
 import { File } from "@/types";
+import { getErrorMessage } from "@/utils/errorUtils";
 import { getFileIcon } from "@/utils/fileIconUtils";
 import { formatFileSize } from "@/utils/formatUtils";
 import { useState } from "react";
@@ -36,6 +38,17 @@ export const FileItem = ({ file }: FileItemProps) => {
   const { handleDownload } = useDownloadWithProgress(downloadFile, file);
 
   const handleRename = () => setIsChangeNameFileDialogOpen(true);
+
+  const handleCreateCopy = async () => {
+    try {
+      await copyFile(file.id);
+      notify.success("Copia creada con éxito.");
+      fetchFolderContent();
+    } catch (error) {
+      notify.error(getErrorMessage(error));
+      console.error(error);
+    }
+  };
 
   const {
     isDeleteDialogOpen,
@@ -90,6 +103,7 @@ export const FileItem = ({ file }: FileItemProps) => {
                   <FileDropdownMenuContent
                     onDownload={handleDownload}
                     onRename={handleRename}
+                    onCreateCopy={handleCreateCopy}
                     onDetails={() => {}}
                     onActivity={() => {}}
                     onMoveToTrash={() =>
@@ -106,6 +120,7 @@ export const FileItem = ({ file }: FileItemProps) => {
         <FileContextMenuContent
           onDownload={handleDownload}
           onRename={handleRename}
+          onCreateCopy={handleCreateCopy}
           onDetails={() => {}}
           onActivity={() => {}}
           onMoveToTrash={() => openDeleteDialog(file.id, file.filename)}

@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/context-menu";
 import {
   DownloadIcon,
+  FilesIcon,
   InfoIcon,
   PencilLineIcon,
   Trash2Icon,
@@ -19,6 +20,7 @@ import {
 type FileContextMenuContentProps = {
   onDownload: () => void;
   onRename: () => void;
+  onCreateCopy: () => void;
   onDetails: () => void;
   onActivity: () => void;
   onMoveToTrash: () => void;
@@ -27,6 +29,7 @@ type FileContextMenuContentProps = {
 export const FileContextMenuContent = ({
   onDownload,
   onRename,
+  onCreateCopy,
   onDetails,
   onActivity,
   onMoveToTrash,
@@ -42,8 +45,14 @@ export const FileContextMenuContent = ({
           <PencilLineIcon className="mr-2 h-4 w-4" />
           Cambiar nombre
         </ContextMenuItem>
+        <ContextMenuItem onSelect={onCreateCopy}>
+          <FilesIcon className="mr-2 h-4 w-4" />
+          Hacer una copia
+        </ContextMenuItem>
       </ContextMenuGroup>
+
       <ContextMenuSeparator />
+
       <ContextMenuGroup>
         <ContextMenuSub>
           <ContextMenuSubTrigger>
@@ -64,7 +73,9 @@ export const FileContextMenuContent = ({
           </ContextMenuPortal>
         </ContextMenuSub>
       </ContextMenuGroup>
+
       <ContextMenuSeparator />
+
       <ContextMenuGroup>
         <ContextMenuItem onSelect={onMoveToTrash}>
           <Trash2Icon className="mr-2 h-4 w-4" />
