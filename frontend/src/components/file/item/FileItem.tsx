@@ -2,7 +2,7 @@ import { DeleteConfirmationDialog } from "@/components/dialogs/DeleteConfirmatio
 import {
   ChangeNameFileDialog,
   ContextMenuContentComponent,
-  FileDropdownMenu,
+  FileDropdownMenuContent,
 } from "@/components/file";
 import { Card, CardContent } from "@/components/ui/card";
 import { ContextMenu, ContextMenuTrigger } from "@/components/ui/context-menu";
@@ -13,6 +13,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useFolderContext } from "@/contexts/FolderContext";
+import { ItemDropdownMenu } from "@/features/filesystem";
 import { useDeleteItem } from "@/hooks/useDeleteItem";
 import { useDownloadWithProgress } from "@/hooks/useDownloadWithProgress";
 import { deleteFile, downloadFile } from "@/services/fileService";
@@ -84,14 +85,17 @@ export const FileItem = ({ file }: FileItemProps) => {
 
               {/* Actions */}
               <div className="flex-none">
-                <FileDropdownMenu
-                  file={file}
-                  onDownload={handleDownload}
-                  onRename={handleRename}
-                  onDetails={() => {}}
-                  onActivity={() => {}}
-                  onMoveToTrash={() => openDeleteDialog(file.id, file.filename)}
-                />
+                <ItemDropdownMenu>
+                  <FileDropdownMenuContent
+                    onDownload={handleDownload}
+                    onRename={handleRename}
+                    onDetails={() => {}}
+                    onActivity={() => {}}
+                    onMoveToTrash={() =>
+                      openDeleteDialog(file.id, file.filename)
+                    }
+                  />
+                </ItemDropdownMenu>
               </div>
             </CardContent>
           </Card>

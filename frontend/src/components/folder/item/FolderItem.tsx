@@ -2,7 +2,7 @@ import { DeleteConfirmationDialog } from "@/components/dialogs/DeleteConfirmatio
 import {
   ChangeNameFolderDialog,
   ContextMenuContentComponent,
-  FolderDropdownMenu,
+  FolderDropdownMenuContent,
 } from "@/components/folder";
 import { Card, CardContent } from "@/components/ui/card";
 import { ContextMenu, ContextMenuTrigger } from "@/components/ui/context-menu";
@@ -13,6 +13,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useFolderContext } from "@/contexts/FolderContext";
+import { ItemDropdownMenu } from "@/features/filesystem";
 import { useDeleteItem } from "@/hooks/useDeleteItem";
 import { useDownloadWithProgress } from "@/hooks/useDownloadWithProgress";
 import { useIsMobile } from "@/hooks/useMobile";
@@ -98,14 +99,17 @@ export const FolderItem = ({ folder }: FolderItemProps) => {
 
               {/* Actions */}
               <div className="flex-none">
-                <FolderDropdownMenu
-                  folder={folder}
-                  onDownload={handleDownload}
-                  onRename={handleRename}
-                  onDetails={handleDetails}
-                  onActivity={handleActivity}
-                  onMoveToTrash={() => openDeleteDialog(folder.id, folder.name)}
-                />
+                <ItemDropdownMenu>
+                  <FolderDropdownMenuContent
+                    onDownload={handleDownload}
+                    onRename={handleRename}
+                    onDetails={handleDetails}
+                    onActivity={handleActivity}
+                    onMoveToTrash={() =>
+                      openDeleteDialog(folder.id, folder.name)
+                    }
+                  />
+                </ItemDropdownMenu>
               </div>
             </CardContent>
           </Card>

@@ -14,5 +14,4 @@ export { FolderList } from "./list/FolderList";
 
 // menu
 export { ContextMenuContentComponent } from "./menu/ContextMenuContentComponent";
-export { DropdownMenuContentComponent } from "./menu/DropdownMenuContentComponent";
-export { FolderDropdownMenu } from "./menu/FolderDropdownMenu";
+export { FolderDropdownMenuContent } from "./menu/FolderDropdownMenuContent";

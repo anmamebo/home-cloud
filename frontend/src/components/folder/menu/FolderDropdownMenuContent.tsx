@@ -8,7 +8,6 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Folder } from "@/types";
 import {
   DownloadIcon,
   InfoIcon,
@@ -17,8 +16,7 @@ import {
   TrendingUpIcon,
 } from "lucide-react";
 
-type DropdownMenuContentProps = {
-  folder: Folder;
+type FolderDropdownMenuContentProps = {
   onDownload: () => void;
   onRename: () => void;
   onDetails: () => void;
@@ -26,14 +24,13 @@ type DropdownMenuContentProps = {
   onMoveToTrash: () => void;
 };
 
-export const DropdownMenuContentComponent = ({
-  folder,
+export const FolderDropdownMenuContent = ({
   onDownload,
   onRename,
   onDetails,
   onActivity,
   onMoveToTrash,
-}: DropdownMenuContentProps) => {
+}: FolderDropdownMenuContentProps) => {
   return (
     <DropdownMenuContent align="end" className="w-80">
       <DropdownMenuGroup>

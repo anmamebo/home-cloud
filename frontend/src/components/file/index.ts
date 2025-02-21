@@ -14,5 +14,4 @@ export { FileList } from "./list/FileList";
 
 // menu
 export { ContextMenuContentComponent } from "./menu/ContextMenuContentComponent";
-export { DropdownMenuContentComponent } from "./menu/DropdownMenuContentComponent";
-export { FileDropdownMenu } from "./menu/FileDropdownMenu";
+export { FileDropdownMenuContent } from "./menu/FileDropdownMenuContent";
