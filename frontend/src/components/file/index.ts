@@ -1,6 +1,3 @@
-// dialog
-export { UploadFileDialog } from "./dialog/UploadFileDialog";
-
 // form
 export { ChangeNameFileForm } from "./form/ChangeNameFileForm";
 export { UploadFileForm } from "./form/UploadFileForm";

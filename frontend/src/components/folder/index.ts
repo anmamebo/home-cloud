@@ -1,6 +1,3 @@
-// dialog
-export { CreateFolderDialog } from "./dialog/CreateFolderDialog";
-
 // form
 export { ChangeNameFolderForm } from "./form/ChangeNameFolderForm";
 export { CreateFolderForm } from "./form/CreateFolderForm";
