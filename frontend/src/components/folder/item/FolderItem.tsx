@@ -120,7 +120,6 @@ export const FolderItem = ({ folder }: FolderItemProps) => {
 
         {/* Context Menu Actions */}
         <FolderContextMenuContent
-          folder={folder}
           onDownload={handleDownload}
           onRename={handleRename}
           onDetails={handleDetails}

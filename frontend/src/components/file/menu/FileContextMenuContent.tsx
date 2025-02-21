@@ -8,7 +8,6 @@ import {
   ContextMenuSubContent,
   ContextMenuSubTrigger,
 } from "@/components/ui/context-menu";
-import { File } from "@/types";
 import {
   DownloadIcon,
   InfoIcon,
@@ -18,7 +17,6 @@ import {
 } from "lucide-react";
 
 type FileContextMenuContentProps = {
-  file: File;
   onDownload: () => void;
   onRename: () => void;
   onDetails: () => void;
@@ -27,7 +25,6 @@ type FileContextMenuContentProps = {
 };
 
 export const FileContextMenuContent = ({
-  file,
   onDownload,
   onRename,
   onDetails,

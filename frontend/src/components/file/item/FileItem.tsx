@@ -106,7 +106,6 @@ export const FileItem = ({ file }: FileItemProps) => {
 
         {/* Context Menu Actions */}
         <FileContextMenuContent
-          file={file}
           onDownload={handleDownload}
           onRename={handleRename}
           onDetails={() => {}}
