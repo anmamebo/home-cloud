@@ -1,6 +1,6 @@
 import { DeleteConfirmationDialog } from "@/components/dialogs/DeleteConfirmationDialog";
 import {
-  ContextMenuContentComponent,
+  FolderContextMenuContent,
   FolderDropdownMenuContent,
 } from "@/components/folder";
 import { Card, CardContent } from "@/components/ui/card";
@@ -119,7 +119,7 @@ export const FolderItem = ({ folder }: FolderItemProps) => {
         </ContextMenuTrigger>
 
         {/* Context Menu Actions */}
-        <ContextMenuContentComponent
+        <FolderContextMenuContent
           folder={folder}
           onDownload={handleDownload}
           onRename={handleRename}

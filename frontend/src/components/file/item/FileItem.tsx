@@ -1,6 +1,6 @@
 import { DeleteConfirmationDialog } from "@/components/dialogs/DeleteConfirmationDialog";
 import {
-  ContextMenuContentComponent,
+  FileContextMenuContent,
   FileDropdownMenuContent,
 } from "@/components/file";
 import { Card, CardContent } from "@/components/ui/card";
@@ -105,7 +105,7 @@ export const FileItem = ({ file }: FileItemProps) => {
         </ContextMenuTrigger>
 
         {/* Context Menu Actions */}
-        <ContextMenuContentComponent
+        <FileContextMenuContent
           file={file}
           onDownload={handleDownload}
           onRename={handleRename}

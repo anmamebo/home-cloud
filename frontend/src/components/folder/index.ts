@@ -5,5 +5,5 @@ export { FolderItem } from "./item/FolderItem";
 export { FolderList } from "./list/FolderList";
 
 // menu
-export { ContextMenuContentComponent } from "./menu/ContextMenuContentComponent";
+export { FolderContextMenuContent } from "./menu/FolderContextMenuContent";
 export { FolderDropdownMenuContent } from "./menu/FolderDropdownMenuContent";

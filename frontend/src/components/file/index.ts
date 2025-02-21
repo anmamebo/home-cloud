@@ -5,5 +5,5 @@ export { FileItem } from "./item/FileItem";
 export { FileList } from "./list/FileList";
 
 // menu
-export { ContextMenuContentComponent } from "./menu/ContextMenuContentComponent";
+export { FileContextMenuContent } from "./menu/FileContextMenuContent";
 export { FileDropdownMenuContent } from "./menu/FileDropdownMenuContent";

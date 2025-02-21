@@ -17,7 +17,7 @@ import {
   TrendingUpIcon,
 } from "lucide-react";
 
-type ContextMenuContentProps = {
+type FolderContextMenuContentProps = {
   folder: Folder;
   onDownload: () => void;
   onRename: () => void;
@@ -26,14 +26,14 @@ type ContextMenuContentProps = {
   onMoveToTrash: () => void;
 };
 
-export const ContextMenuContentComponent = ({
+export const FolderContextMenuContent = ({
   folder,
   onDownload,
   onRename,
   onDetails,
   onActivity,
   onMoveToTrash,
-}: ContextMenuContentProps) => {
+}: FolderContextMenuContentProps) => {
   return (
     <ContextMenuContent className="w-64">
       <ContextMenuGroup>
