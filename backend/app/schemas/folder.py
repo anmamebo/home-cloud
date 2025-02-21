@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from pydantic import BaseModel, computed_field
 
 from .file import FileOut
@@ -13,6 +15,8 @@ class FolderIn(FolderBase):
 
 class FolderOut(FolderBase):
     id: int
+    created_at: datetime
+    updated_at: datetime
 
     class Config:
         from_attributes = True
