@@ -4,6 +4,10 @@ export { ChangeNameDialog } from "./components/dialogs/ChangeNameDialog";
 export { CreateFolderDialog } from "./components/dialogs/CreateFolderDialog";
 export { UploadFileDialog } from "./components/dialogs/UploadFileDialog";
 
+// forms
+export { ChangeNameFileForm } from "./components/forms/ChangeNameFileForm";
+export { UploadFileForm } from "./components/forms/UploadFileForm";
+
 export { FileFilters } from "./components/FileFilters";
 export { FilesystemSection } from "./components/FilesystemSection";
 export { FolderFilters } from "./components/FolderFilters";

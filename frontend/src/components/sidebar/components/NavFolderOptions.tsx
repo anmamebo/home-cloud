@@ -1,10 +1,9 @@
-import { UploadFileDialog } from "@/components/file";
-import { CreateFolderDialog } from "@/components/folder";
 import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { CreateFolderDialog, UploadFileDialog } from "@/features/filesystem";
 import { FileUpIcon, FolderUpIcon } from "lucide-react";
 import { useState } from "react";
 

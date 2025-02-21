@@ -1,7 +1,3 @@
-// form
-export { ChangeNameFileForm } from "./form/ChangeNameFileForm";
-export { UploadFileForm } from "./form/UploadFileForm";
-
 // item
 export { FileItem } from "./item/FileItem";
 
