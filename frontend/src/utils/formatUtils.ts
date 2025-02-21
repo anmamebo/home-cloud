@@ -7,3 +7,13 @@ export const formatFileSize = (sizeInBytes: number): string => {
     return `${(sizeInBytes / 1_000).toFixed(2)} KB`;
   }
 };
+
+export const formatDateTime = (datetime: string): string => {
+  return new Date(datetime).toLocaleString("es-ES", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+};
