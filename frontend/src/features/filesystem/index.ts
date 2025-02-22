@@ -33,6 +33,7 @@ export { ItemDropdownMenu } from "./components/menus/ItemDropdownMenu";
 // tables
 export { FilesystemTable } from "./components/tables/FilesystemTable";
 
+export { FilesystemHeader } from "./components/FilesystemHeader";
 export { FilesystemSection } from "./components/FilesystemSection";
 export { NoContent } from "./components/NoContent";
 

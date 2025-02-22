@@ -1,10 +1,10 @@
-import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { ViewMode } from "@/constants/ViewModeConstants";
 import { useFolderContext } from "@/contexts/FolderContext";
 import {
   FileFilters,
   FileList,
+  FilesystemHeader,
   FilesystemSection,
   FilesystemTable,
   FolderFilters,
@@ -18,7 +18,7 @@ export const MainPage = () => {
   const { folderId } = useParams<{ folderId: string }>();
   const folderIdNumber = folderId ? parseInt(folderId, 10) : 0;
 
-  const { subfolders, files, isLoading, viewMode, setFolderId, setViewMode } =
+  const { subfolders, files, isLoading, viewMode, setFolderId } =
     useFolderContext();
 
   useEffect(() => {
@@ -38,14 +38,7 @@ export const MainPage = () => {
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex gap-2">
-        <Button variant="default" onClick={() => setViewMode(ViewMode.GRID)}>
-          GRID
-        </Button>
-        <Button variant="default" onClick={() => setViewMode(ViewMode.TABLE)}>
-          TABLA
-        </Button>
-      </div>
+      <FilesystemHeader />
 
       {viewMode === ViewMode.GRID && (
         <>
