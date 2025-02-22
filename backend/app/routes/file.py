@@ -64,7 +64,8 @@ def upload_file(
 
         # Generate a unique name for storage
         unique_filename = f"{uuid.uuid4().hex}{os.path.splitext(file.filename)[-1]}"
-        storage_path = os.path.join(settings.STORAGE_PATH, unique_filename)
+        relative_storage_path = unique_filename
+        storage_path = os.path.join(settings.STORAGE_PATH, relative_storage_path)
 
         # Saving the file physically
         with open(storage_path, "wb") as buffer:
@@ -73,7 +74,7 @@ def upload_file(
         # Create the file record in the database
         db_file = File(
             filename=file.filename,
-            storage_path=storage_path,
+            storage_path=relative_storage_path,
             filetype=file.content_type,
             filesize=os.path.getsize(storage_path),
             folder_id=folder_id,
