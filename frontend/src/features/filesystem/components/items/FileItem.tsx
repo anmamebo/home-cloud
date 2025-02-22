@@ -38,6 +38,8 @@ export const FileItem = ({ file }: FileItemProps) => {
 
   const FileIcon = getFileIcon(file.filename);
 
+  const isImage = file.filetype.startsWith("image/");
+
   return (
     <>
       <ContextMenu>
@@ -47,46 +49,69 @@ export const FileItem = ({ file }: FileItemProps) => {
             role="button"
             tabIndex={0}
           >
-            <CardContent className="flex items-center gap-4 p-0">
-              {/* Icon */}
-              <div className="flex-none">
-                <FileIcon />
-              </div>
+            <CardContent className="flex flex-col items-center gap-4 p-0">
+              <div className="flex items-center gap-4 w-full">
+                {/* Icon */}
+                <div className="flex-none">
+                  <FileIcon />
+                </div>
 
-              {/* Name */}
-              <div className="flex-grow truncate select-none">
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <div className="truncate text-md font-medium">
+                {/* Name */}
+                <div className="flex-grow truncate select-none">
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <div className="truncate text-md font-medium">
+                          {file.filename}
+                        </div>
+                      </TooltipTrigger>
+                      <TooltipContent side="bottom">
                         {file.filename}
-                      </div>
-                    </TooltipTrigger>
-                    <TooltipContent side="bottom">
-                      {file.filename}
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-                <div>
-                  <span className="text-xs text-primary/60">
-                    {formatFileSize(file.filesize)}
-                  </span>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                  <div>
+                    <span className="text-xs text-primary/60">
+                      {formatFileSize(file.filesize)}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Actions */}
+                <div className="flex-none">
+                  <ItemDropdownMenu>
+                    <FileDropdownMenuContent
+                      onDownload={handleDownload}
+                      onRename={handleRename}
+                      onCreateCopy={handleCreateCopy}
+                      onDetails={() => {}}
+                      onActivity={() => {}}
+                      onMoveToTrash={handleConfirmDelete}
+                    />
+                  </ItemDropdownMenu>
                 </div>
               </div>
 
-              {/* Actions */}
-              <div className="flex-none">
-                <ItemDropdownMenu>
-                  <FileDropdownMenuContent
-                    onDownload={handleDownload}
-                    onRename={handleRename}
-                    onCreateCopy={handleCreateCopy}
-                    onDetails={() => {}}
-                    onActivity={() => {}}
-                    onMoveToTrash={handleConfirmDelete}
+              {/* Preview */}
+              {isImage ? (
+                <div className="flex-none w-full h-64">
+                  <img
+                    src={`${import.meta.env.VITE_API_URL}/static/${
+                      file.storage_path
+                    }`}
+                    alt={file.filename}
+                    className="object-cover w-full h-full rounded-md"
                   />
-                </ItemDropdownMenu>
-              </div>
+                </div>
+              ) : (
+                <div className="flex-none w-full h-64">
+                  <div className="flex items-center justify-center w-full h-full bg-primary/10 rounded-md">
+                    <span className="text-primary/60 ">
+                      <FileIcon />
+                    </span>
+                  </div>
+                </div>
+              )}
             </CardContent>
           </Card>
         </ContextMenuTrigger>
