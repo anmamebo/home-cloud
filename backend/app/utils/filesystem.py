@@ -41,7 +41,7 @@ def delete_folder_recursive(db: Session, user_id: int, folder: Folder):
     """Delete a folder and its contents recursively."""
     # Obtain and delete files in this folder
     for file in folder.files:
-        delete_file_from_disk(file.storage_path)
+        delete_file_from_disk(file.storage_path, file.thumbnail_path)
         delete_file(db, user_id, file)
 
     # Obtain and delete subfolders recursively
@@ -52,11 +52,16 @@ def delete_folder_recursive(db: Session, user_id: int, folder: Folder):
     delete_folder(db, user_id, folder)
 
 
-def delete_file_from_disk(file_path: str):
+def delete_file_from_disk(file_path: str, thumbnail_path: str):
     """Delete a file from the storage system."""
     absolute_storage_path = os.path.join(settings.STORAGE_PATH, file_path)
     if os.path.exists(absolute_storage_path):
         os.remove(absolute_storage_path)
+
+    if thumbnail_path:
+        absolute_thumbnail_path = os.path.join(settings.STORAGE_PATH, thumbnail_path)
+        if os.path.exists(absolute_thumbnail_path):
+            os.remove(absolute_thumbnail_path)
 
 
 def is_subfolder(folder: Folder, possible_parent: Folder) -> bool:

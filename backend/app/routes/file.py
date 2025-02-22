@@ -170,6 +170,12 @@ def delete_file_route(
     absolute_storage_path = os.path.join(settings.STORAGE_PATH, file.storage_path)
     os.remove(absolute_storage_path)
 
+    if file.thumbnail_path:
+        absolute_thumbnail_path = os.path.join(
+            settings.STORAGE_PATH, file.thumbnail_path
+        )
+        os.remove(absolute_thumbnail_path)
+
     return None
 
 
