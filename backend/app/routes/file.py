@@ -121,7 +121,9 @@ def download_file(
         details="File downloaded.",
     )
 
-    return FileResponse(file.storage_path, filename=file.filename)
+    absolute_storage_path = os.path.join(settings.STORAGE_PATH, file.storage_path)
+
+    return FileResponse(absolute_storage_path, filename=file.filename)
 
 
 @router.delete(
