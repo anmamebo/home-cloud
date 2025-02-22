@@ -80,7 +80,7 @@ export const UploadFileForm = ({ onOpenChange }: UploadFileFormProps) => {
             </div>
 
             <Button type="submit" className="w-full" disabled={isUploading}>
-              {isUploading ? "Subiendo..." : "Subir archivo"}
+              {isUploading ? "Subiendo..." : "Subir archivo/s"}
             </Button>
           </div>
         </form>

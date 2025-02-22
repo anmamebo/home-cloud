@@ -35,14 +35,14 @@ export const NavFolderOptions = () => {
         <SidebarMenuItem>
           <SidebarMenuButton
             size="lg"
-            tooltip="Subir archivo"
+            tooltip="Subir archivo/s"
             onClick={() => setIsUploadFileDialogOpen(true)}
           >
             <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
               <FileUpIcon className="size-4" />
             </div>
             <span className="truncate font-semibold text-md">
-              Subir archivo
+              Subir archivo/s
             </span>
           </SidebarMenuButton>
         </SidebarMenuItem>

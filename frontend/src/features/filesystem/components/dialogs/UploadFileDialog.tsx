@@ -29,7 +29,7 @@ export const UploadFileDialog = ({ open, onOpenChange }: DialogProps) => {
         <DrawerContent>
           {/* Header */}
           <DrawerHeader className="text-left">
-            <DrawerTitle>Subir archivo</DrawerTitle>
+            <DrawerTitle>Subir archivo/s</DrawerTitle>
             <DrawerDescription>
               Elige un archivo para subir a tu carpeta.
             </DrawerDescription>
@@ -57,7 +57,7 @@ export const UploadFileDialog = ({ open, onOpenChange }: DialogProps) => {
       <DialogContent className="sm:max-w-[550px]">
         {/* Header */}
         <DialogHeader>
-          <DialogTitle>Subir archivo</DialogTitle>
+          <DialogTitle>Subir archivo/s</DialogTitle>
           <DialogDescription>
             Elige un archivo para subir a tu carpeta.
           </DialogDescription>
