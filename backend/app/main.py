@@ -6,6 +6,7 @@ from app.database.connection import create_db_and_tables
 from app.routes import auth, file, folder
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 
 
 @asynccontextmanager
@@ -44,6 +45,8 @@ app.add_middleware(
 app.include_router(auth.router)
 app.include_router(folder.router)
 app.include_router(file.router)
+
+app.mount("/static", StaticFiles(directory=settings.STORAGE_PATH), name="static")
 
 
 @app.get("/")
