@@ -40,7 +40,7 @@ export const FileItem = ({ file }: FileItemProps) => {
 
   const FileIcon = getFileIcon(file.filename);
 
-  const isImage = file.filetype.startsWith("image/");
+  const hasThumbnail = file.thumbnail_path !== null;
 
   return (
     <>
@@ -95,10 +95,10 @@ export const FileItem = ({ file }: FileItemProps) => {
               </div>
 
               {/* Preview */}
-              {isImage ? (
+              {hasThumbnail ? (
                 <div className="flex-none w-full h-48">
                   <img
-                    src={`${STATIC_URL}${file.storage_path}`}
+                    src={`${STATIC_URL}${file.thumbnail_path}`}
                     alt={file.filename}
                     className="object-cover w-full h-full rounded-md"
                   />
