@@ -1,11 +1,7 @@
 import { useFolderContext } from "@/contexts/FolderContext";
 import { useDeleteItem } from "@/hooks/useDeleteItem";
 import { useDownloadWithProgress } from "@/hooks/useDownloadWithProgress";
-import {
-  copyFile,
-  deleteFile as deleteFileService,
-  downloadFile,
-} from "@/services/fileService";
+import { copyFile, deleteFile, downloadFile } from "@/services/fileService";
 import { notify } from "@/services/notifications";
 import { File } from "@/types";
 import { getErrorMessage } from "@/utils/errorUtils";
@@ -38,15 +34,11 @@ export const useFileActions = (file: File) => {
   const {
     isDeleteDialogOpen,
     setIsDeleteDialogOpen,
-    handleDelete: deleteFile,
     openDeleteDialog,
-  } = useDeleteItem({
-    onSuccess: () => fetchFolderContent(),
-  });
+    handleDelete,
+  } = useDeleteItem(deleteFile);
 
   const handleConfirmDelete = () => openDeleteDialog(file.id, file.filename);
-
-  const handleDelete = () => deleteFile(deleteFileService, file.id);
 
   return {
     isChangeNameDialogOpen,
