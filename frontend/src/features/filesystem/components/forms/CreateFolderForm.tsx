@@ -32,7 +32,7 @@ export const CreateFolderForm = ({ onOpenChange }: CreateFolderFormProps) => {
   const form = useForm<CreateFolderFormValues>({
     resolver: zodResolver(createFolderSchema),
     defaultValues: {
-      name: "",
+      name: "Carpeta sin título",
     },
   });
 
