@@ -1,6 +1,7 @@
 import os
 
 import ffmpeg
+import fitz
 from app.config import settings
 from app.crud.file import delete_file, get_file_in_folder_by_name
 from app.crud.folder import delete_folder
@@ -100,6 +101,15 @@ def generate_thumbnail(file_path: str, thumbnail_path: str, size: tuple = (400, 
                 .output(thumbnail_path, vframes=1)
                 .run()
             }
+        elif file_extension == "pdf":
+            pdf_document = fitz.open(file_path)
+            first_page = pdf_document.load_page(0)
+
+            pix = first_page.get_pixmap()
+            img = Image.frombytes("RGB", [pix.width, pix.height], pix.samples)
+
+            img.thumbnail(size)
+            img.save(thumbnail_path, quality=85)
     except FileNotFoundError:
         raise RuntimeError("FFmpeg no está instalado o no se encuentra en la ruta.")
     except Exception as e:

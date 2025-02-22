@@ -36,6 +36,7 @@ class Settings(BaseSettings):
         "mp4",
         "avi",
         "mov",
+        "pdf",
     ]
     THUMBNAIL_SUPPORTED_MIME_TYPES: list[str] = [
         "image/jpeg",
@@ -44,6 +45,7 @@ class Settings(BaseSettings):
         "video/mp4",
         "video/avi",
         "video/quicktime",
+        "application/pdf",
     ]
 
     class Config:
