@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useFolderContext } from "@/contexts/FolderContext";
-import { useUploadWithProgress } from "@/hooks/useUploadWithProgress"; // Importar el hook personalizado
+import { useUploadWithProgress } from "@/hooks/useUploadWithProgress";
 import {
   UploadFileFormValues,
   uploadFileSchema,
@@ -33,13 +33,13 @@ export const UploadFileForm = ({ onOpenChange }: UploadFileFormProps) => {
   const form = useForm<UploadFileFormValues>({
     resolver: zodResolver(uploadFileSchema),
     defaultValues: {
-      file: undefined,
+      files: [],
     },
   });
 
   const onSubmit = form.handleSubmit(async (values: UploadFileFormValues) => {
     try {
-      await handleUpload(values.file);
+      await handleUpload(values.files);
       fetchFolderContent();
       form.reset();
       onOpenChange(false);
@@ -56,17 +56,18 @@ export const UploadFileForm = ({ onOpenChange }: UploadFileFormProps) => {
             <div className="grid gap-2">
               <FormField
                 control={form.control}
-                name="file"
+                name="files"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Archivo</FormLabel>
                     <FormControl>
                       <Input
                         type="file"
+                        multiple
                         onChange={(e) => {
-                          const file = e.target.files?.[0];
-                          if (file) {
-                            field.onChange(file);
+                          const files = e.target.files;
+                          if (files) {
+                            field.onChange(Array.from(files));
                           }
                         }}
                         accept="*"

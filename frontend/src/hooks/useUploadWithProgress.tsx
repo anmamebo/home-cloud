@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 
 type UploadFunction<T> = (
-  file: File,
+  files: File[],
   folderId: number,
   onUploadProgress: (progress: number) => void
 ) => Promise<T>;
@@ -17,7 +17,7 @@ export const useUploadWithProgress = <T extends { filename: string }>(
   const [isUploading, setIsUploading] = useState(false);
   const toastId = useRef<string | number | null>(null);
 
-  const handleUpload = async (file: File) => {
+  const handleUpload = async (files: File[]) => {
     if (folderId === null) {
       notify.error("No se puede subir un archivo sin una carpeta destino.");
       return;
@@ -28,7 +28,7 @@ export const useUploadWithProgress = <T extends { filename: string }>(
 
     toastId.current = toast(
       <div className="flex flex-col w-full">
-        <p>Subiendo {file.name}...</p>
+        <p>Subiendo {files.length} archivos...</p>
         <Progress value={0} className="mt-2" />
       </div>,
       {
@@ -37,14 +37,14 @@ export const useUploadWithProgress = <T extends { filename: string }>(
     );
 
     try {
-      const response = await uploadFunction(file, folderId, (progress) => {
+      const response = await uploadFunction(files, folderId, (progress) => {
         setUploadProgress(progress);
       });
 
-      notify.success(`Archivo "${response.filename}" subido correctamente`);
+      notify.success(`${files.length} archivos subidos correctamente.`);
       return response;
     } catch (error) {
-      notify.error("No se pudo subir el archivo.");
+      notify.error("No se pudieron subir los archivos.");
       console.error(error);
       throw error;
     } finally {
@@ -61,7 +61,7 @@ export const useUploadWithProgress = <T extends { filename: string }>(
     if (uploadProgress !== null && toastId.current !== null) {
       toast(
         <div className="flex flex-col w-full">
-          <p>Subiendo...</p>
+          <p>Subiendo {uploadProgress}%...</p>
           <Progress value={uploadProgress} className="mt-2" />
         </div>,
         {

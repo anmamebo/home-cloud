@@ -7,7 +7,9 @@ export const changeNameSchema = z.object({
 });
 
 export const uploadFileSchema = z.object({
-  file: z.instanceof(File, { message: ERROR_MESSAGES.REQUIRED_FILE }),
+  files: z
+    .array(z.instanceof(File, { message: ERROR_MESSAGES.REQUIRED_FILE }))
+    .nonempty({ message: ERROR_MESSAGES.REQUIRED_AT_LEAST_ONE_FILE }),
 });
 
 export const createFolderSchema = z.object({

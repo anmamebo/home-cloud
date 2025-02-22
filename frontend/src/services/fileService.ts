@@ -36,12 +36,14 @@ export const downloadFile = async (
 };
 
 export const uploadFile = async (
-  file: File,
+  files: File[],
   folderId: number,
   onUploadProgress?: (progress: number) => void
 ) => {
   const formData = new FormData();
-  formData.append("file", file);
+  files.forEach((file) => {
+    formData.append("files", file);
+  });
 
   const response = await axiosInstance.post(
     `filesystem/files?folder_id=${folderId}`,
