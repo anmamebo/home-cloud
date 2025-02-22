@@ -6,7 +6,7 @@ type FolderListProps = {
 
 export const FolderList = ({ folders }: FolderListProps) => {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4">
       {folders.map((item: Folder) => (
         <FolderItem key={item.id} folder={item} />
       ))}

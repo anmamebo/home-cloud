@@ -96,7 +96,7 @@ export const FileItem = ({ file }: FileItemProps) => {
 
               {/* Preview */}
               {isImage ? (
-                <div className="flex-none w-full h-64">
+                <div className="flex-none w-full h-48">
                   <img
                     src={`${STATIC_URL}${file.storage_path}`}
                     alt={file.filename}
@@ -104,7 +104,7 @@ export const FileItem = ({ file }: FileItemProps) => {
                   />
                 </div>
               ) : (
-                <div className="flex-none w-full h-64">
+                <div className="flex-none w-full h-48">
                   <div className="flex items-center justify-center w-full h-full bg-primary/10 rounded-md">
                     <span className="text-primary/60 ">
                       <FileIcon />
