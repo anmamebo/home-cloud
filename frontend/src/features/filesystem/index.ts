@@ -35,6 +35,9 @@ export { FilesystemTable } from "./components/tables/FilesystemTable";
 export { FilesystemSection } from "./components/FilesystemSection";
 export { NoContent } from "./components/NoContent";
 
+// constants
+export { columns } from "./constants/ColumnsConstants";
+
 // pages
 export { MainPage } from "./pages/MainPage";
 
