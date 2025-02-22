@@ -259,16 +259,18 @@ def make_file_copy_route(
 
     # Generate a unique name for storage
     unique_filename = f"{uuid.uuid4().hex}{os.path.splitext(new_filename)[-1]}"
-    storage_path = os.path.join(settings.STORAGE_PATH, unique_filename)
+    relative_storage_path = unique_filename
+    storage_path = os.path.join(settings.STORAGE_PATH, relative_storage_path)
 
-    shutil.copy(file_db.storage_path, storage_path)
+    file_db_storage_path = os.path.join(settings.STORAGE_PATH, file_db.storage_path)
+    shutil.copy(file_db_storage_path, storage_path)
 
     # Create a new file record
     new_file = File(
         filename=new_filename,
         folder_id=file_db.folder_id,
         user_id=current_user.id,
-        storage_path=storage_path,
+        storage_path=relative_storage_path,
         filesize=file_db.filesize,
         filetype=file_db.filetype,
     )
