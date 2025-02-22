@@ -11,6 +11,7 @@ export { FolderFilters } from "./components/filters/FolderFilters";
 // forms
 export { ChangeNameFileForm } from "./components/forms/ChangeNameFileForm";
 export { ChangeNameFolderForm } from "./components/forms/ChangeNameFolderForm";
+export { ChangeNameForm } from "./components/forms/ChangeNameForm";
 export { CreateFolderForm } from "./components/forms/CreateFolderForm";
 export { UploadFileForm } from "./components/forms/UploadFileForm";
 
