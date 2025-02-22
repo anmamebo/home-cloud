@@ -1,5 +1,6 @@
 import os
 
+from app.config import settings
 from app.crud.file import delete_file, get_file_in_folder_by_name
 from app.crud.folder import delete_folder
 from app.models.file import File
@@ -28,7 +29,8 @@ def add_folder_to_zip(db, zip_file, folders, parent_path):
 
 def get_file_content(file: File) -> bytes:
     """Get the contents of a file from the storage system."""
-    with open(file.storage_path, "rb") as f:
+    absolute_storage_path = os.path.join(settings.STORAGE_PATH, file.storage_path)
+    with open(absolute_storage_path, "rb") as f:
         return f.read()
 
 
@@ -49,8 +51,9 @@ def delete_folder_recursive(db: Session, user_id: int, folder: Folder):
 
 def delete_file_from_disk(file_path: str):
     """Delete a file from the storage system."""
-    if os.path.exists(file_path):
-        os.remove(file_path)
+    absolute_storage_path = os.path.join(settings.STORAGE_PATH, file_path)
+    if os.path.exists(absolute_storage_path):
+        os.remove(absolute_storage_path)
 
 
 def is_subfolder(folder: Folder, possible_parent: Folder) -> bool:
