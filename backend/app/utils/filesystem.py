@@ -1,10 +1,12 @@
 import os
 
+import ffmpeg
 from app.config import settings
 from app.crud.file import delete_file, get_file_in_folder_by_name
 from app.crud.folder import delete_folder
 from app.models.file import File
 from app.models.folder import Folder
+from PIL import Image, ImageOps
 from sqlmodel import Session
 
 
@@ -77,3 +79,28 @@ def generate_copy_filename(db: Session, folder_id: int, filename: str) -> str:
         copy_number += 1
 
     return new_filename
+
+
+def generate_thumbnail(file_path: str, thumbnail_path: str, size: tuple = (400, 400)):
+    """Generate a thumbnail for an image or video file."""
+    try:
+        file_extension = file_path.lower().split(".")[-1]
+
+        if file_extension in ("jpg", "jpeg", "png", "gif"):
+            # Images
+            with Image.open(file_path) as img:
+                img = ImageOps.exif_transpose(img)  # Rotate image if needed
+
+                img.thumbnail(size)
+                img.save(thumbnail_path, quality=85)
+        elif file_extension in ("mp4", "avi", "mov"):
+            {
+                ffmpeg.input(file_path, ss="00:00:01")
+                .filter("scale", size[0], -1)
+                .output(thumbnail_path, vframes=1)
+                .run()
+            }
+    except FileNotFoundError:
+        raise RuntimeError("FFmpeg no está instalado o no se encuentra en la ruta.")
+    except Exception as e:
+        raise RuntimeError(f"Error al generar la thumbnail: {str(e)}")

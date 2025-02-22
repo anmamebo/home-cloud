@@ -28,6 +28,24 @@ class Settings(BaseSettings):
         "http://localhost:5173",
     ]
 
+    THUMBNAIL_SUPPORTED_EXTENSIONS: list[str] = [
+        "jpg",
+        "jpeg",
+        "png",
+        "gif",
+        "mp4",
+        "avi",
+        "mov",
+    ]
+    THUMBNAIL_SUPPORTED_MIME_TYPES: list[str] = [
+        "image/jpeg",
+        "image/png",
+        "image/gif",
+        "video/mp4",
+        "video/avi",
+        "video/quicktime",
+    ]
+
     class Config:
         env_file = ".env"
 

@@ -14,6 +14,7 @@ class FileIn(FileBase):
 class FileOut(FileBase):
     id: int
     storage_path: str
+    thumbnail_path: str | None
     filetype: str
     filesize: int
     download_count: int

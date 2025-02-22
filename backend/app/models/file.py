@@ -13,6 +13,7 @@ class File(AuditableModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
     filename: str = Field(index=True)
     storage_path: str = Field(unique=True)
+    thumbnail_path: str | None = None
     filetype: str
     filesize: int
     download_count: int = Field(default=0)

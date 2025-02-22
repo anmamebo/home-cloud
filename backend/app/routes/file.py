@@ -18,7 +18,7 @@ from app.enums import ActionType
 from app.models.file import File
 from app.schemas.file import FileIn, FileOut
 from app.utils.auth import CurrentUserDep
-from app.utils.filesystem import generate_copy_filename
+from app.utils.filesystem import generate_copy_filename, generate_thumbnail
 from fastapi import APIRouter
 from fastapi import File as FastAPIFile
 from fastapi import HTTPException, UploadFile, status
@@ -63,7 +63,8 @@ def upload_file(
             )
 
         # Generate a unique name for storage
-        unique_filename = f"{uuid.uuid4().hex}{os.path.splitext(file.filename)[-1]}"
+        uuid_str = uuid.uuid4().hex
+        unique_filename = f"{uuid_str}{os.path.splitext(file.filename)[-1]}"
         relative_storage_path = unique_filename
         storage_path = os.path.join(settings.STORAGE_PATH, relative_storage_path)
 
@@ -71,10 +72,28 @@ def upload_file(
         with open(storage_path, "wb") as buffer:
             buffer.write(file.file.read())
 
+        # Generate thumbnail if the file is supported
+        relative_thumbnail_path = None
+        file_extension = file.filename.lower().split(".")[-1]
+        if (
+            file_extension in settings.THUMBNAIL_SUPPORTED_EXTENSIONS
+            and file.content_type in settings.THUMBNAIL_SUPPORTED_MIME_TYPES
+        ):
+            thumbnail_filename = f"{uuid_str}.webp"
+            relative_thumbnail_path = os.path.join("thumbnails", thumbnail_filename)
+            thumbnail_path = os.path.join(
+                settings.STORAGE_PATH, relative_thumbnail_path
+            )
+
+            os.makedirs(os.path.dirname(thumbnail_path), exist_ok=True)
+
+            generate_thumbnail(storage_path, thumbnail_path)
+
         # Create the file record in the database
         db_file = File(
             filename=file.filename,
             storage_path=relative_storage_path,
+            thumbnail_path=relative_thumbnail_path,
             filetype=file.content_type,
             filesize=os.path.getsize(storage_path),
             folder_id=folder_id,
