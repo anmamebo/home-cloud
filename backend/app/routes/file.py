@@ -146,7 +146,8 @@ def delete_file_route(
     delete_file(db, current_user.id, file)
 
     # Delete file from file system
-    os.remove(file.storage_path)
+    absolute_storage_path = os.path.join(settings.STORAGE_PATH, file.storage_path)
+    os.remove(absolute_storage_path)
 
     return None
 
