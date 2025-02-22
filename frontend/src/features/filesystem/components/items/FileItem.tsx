@@ -19,6 +19,8 @@ import { File } from "@/types";
 import { getFileIcon } from "@/utils/fileIconUtils";
 import { formatFileSize } from "@/utils/formatUtils";
 
+const STATIC_URL = `${import.meta.env.VITE_API_URL}/static/`;
+
 type FileItemProps = {
   file: File;
 };
@@ -96,9 +98,7 @@ export const FileItem = ({ file }: FileItemProps) => {
               {isImage ? (
                 <div className="flex-none w-full h-64">
                   <img
-                    src={`${import.meta.env.VITE_API_URL}/static/${
-                      file.storage_path
-                    }`}
+                    src={`${STATIC_URL}${file.storage_path}`}
                     alt={file.filename}
                     className="object-cover w-full h-full rounded-md"
                   />
