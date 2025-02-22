@@ -2,6 +2,7 @@ import os
 import shutil
 import uuid
 from datetime import datetime
+from typing import List
 
 from app.config import settings
 from app.crud.file import (
@@ -32,16 +33,16 @@ router = APIRouter(
 
 @router.post(
     "/",
-    response_model=FileOut,
+    response_model=List[FileOut],
     status_code=status.HTTP_201_CREATED,
-    summary="Upload a new file",
-    description="Upload a new file to the filesystem.",
+    summary="Upload a new file or multiple files",
+    description="Upload a new file or multiple files to the filesystem.",
 )
 def upload_file(
     db: SessionDep,
     current_user: CurrentUserDep,
     folder_id: int = 0,
-    file: UploadFile = FastAPIFile(...),
+    files: List[UploadFile] = FastAPIFile(...),
 ):
     # Check if the folder exists
     folder = get_folder_by_id(db, folder_id)
@@ -51,31 +52,40 @@ def upload_file(
             detail="Carpeta no encontrada.",
         )
 
-    # Check if a file with the same name already exists
-    if check_same_name(db, folder_id, file.filename):
-        raise HTTPException(
-            status_code=status.HTTP_409_CONFLICT,
-            detail="Ya existe un archivo con el mismo nombre en esta carpeta.",
+    uploaded_files = []
+
+    for file in files:
+        # Check if a file with the same name already exists
+        if check_same_name(db, folder_id, file.filename):
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail="Ya existe un archivo con el mismo nombre en esta carpeta.",
+            )
+
+        # Generate a unique name for storage
+        unique_filename = f"{uuid.uuid4().hex}{os.path.splitext(file.filename)[-1]}"
+        storage_path = os.path.join(settings.STORAGE_PATH, unique_filename)
+
+        # Saving the file physically
+        with open(storage_path, "wb") as buffer:
+            buffer.write(file.file.read())
+
+        # Create the file record in the database
+        db_file = File(
+            filename=file.filename,
+            storage_path=storage_path,
+            filetype=file.content_type,
+            filesize=os.path.getsize(storage_path),
+            folder_id=folder_id,
+            user_id=current_user.id,
         )
 
-    # Generate a unique name for storage
-    unique_filename = f"{uuid.uuid4().hex}{os.path.splitext(file.filename)[-1]}"
-    storage_path = os.path.join(settings.STORAGE_PATH, unique_filename)
+        created_file = create_file(
+            db, current_user.id, db_file, action=ActionType.UPLOAD
+        )
+        uploaded_files.append(created_file)
 
-    # Saving the file physically
-    with open(storage_path, "wb") as buffer:
-        buffer.write(file.file.read())
-
-    # Create the file record in the database
-    db_file = File(
-        filename=file.filename,
-        storage_path=storage_path,
-        filetype=file.content_type,
-        filesize=os.path.getsize(storage_path),
-        folder_id=folder_id,
-        user_id=current_user.id,
-    )
-    return create_file(db, current_user.id, db_file, action=ActionType.UPLOAD)
+    return uploaded_files
 
 
 @router.get(
